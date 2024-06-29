@@ -1,0 +1,53 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:tourism_project/core/utils/app_color.dart';
+import 'package:tourism_project/core/functions/functions.dart';
+
+// ignore: must_be_immutable
+class CardCategouries extends StatelessWidget {
+  CardCategouries(
+      {required this.image,
+      required this.nameCategory,
+      required this.path,
+      super.key});
+  String image;
+  String nameCategory;
+  String path;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: () {
+            goRoute(context, path);
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                color: AppColor.secondColor.withOpacity(0.9),
+                border: Border.all(width: 2, color: AppColor.primaryColor),
+                borderRadius: BorderRadius.circular(50)),
+            height: 90,
+            width: 90,
+            child: Center(
+              child: SvgPicture.asset(
+                image,
+                color: AppColor.primaryColor,
+                height: 50,
+              ),
+              // child: Icon(
+              //   icon,
+              //   color: AppColor.primaryColor,
+              //   size: 28,
+              // ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          "${nameCategory}",
+          style: const TextStyle(fontSize: 16, color: Colors.black),
+        ),
+      ],
+    );
+  }
+}
