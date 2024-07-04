@@ -14,7 +14,7 @@ class WidgetInfoBookRoom extends StatelessWidget {
       required this.numCapacity,
       super.key});
   String num;
-  int price;
+  String price;
   int numCapacity = 0;
   Color? colorAdd;
   Color? colorMinus;
@@ -25,13 +25,14 @@ class WidgetInfoBookRoom extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Container(
-        height: 140,
+        height: 150,
         decoration: BoxDecoration(
-          color: AppColor.secondColor.withAlpha(130),
-          borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(45),
-              bottomRight: Radius.circular(45),
-              topRight: Radius.circular(45)),
+          border: Border.all(width: 0.5, color: AppColor.primaryColor),
+          color: AppColor.secondColor,
+          borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(55),
+              bottomRight: Radius.circular(55),
+              topRight: Radius.circular(55)),
         ),
         width: double.infinity,
         child: Padding(
@@ -42,15 +43,30 @@ class WidgetInfoBookRoom extends StatelessWidget {
               children: [
                 Text(
                   'Capacity room : $num persons',
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
-                Text(
-                  'Price : $price per day',
-                  style: TextStyle(fontSize: 16),
+                // Text(
+                //   'Price : $price per day',
+                //   style: const TextStyle(fontSize: 16),
+                // ),
+                Row(
+                  children: [
+                    const Text(
+                      'Price : ',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    Text("$price\$",
+                        style:
+                            const TextStyle(color: Colors.red, fontSize: 16)),
+                    const Text(
+                      ' per day ',
+                      style: TextStyle(fontSize: 16),
+                    )
+                  ],
                 ),
                 Row(
                   children: [
-                    Text(
+                    const Text(
                       'num :',
                       style: TextStyle(fontSize: 16),
                     ),
@@ -63,8 +79,8 @@ class WidgetInfoBookRoom extends StatelessWidget {
                     const SizedBox(width: 10),
                     Text(
                       '$numCapacity',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 18),
                     ),
                     const SizedBox(width: 10),
                     WidgetAddAndMinus(

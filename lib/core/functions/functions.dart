@@ -2,18 +2,42 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_images.dart';
+import 'package:tourism_project/presentation/widget/hotel/custom_elevated_buttom.dart';
 
 showAlertDialog(BuildContext context, String message) {
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: const Text(
-      "Warning",
-      style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-    ),
-    content: Text(
-      message,
-      style: const TextStyle(
-          fontFamily: "normal", fontSize: 20, fontWeight: FontWeight.bold),
+    content: SizedBox(
+      height: 300,
+      child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        Image.asset(
+          "assets/images/false.png",
+        ),
+        const Text(
+          "Oops...",
+          style: TextStyle(
+              // fontFamily: 'normal',
+              color: Color.fromARGB(251, 244, 82, 82),
+              fontSize: 20),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          message,
+          style: const TextStyle(
+              color: Colors.black45, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 20),
+        Padding(
+          padding: const EdgeInsets.only(left: 40, right: 40),
+          child: WidgetElevatedButton(
+            height: 40,
+            onTap: () {
+              Navigator.pop(context);
+            },
+            text: 'OK',
+          ),
+        )
+      ]),
     ),
   );
 

@@ -3,7 +3,11 @@ import 'package:go_router/go_router.dart';
 import 'package:tourism_project/business_logic/area/area_cubit.dart';
 import 'package:tourism_project/business_logic/country/country_cubit.dart';
 import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
+import 'package:tourism_project/business_logic/flight/detailsTrip_cubit.dart';
+import 'package:tourism_project/business_logic/flight/searchFlight_cubit.dart';
 import 'package:tourism_project/business_logic/forgetpassword/forgetpassword_cubit.dart';
+import 'package:tourism_project/business_logic/hotel/room_cubit.dart';
+import 'package:tourism_project/business_logic/hotel/searchHotel_cubit.dart';
 import 'package:tourism_project/business_logic/places/place_desc_cubit.dart';
 import 'package:tourism_project/business_logic/places/places_cubit.dart';
 import 'package:tourism_project/business_logic/profile/profile_cubit.dart';
@@ -12,8 +16,12 @@ import 'package:tourism_project/business_logic/upload_image/upload_image_cubit.d
 import 'package:tourism_project/business_logic/user/user_cubit.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/presentation/screens/auth/forget_password_page.dart';
+import 'package:tourism_project/presentation/screens/flight/flight_details.dart';
 import 'package:tourism_project/presentation/screens/flight/flight_page.dart';
+import 'package:tourism_project/presentation/screens/flight/search_flight_page.dart';
+import 'package:tourism_project/presentation/screens/hotel/hotel_details_page.dart';
 import 'package:tourism_project/presentation/screens/hotel/hotel_page.dart';
+import 'package:tourism_project/presentation/screens/hotel/search_hotel_page.dart';
 import 'package:tourism_project/presentation/screens/place/images_view_page.dart';
 import 'package:tourism_project/presentation/screens/place/comments.dart';
 import 'package:tourism_project/presentation/screens/place/place_desc_page.dart';
@@ -46,8 +54,10 @@ final GoRouter router = GoRouter(
               child: const TestPage(),
             )),
 
-    //GoRoute(path: "/", builder: (context, state) => const SplashScreen()),
-    GoRoute(path: "/", builder: (context, state) => const HomePage()),
+    GoRoute(path: "/", builder: (context, state) => const SplashScreen()),
+    GoRoute(
+        path: AppRoutes.homePage,
+        builder: (context, state) => const HomePage()),
     GoRoute(
         path: AppRoutes.login,
         builder: (context, state) => BlocProvider(
@@ -176,28 +186,54 @@ final GoRouter router = GoRouter(
         //       ),
         //     )
         ),
+//====================Flight===================
+    GoRoute(
+        path: AppRoutes.flightPage,
+        builder: (context, state) => MultiBlocProvider(providers: [
+              BlocProvider(create: (context) => CountryCubit()),
+              BlocProvider(create: (context) => SearchFlightCubit())
+            ], child: FlightPage())),
+
+    GoRoute(
+        path: AppRoutes.searchFlightPage,
+        builder: (context, state) => BlocProvider(
+              create: (context) => SearchFlightCubit(),
+              child: SearchFlightPage(),
+            )),
+
+    GoRoute(
+      path: "/flightDetails/:id",
+      builder: (context, state) => BlocProvider(
+        create: (context) => DetailsPlaneTripCubit(),
+        child: flightDetails(
+          planeTripId: state.pathParameters['id']!,
+        ),
+      ),
+    ),
 //================ Hotel =============
 
     GoRoute(
         path: AppRoutes.hotelPage,
-        builder: (context, state) => const HotelPage()),
+        builder: (context, state) => MultiBlocProvider(providers: [
+              BlocProvider(create: (context) => CountryCubit()),
+              BlocProvider(create: (context) => SearchHotelCubit())
+            ], child: HotelPage())),
+
     GoRoute(
-        path: AppRoutes.flightPage, builder: (context, state) => FlightPage()),
-    GoRoute(
-        path: AppRoutes.imagesview,
-        builder: (context, state) => const ImageViewPage()),
-    GoRoute(
-        path: AppRoutes.searchCountryPage,
+        path: "/SearchHotelPage/:id",
         builder: (context, state) => BlocProvider(
-              create: (context) => CountryCubit(),
-              child: const SearchCountryPage(),
+              create: (context) => SearchHotelCubit(),
+              child: SearchHotelPage(
+                countryId: state.pathParameters['id']!,
+              ),
             )),
+
     GoRoute(
-        path: "/searchAreaPage/:id",
+        path: "/InfoBookingHotelPage/:id",
         builder: (context, state) => BlocProvider(
-              create: (context) => AreaCubit(),
-              child: SearchAreaPage(
-                areaId: state.pathParameters['id']!,
+              create: (context) => RoomCubit(),
+              child: InfoBookingHotelPage(
+                HotelId: state.pathParameters['id']!,
               ),
             )),
   ],

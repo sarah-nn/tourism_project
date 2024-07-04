@@ -13,7 +13,7 @@ class widgetListTile extends StatelessWidget {
     return ListTile(
       leading: Icon(
         icon,
-        color: AppColor.secondColor,
+        color: AppColor.primaryColor,
       ),
       title: Text(text),
       onTap: onTap,

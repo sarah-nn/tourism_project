@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:tourism_project/business_logic/country/country_cubit.dart';
+import 'package:tourism_project/business_logic/flight/searchFlight_cubit.dart';
+import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
-import 'package:tourism_project/core/utils/app_images.dart';
-import 'package:tourism_project/presentation/screens/flight/search_flight_page.dart';
+import 'package:tourism_project/core/utils/app_routes.dart';
+import 'package:tourism_project/core/utils/info_user.dart';
+import 'package:tourism_project/data/models/country_model.dart';
+import 'package:tourism_project/presentation/screens/hotel/Card_Show_Country.dart';
+import 'package:tourism_project/presentation/widget/hotel/custom_elevated_buttom.dart';
 import 'package:tourism_project/presentation/widget/hotel/listtile_complete.dart';
 
 class FlightPage extends StatefulWidget {
@@ -13,313 +21,366 @@ class FlightPage extends StatefulWidget {
 }
 
 class _FlightPageState extends State<FlightPage> {
-  bool roundTrip = true;
+  late List<CountryModel> allCountry;
+  String CountrySource = 'Enter The Country';
+  int CountryIdSource = 0;
+  String CountryDestination = 'Enter The Country';
+  int CountryIdDestination = 0;
+  static bool roundTrip = true;
   String selectedData = '';
-  String Depart_date_Round = 'Select Date';
-  String Retur_date_Round = 'Select Date';
-  bool A = true;
-  bool B = true;
-  static String Depart_date_oneway = 'Select Date';
+  String depart_date = 'Select Date';
+  late SearchFlightCubit myBloc;
+  @override
+  void initState() {
+    super.initState();
+    context.read<CountryCubit>().getAllCountrey();
+    myBloc = BlocProvider.of<SearchFlightCubit>(context);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          /* Image Flight  */
-          Expanded(
-            flex: 2,
-            child: Stack(
-              children: [
-                Container(
-                  height: 300,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(40),
+    return BlocConsumer<SearchFlightCubit, SearchFlightState>(
+        listener: (context, state) {
+      if (state is SearchFlightSuccess) {
+        GoRouter.of(context).push(AppRoutes.searchFlightPage);
+        print('success');
+      }
+      if (state is SearchFlightFailure) {
+        showAlertDialog(context, state.errMessage);
+      }
+    }, builder: (context, state) {
+      return Scaffold(
+        body: Column(
+          children: [
+            /* Image Flight  */
+            Expanded(
+              flex: 2,
+              child: Stack(
+                children: [
+                  Container(
+                    height: 300,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(70),
+                      ),
+                    ),
+                    child: Image.asset(
+                      'assets/images/flight.png',
+                      width: double.infinity,
+                      fit: BoxFit.fill,
                     ),
                   ),
-                  child: Image.asset(
-                    AppImage.flight,
-                    fit: BoxFit.fill,
+                  const Positioned(
+                    bottom: 40,
+                    left: 25,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Book Your \nFlight',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Philosopher',
+                              fontSize: 35),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                const Positioned(
-                  top: 150,
-                  left: 20,
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 5,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Book Your',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 26),
+                      const SizedBox(height: 40),
+                      const Text(
+                        '  Select type trip your :',
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      Text(
-                        'Flight',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 26),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            flex: 5,
-            child: Container(
-              child: Column(
-                children: [
-                  /* One-way and Round-way*/
-                  Expanded(
-                    flex: 1,
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Row(
+                      const SizedBox(height: 10),
+                      Row(
                         children: [
                           Expanded(
                             flex: 2,
                             child: WidgetListTileComplete(
+                              enableIconButton: false,
+                              selectedColor: AppColor.primaryColor,
                               enableCenterText: true,
                               enableIcon: false,
                               selected: roundTrip,
                               text: 'Round Trip',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                               onTap: () {
                                 setState(() {
                                   roundTrip = true;
+                                  User.round = true;
                                 });
                               },
+                              onTapIconButton: () {},
                             ),
                           ),
                           Expanded(
                             flex: 2,
                             child: WidgetListTileComplete(
+                              enableIconButton: false,
+                              selectedColor: AppColor.primaryColor,
                               enableCenterText: true,
                               enableIcon: false,
                               selected: !roundTrip,
                               text: 'oneway',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                               onTap: () {
                                 setState(() {
                                   roundTrip = false;
+                                  User.round = false;
                                 });
                               },
+                              onTapIconButton: () {},
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 5,
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 20, right: 20, bottom: 20),
-                      child: SingleChildScrollView(
-                        child: Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'From',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              WidgetListTileComplete(
-                                enableCenterText: false,
-                                enableIcon: true,
-                                selected: false,
-                                icon: Iconsax.airplane,
-                                text: 'enter the city',
-                                onTap: () {},
-                              ),
-                              const SizedBox(height: 20),
-                              const Text(
-                                'To',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              WidgetListTileComplete(
-                                enableCenterText: false,
-                                enableIcon: true,
-                                selected: false,
-                                icon: Iconsax.airplane,
-                                text: 'enter the city',
-                                onTap: () {},
-                              ),
-                              const SizedBox(height: 20),
-                              roundTrip
-                                  ? Row(
-                                      children: [
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              const Text(
-                                                'Depart',
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              WidgetListTileComplete(
-                                                enableCenterText: false,
-                                                enableIcon: true,
-                                                selected: false,
-                                                icon: Icons.date_range,
-                                                text: '$Depart_date_Round',
-                                                onTap: () {
-                                                  selectData(context);
-                                                  A = false;
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              const Text(
-                                                "Return",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              WidgetListTileComplete(
-                                                enableCenterText: false,
-                                                enableIcon: true,
-                                                selected: false,
-                                                icon: Icons.date_range,
-                                                text: '$Retur_date_Round',
-                                                onTap: () {
-                                                  selectData(context);
-                                                  A = true;
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    )
-                                  : Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          'Depart',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        WidgetListTileComplete(
-                                          enableCenterText: false,
-                                          enableIcon: true,
-                                          selected: false,
-                                          icon: Icons.date_range,
-                                          text: '$Depart_date_oneway',
-                                          onTap: () {
-                                            selectData(context);
-                                            B = true;
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                              const SizedBox(height: 20),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          'Passenger',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        WidgetListTileComplete(
-                                          enableCenterText: false,
-                                          enableIcon: false,
-                                          selected: false,
-                                          text: '2',
-                                          onTap: () {},
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          'Class',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        WidgetListTileComplete(
-                                          enableCenterText: false,
-                                          enableIcon: false,
-                                          selected: false,
-                                          text: 'First',
-                                          onTap: () {},
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-                              Container(
-                                width: double.infinity,
-                                height: 55,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.push(context, MaterialPageRoute(
-                                        builder: (BuildContext context) {
-                                      return SearchFlightPage();
-                                    }));
-                                  },
-                                  child: const Text(
-                                    'Search Flight',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18),
-                                  ),
-                                  style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(25),
-                                    ),
-                                    primary: AppColor.primaryColor,
-
-                                    elevation: 10,
-                                    //fixedSize: Size(double.infinity, 50),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                      const SizedBox(height: 20),
+                      const Text(
+                        '  From :',
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                    ),
-                  )
-                ],
+                      const SizedBox(height: 10),
+                      BlocConsumer<CountryCubit, CountryState>(
+                          listener: (context, state) {
+                        if (state is CountrySuccess) {
+                          allCountry = (state).countryList;
+                        }
+                      }, builder: (context, state) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            WidgetListTileComplete(
+                              enableIconButton: false,
+                              enableCenterText: false,
+                              enableIcon: true,
+                              selected: false,
+                              icon: Iconsax.airplane,
+                              text: CountrySource,
+                              onTap: () {
+                                showModalBottomSheet(
+                                    // backgroundColor: AppColor.secondColor,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(30),
+                                        topRight: Radius.circular(30),
+                                      ),
+                                    ),
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return SizedBox(
+                                          height: 300,
+                                          child: state is CountrySuccess
+                                              ? Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(20),
+                                                  child: GridView.builder(
+                                                    itemCount:
+                                                        allCountry.length,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            index) {
+                                                      return CardWidgetCountry(
+                                                        country:
+                                                            allCountry[index],
+                                                        onTap: () {
+                                                          CountryIdSource =
+                                                              allCountry[index]
+                                                                  .id;
+                                                          User.countrySourceIdflight =
+                                                              allCountry[index]
+                                                                  .id;
+
+                                                          setState(() {
+                                                            CountrySource =
+                                                                allCountry[
+                                                                        index]
+                                                                    .name;
+                                                          });
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                      );
+                                                    },
+                                                    gridDelegate:
+                                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                                      crossAxisCount: 2,
+                                                      childAspectRatio: 2.5,
+                                                      crossAxisSpacing: 20,
+                                                    ),
+                                                  ),
+                                                )
+                                              : const Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                ));
+                                    });
+                              },
+                              selectedColor: null, onTapIconButton: () {},
+                              //   );
+                              // },
+                            ),
+                            const SizedBox(height: 20),
+                            const Text(
+                              '  To :',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 10),
+                            WidgetListTileComplete(
+                              enableIconButton: false,
+                              enableCenterText: false,
+                              enableIcon: true,
+                              selected: false,
+                              icon: Iconsax.airplane,
+                              text: CountryDestination,
+                              onTap: () {
+                                showModalBottomSheet(
+                                    // backgroundColor: AppColor.secondColor,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(30),
+                                        topRight: Radius.circular(30),
+                                      ),
+                                    ),
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return SizedBox(
+                                          height: 300,
+                                          child: state is CountrySuccess
+                                              ? Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(20),
+                                                  child: GridView.builder(
+                                                    itemCount:
+                                                        allCountry.length,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            index) {
+                                                      return CardWidgetCountry(
+                                                        country:
+                                                            allCountry[index],
+                                                        onTap: () {
+                                                          CountryIdDestination =
+                                                              allCountry[index]
+                                                                  .id;
+                                                          User.countryDestinationIdflight =
+                                                              allCountry[index]
+                                                                  .id;
+
+                                                          setState(() {
+                                                            CountryDestination =
+                                                                allCountry[
+                                                                        index]
+                                                                    .name;
+                                                            // User.countryShow = Country;
+                                                          });
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                      );
+                                                    },
+                                                    gridDelegate:
+                                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                                      crossAxisCount: 2,
+                                                      childAspectRatio: 2.5,
+                                                      crossAxisSpacing: 20,
+                                                    ),
+                                                  ),
+                                                )
+                                              : const Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                ));
+                                    });
+                              },
+                              selectedColor: null,
+                              onTapIconButton: () {},
+                            ),
+                          ],
+                        );
+                      }),
+                      const SizedBox(height: 20),
+                      const Text(
+                        '  Depart :',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 10),
+                      WidgetListTileComplete(
+                        enableIconButton: false,
+                        enableCenterText: false,
+                        enableIcon: true,
+                        selected: false,
+                        icon: Icons.date_range,
+                        text: depart_date,
+                        onTap: () {
+                          selectData(context);
+                        },
+                        selectedColor: null,
+                        onTapIconButton: () {},
+                      ),
+                      const SizedBox(height: 40),
+                      WidgetElevatedButton(
+                        height: 55,
+                        text: 'Search Flight',
+                        onTap: () {
+                          roundTrip
+                              ? myBloc.getallPlaneTripGoingAndReturn(
+                                  country_source_id: CountryIdSource.toString(),
+                                  country_destination_id:
+                                      CountryIdDestination.toString(),
+                                  flight_date: depart_date)
+                              : myBloc.getallPlaneTripGoing(
+                                  country_source_id: CountryIdSource.toString(),
+                                  country_destination_id:
+                                      CountryIdDestination.toString(),
+                                  flight_date: depart_date);
+                        },
+                      )
+                    ],
+                  ),
+                ),
               ),
-            ),
-          )
-        ],
-      ),
-    );
+            )
+          ],
+        ),
+      );
+    });
   }
 
   Future<void> selectData(BuildContext context) async {
+    final ThemeData customTheme = ThemeData(
+      primaryColor: AppColor.primaryColor,
+      colorScheme: ColorScheme.light(
+          primary: AppColor.primaryColor, background: AppColor.secondColor),
+      textTheme: const TextTheme(
+        headlineMedium: TextStyle(
+            fontSize: 24.0,
+            fontWeight: FontWeight.bold,
+            fontFamily: "Philosopher"),
+      ),
+      dialogTheme: DialogTheme(
+        elevation: 10,
+        backgroundColor: AppColor.secondColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(40.0),
+        ),
+      ),
+    );
+
     final DateTime? picker = await showDatePicker(
       initialDate: DateTime.now(),
       firstDate: DateTime.now(),
@@ -327,31 +388,15 @@ class _FlightPageState extends State<FlightPage> {
       context: context,
       initialDatePickerMode: DatePickerMode.day,
       builder: (BuildContext context, Widget? child) {
-        return Theme(
-            data: ThemeData.light().copyWith(
-              primaryColor: AppColor.primaryColor,
-              dialogBackgroundColor: AppColor.secondColor.withOpacity(0.9),
-            ),
-            child: child!);
+        return Theme(data: customTheme, child: child!);
       },
     );
-    if (picker != null && picker != selectedData && A && roundTrip) {
+    if (picker != null && picker != selectedData) {
       setState(() {
         selectedData =
-            '${picker.day.toString()}/${picker.month.toString()}/${picker.year.toString()}';
-        Retur_date_Round = selectedData;
-      });
-    } else if (picker != null && picker != selectedData && !A && roundTrip) {
-      setState(() {
-        selectedData =
-            '${picker.day.toString()}/${picker.month.toString()}/${picker.year.toString()}';
-        Depart_date_Round = selectedData;
-      });
-    } else if (picker != null && picker != selectedData && B) {
-      setState(() {
-        selectedData =
-            '${picker.day.toString()}/${picker.month.toString()}/${picker.year.toString()}';
-        Depart_date_oneway = selectedData;
+            '${picker.day.toString()}-${picker.month.toString()}-${picker.year.toString()}';
+        depart_date = selectedData;
+        User.departFlight = selectedData;
       });
     }
   }

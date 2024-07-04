@@ -4,7 +4,7 @@ abstract class AppColor {
   //============first test
   static Color primaryColor = Color(0xff2b7fb8);
   static Color secondColor = Color(0xFFDEEAF1);
-  // static Color primaryColor = const Color(0xff112D4E);
+  static Color fifeColor = const Color(0xff112D4E);
   // static Color secondColor = const Color(0xff3F72AF);
   static Color thirdColor = Color.fromARGB(255, 131, 159, 211);
   static Color fourthColor = const Color(0xffF9F7F7);

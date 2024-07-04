@@ -19,6 +19,8 @@ class AppRoutes {
   static const String comments = '/commentPage';
   static const String hotelPage = '/hotelPage';
   static const String flightPage = '/flightPage';
+  static const String searchFlightPage = '/SearchFlightPage';
+
   static const String imagesview = '/imagesviewpage';
   static const String searchCountryPage = '/searchCountryPage';
   static const String searchAreaPage = '/searchAreaPage';

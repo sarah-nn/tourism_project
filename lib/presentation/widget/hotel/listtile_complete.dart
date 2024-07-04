@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 
+// ignore: must_be_immutable
 class WidgetListTileComplete extends StatelessWidget {
   WidgetListTileComplete(
-      {required this.enableIcon,
+      {required this.enableIconButton,
+      @required this.onTapIconButton,
+      required this.enableIcon,
       required this.enableCenterText,
       this.icon,
       required this.text,
       required this.onTap,
       required this.selected,
       this.style,
-      super.key});
+      super.key,
+      @required selectedColor});
   IconData? icon;
+  void Function()? onTapIconButton;
   String text;
   bool selected;
   bool enableIcon;
   bool enableCenterText;
   TextStyle? style;
+  bool enableIconButton;
   void Function() onTap;
   @override
   Widget build(BuildContext context) {
@@ -30,11 +36,16 @@ class WidgetListTileComplete extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25),
                 ),
-                leading: Icon(
-                  icon,
-                  color: AppColor.primaryColor,
-                ),
-                selected: selected!,
+                leading: enableIconButton
+                    ? IconButton(
+                        onPressed: onTapIconButton,
+                        icon: Icon(
+                          icon,
+                          color: AppColor.thirdColor,
+                          size: 28,
+                        ))
+                    : Icon(icon, color: AppColor.primaryColor),
+                selected: selected,
                 selectedColor: Colors.white,
                 selectedTileColor: AppColor.primaryColor,
                 title: enableCenterText
@@ -53,7 +64,7 @@ class WidgetListTileComplete extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25),
                 ),
-                selected: selected!,
+                selected: selected,
                 selectedColor: Colors.white,
                 selectedTileColor: AppColor.primaryColor,
                 title: enableCenterText

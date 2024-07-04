@@ -12,13 +12,13 @@ class WidgetDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: AppColor.thirdColor,
+      backgroundColor: AppColor.secondColor,
       child: Column(
         children: [
           Expanded(
-            flex: 1,
+            flex: 2,
             child: Container(
-              color: AppColor.secondColor,
+              color: AppColor.primaryColor,
               child: Center(
                 child: Padding(
                   padding: const EdgeInsets.all(10),
