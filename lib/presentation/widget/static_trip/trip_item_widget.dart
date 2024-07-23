@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_images.dart';
-import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
-import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/data/models/all_static_trip_model.dart';
-import 'package:tourism_project/presentation/widget/starting_page/forsted_glassbox_widget.dart';
 
 class StaticTripItem extends StatelessWidget {
   const StaticTripItem(
@@ -14,24 +11,30 @@ class StaticTripItem extends StatelessWidget {
       required this.location,
       required this.price,
       required this.index,
-      required this.tripmodel});
+      required this.tripmodel,
+      required this.isSearch});
 
   final String location;
   final String price;
   final int index;
   final AllStaticTripModel tripmodel;
+  final bool isSearch;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.only(bottom: 18),
       child: Container(
+        padding: const EdgeInsets.only(bottom: 15),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          color: isSearch
+              ? const Color.fromARGB(255, 224, 236, 240)
+              : Colors.white,
           border: Border.all(width: 0.5),
           // const Color.fromARGB(255, 158, 209, 250),
         ),
-        height: 250,
+        //  height: 250,
         child: Column(
           children: [
             Padding(
@@ -47,22 +50,7 @@ class StaticTripItem extends StatelessWidget {
                           fit: BoxFit.cover),
                       borderRadius: BorderRadius.circular(20)),
                 ),
-                Positioned(
-                    bottom: 0,
-                    child: ForstedGlassBox(
-                        blur: 5.0,
-                        isBorder: false,
-                        theWidth: MediaQuery.of(context).size.width - 42,
-                        theHeight: 40,
-                        theChild: Text(
-                          tripmodel.tripName!,
-                          //  "Taj Mahal",
-                          style: MyTextStyle.headers.copyWith(
-                              letterSpacing: 0.9,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 26,
-                              color: const Color.fromARGB(255, 59, 59, 59)),
-                        )))
+                tripmodel.newPrice == null ? Container() : offers()
               ]),
             ),
             Padding(
@@ -71,7 +59,29 @@ class StaticTripItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 5),
-                  locationRow(location),
+                  //locationRow(location),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(" ${tripmodel.tripName!}",
+                          style: TextStyle(
+                              color: AppColor.primaryColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 21)),
+                      Container(
+                        padding: const EdgeInsets.only(right: 25),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                            ),
+                            Text("(${tripmodel.stars})")
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                   const SizedBox(height: 6),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -163,9 +173,38 @@ Widget priceRow(price) {
   );
 }
 
+Widget offers() {
+  return Positioned(
+      bottom: 8,
+      right: 8,
+      child: Container(
+        height: 50,
+        width: 75,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(50)),
+            color: Color.fromARGB(255, 231, 82, 72).withOpacity(0.8)),
+        child: Container(
+          alignment: Alignment.center,
+          height: 40,
+          width: 60,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(50)),
+              border: Border.all(color: Colors.white)),
+          child: Center(
+              child: Text(
+            "Offer",
+            style: MyTextStyle.Pacifico.copyWith(
+                fontSize: 17, color: Colors.white),
+          )),
+        ),
+      ));
+}
+
 const List<String> images = [
   AppImage.tajMahal,
   AppImage.two,
   AppImage.onboarding1,
   AppImage.offers,
+  AppImage.hotel,
+  AppImage.starting2
 ];

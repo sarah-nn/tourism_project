@@ -8,6 +8,7 @@ class AllStaticTripModel {
   String? endDate;
   String? stars;
   String? tripNote;
+  String? newPrice;
 
   AllStaticTripModel(
       {this.id,
@@ -18,7 +19,8 @@ class AllStaticTripModel {
       this.startDate,
       this.endDate,
       this.stars,
-      this.tripNote});
+      this.tripNote,
+      this.newPrice});
 
   AllStaticTripModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -30,6 +32,7 @@ class AllStaticTripModel {
     endDate = json['end_date'];
     stars = json['stars'];
     tripNote = json['trip_note'];
+    newPrice = json['new_price'];
   }
 
   Map<String, dynamic> toJson() {
@@ -43,6 +46,7 @@ class AllStaticTripModel {
     data['end_date'] = this.endDate;
     data['stars'] = this.stars;
     data['trip_note'] = this.tripNote;
+    data['new_price'] = this.newPrice;
     return data;
   }
 }

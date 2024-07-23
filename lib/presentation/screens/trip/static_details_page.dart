@@ -1,8 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:tourism_project/business_logic/static_trip/static_trip_cubit.dart';
-import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_images.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
 import 'package:tourism_project/data/models/static_trip_details_model.dart';
@@ -97,11 +97,19 @@ class _StaticTripDetailsPageState extends State<StaticTripDetailsPage> {
                           ],
                         ),
                       ),
-                      const Expanded(
-                          flex: 2, child: PriceAndBookButtom(price: "\$ 569.0"))
+                      Expanded(
+                          flex: 2,
+                          child: PriceAndBookButtom(
+                            price: "\$ 569.0",
+                            tripId: tripModel!.staticTrip!.id.toString(),
+                          ))
                     ],
                   )
-                : const Center(child: CircularProgressIndicator()));
+                : Center(
+                    child: Container(
+                        height: 200,
+                        width: 200,
+                        child: Lottie.asset(AppImage.loading))));
       },
     );
   }

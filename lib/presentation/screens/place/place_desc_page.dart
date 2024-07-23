@@ -68,16 +68,20 @@ class _TestPageState extends State<PlaceDescPage> {
                                 children: [
                                   SizedBox(
                                     child: NameAndPrice(
-                                        placeName: state.placeDescModel.name,
-                                        price: state.placeDescModel.placePrice),
+                                        placeName: state.placeDescModel.name!,
+                                        price:
+                                            state.placeDescModel.placePrice!),
                                   ),
                                   SizedBox(
                                     child: LocationAndCategory(
-                                        country: state
-                                            .placeDescModel.area.country.name,
-                                        area: state.placeDescModel.area.name,
+                                        country: state.placeDescModel.area!
+                                            .country!.name!,
+                                        //  state
+                                        //     .placeDescModel.area.country.name,
+                                        // area: state.placeDescModel.area.name,
+                                        area: state.placeDescModel.area!.name!,
                                         category: state
-                                            .placeDescModel.categories
+                                            .placeDescModel.categories!
                                             .map((e) => e.name.toString())),
                                   ),
                                   const SizedBox(height: 50),
@@ -91,25 +95,44 @@ class _TestPageState extends State<PlaceDescPage> {
                                   SizedBox(
                                     child: PlaceDescText(
                                       maxWords: 22,
-                                      text: state.placeDescModel.text,
+                                      text: state.placeDescModel.text!,
                                     ),
                                   ),
                                   const SizedBox(height: 23),
                                   const Gallery(),
-                                  const SizedBox(height: 50),
+                                  const SizedBox(height: 30),
                                   Container(
                                     height: 100,
-                                    color: Colors.white,
+                                    alignment: Alignment.center,
+                                    decoration:
+                                        BoxDecoration(border: Border.all()),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text("View On Map"),
+                                        Icon(Icons.map_outlined)
+                                      ],
+                                    ),
                                   ),
+                                  const SizedBox(height: 30),
                                   Container(
                                     height: 200,
+                                    child: Text("data"),
+                                    color: Colors.amber,
                                   )
                                 ],
                               ),
                             ),
                           ),
                         )
-                      : Container()),
+                      //! this is constant and it shoud be responsive
+                      : Padding(
+                          padding: const EdgeInsets.only(top: 100, left: 160),
+                          child: CircularProgressIndicator(),
+                        )),
             ],
           ),
         ));

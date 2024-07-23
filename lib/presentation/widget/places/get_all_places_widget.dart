@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:tourism_project/business_logic/places/places_cubit.dart';
 import 'package:tourism_project/data/models/places_model.dart';
 import 'package:tourism_project/presentation/widget/places/places_item.dart';

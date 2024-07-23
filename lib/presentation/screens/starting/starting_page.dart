@@ -19,6 +19,7 @@ class _StartingPageState extends State<StartingPage> {
   Widget build(BuildContext context) {
     mycolor = Theme.of(context).primaryColor;
     return Scaffold(
+      //backgroundColor: Color(0xffF9F7F7),
       body: Stack(children: [
         Container(
           decoration: BoxDecoration(

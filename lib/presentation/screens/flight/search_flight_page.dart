@@ -241,6 +241,7 @@ class _SearchFlightPageState extends State<SearchFlightPage> {
                                           (BuildContext context, int index) {
                                         return departTripFlight
                                             ? WidgetSearchFlight(
+                                                isTrip: false,
                                                 round: User.round,
                                                 departflight: departTripFlight,
                                                 goingTrip:
@@ -250,6 +251,7 @@ class _SearchFlightPageState extends State<SearchFlightPage> {
                                                 returnTrip: null,
                                               )
                                             : WidgetSearchFlight(
+                                                isTrip: false,
                                                 round: User.round,
                                                 departflight: departTripFlight,
                                                 returnTrip:
@@ -266,6 +268,7 @@ class _SearchFlightPageState extends State<SearchFlightPage> {
                                       itemBuilder:
                                           (BuildContext context, int index) {
                                         return WidgetSearchFlight(
+                                          isTrip: false,
                                           round: User.round,
                                           departflight: false,
                                           goingPlaneTrip: goingPlaneTrip[index],

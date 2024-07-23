@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_images.dart';
+import 'package:tourism_project/core/utils/app_text_style.dart';
 import 'package:tourism_project/presentation/widget/hotel/custom_elevated_buttom.dart';
 
 showAlertDialog(BuildContext context, String message) {
@@ -9,35 +10,40 @@ showAlertDialog(BuildContext context, String message) {
   AlertDialog alert = AlertDialog(
     content: SizedBox(
       height: 300,
-      child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Image.asset(
-          "assets/images/false.png",
-        ),
-        const Text(
-          "Oops...",
-          style: TextStyle(
-              // fontFamily: 'normal',
-              color: Color.fromARGB(251, 244, 82, 82),
-              fontSize: 20),
-        ),
-        const SizedBox(height: 10),
-        Text(
-          message,
-          style: const TextStyle(
-              color: Colors.black45, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 20),
-        Padding(
-          padding: const EdgeInsets.only(left: 40, right: 40),
-          child: WidgetElevatedButton(
-            height: 40,
-            onTap: () {
-              Navigator.pop(context);
-            },
-            text: 'OK',
-          ),
-        )
-      ]),
+      child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(
+              "assets/images/false.png",
+            ),
+            const Text(
+              "Oops...",
+              style: TextStyle(
+                  // fontFamily: 'normal',
+                  color: Color.fromARGB(251, 244, 82, 82),
+                  fontSize: 20),
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: Text(
+                message,
+                style: const TextStyle(
+                    color: Colors.black45, fontWeight: FontWeight.bold),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, right: 40),
+              child: WidgetElevatedButton(
+                height: 40,
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                text: 'OK',
+              ),
+            )
+          ]),
     ),
   );
 
@@ -47,6 +53,26 @@ showAlertDialog(BuildContext context, String message) {
     builder: (BuildContext context) {
       return alert;
     },
+  );
+}
+
+Widget noSearchResult() {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Container(
+        alignment: Alignment.center,
+        height: 100,
+        width: 100,
+        child: Image.asset(AppImage.noResult),
+      ),
+      const SizedBox(height: 20),
+      Text(
+        "No Result",
+        style: MyTextStyle.poppins
+            .copyWith(color: const Color(0xff9E9E9E), fontSize: 20),
+      )
+    ],
   );
 }
 
@@ -95,6 +121,56 @@ showAlertSuccess(
       ],
     ),
   );
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+CustomAlertDialog(
+  BuildContext context,
+  final String title,
+  final String message,
+  final String positiveBtnText,
+  final String negativeBtnText,
+  final Function onPostivePressed,
+  final Function onNegativePressed,
+) {
+  AlertDialog alert = AlertDialog(
+    title: title != null ? Text(title) : null,
+    content: message != null ? Text(message) : null,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    actions: <Widget>[
+      MaterialButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+          if (onNegativePressed != null) {
+            onNegativePressed();
+          }
+          print("negattttttive ${negativeBtnText}");
+        },
+        child: Text(
+          negativeBtnText,
+          style: TextStyle(color: AppColor.primaryColor),
+        ),
+      ),
+      MaterialButton(
+        onPressed: () {
+          if (onPostivePressed != null) {
+            onPostivePressed();
+          }
+          print("posittttttive ${positiveBtnText}");
+        },
+        child: Text(
+          positiveBtnText,
+          style: TextStyle(color: AppColor.primaryColor),
+        ),
+      ),
+    ],
+  );
+
   showDialog(
     context: context,
     builder: (BuildContext context) {

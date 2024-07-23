@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_project/business_logic/user/user_cubit.dart';
+import 'package:tourism_project/core/database/cach_helper.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/core/functions/functions.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/core/validation.dart';
 import 'package:tourism_project/presentation/widget/auth/buttom_auth_widget.dart';
 import 'package:tourism_project/presentation/widget/auth/dont_have_account_widget.dart';
@@ -19,6 +21,7 @@ class LoginPage extends StatelessWidget {
     return BlocConsumer<UserCubit, UserState>(
       listener: (context, state) {
         if (state is UserSuccess) {
+          myToken = CacheHelper().getData(key: 'token');
           goRoute(context, AppRoutes.homePage);
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -73,7 +76,7 @@ class LoginPage extends StatelessWidget {
                           iconData: Icons.lock,
                           //  icon_password: Icons.visibility,
                           isPassword: true,
-                          passToggle: false,
+                          passToggle: true,
                         ),
                         const SizedBox(height: 10),
                         InkWell(
@@ -91,7 +94,10 @@ class LoginPage extends StatelessWidget {
                             ? const Center(child: CircularProgressIndicator())
                             : CustomButtomAuth(
                                 onPressed: () {
+                                  CacheHelper().saveData(
+                                      key: "isUserLoggedIn?", value: true);
                                   context.read<UserCubit>().login();
+
                                   //goRoute(context, AppRoutes.homePage);
                                 },
                                 textButtom: 'Login',

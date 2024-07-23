@@ -9,6 +9,8 @@ final class UserSuccess extends UserState {}
 
 final class UserLoading extends UserState {}
 
+final class UserLogOut extends UserState {}
+
 final class UserFailure extends UserState {
   final String message;
 

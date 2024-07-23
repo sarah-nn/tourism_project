@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:tourism_project/business_logic/static_trip/book_static_trip/book_static_trip_cubit.dart';
+import 'package:tourism_project/core/utils/end_point.dart';
 import 'package:tourism_project/core/utils/global.dart';
-import 'package:tourism_project/data/models/dynamic_booking_value_model.dart';
+import 'package:tourism_project/data/models/dynamic_booking_details_model.dart';
 
 part 'dynamic_trip_state.dart';
 
@@ -10,17 +15,115 @@ class DynamicTripCubit extends Cubit<DynamicTripState> {
 
   TextEditingController tripName = TextEditingController();
   List<String> triplist = [];
+  // List<int> placeIds = [];
+  // List<int> activities = [1, 2];
   String tripNameVal = '';
   String startDate = '';
+  //String plane_trip_id = goingPlaneId;
+  //String plane_trip_away_id = returnPlaneId;
   String endDate = '';
+  String sourceTripId = '';
+  String destinationTripId = '';
+  String hotelId = '';
+  int numOfPeople = 0;
 
-  void addToTripList(String keyName, String value) {
-    keyName = value;
+  // for Room Capacity
+  TextEditingController controller2 = TextEditingController();
+  TextEditingController controller4 = TextEditingController();
+  TextEditingController controller6 = TextEditingController();
+
+  //for number of people
+  TextEditingController num = TextEditingController();
+
+  //for trip note
+  TextEditingController tripNote = TextEditingController();
+
+  DynamicTripModel? bookingModel;
+
+  void addPlaceIds(int value) {
+    placeIds.add(value);
+    print("adeddd");
+    print(placeIds);
+  }
+
+  void addActivites(int value) {
+    activities.add(value);
   }
 
   void printList() {
-    print("1.$gtripname \n");
-    print("1.$gstartDate \n");
-    print("1.$gendDate jkwdj \n");
+    Map<String, String> tripRequestBody = buildRequestBody();
+
+    // print("\n\n\n==$tripRequestBody==");
+  }
+
+  Map<String, String> buildRequestBody() {
+    Map<String, String> body = {
+      'source_trip_id': sourceTripId,
+      'destination_trip_id': destinationTripId,
+      'trip_name': tripName.text,
+      'number_of_people': numOfPeople.toString(),
+      'start_date': startDate,
+      'end_date': endDate,
+      'trip_note': tripNote.text,
+      // 'plane_trip_id': '1',
+      // 'plane_trip_away_id': '2',
+      'count_room_C2': controller2.text.isEmpty ? "0" : controller2.text,
+      'count_room_C4': controller4.text.isEmpty ? "0" : controller4.text,
+      'count_room_C6': controller6.text.isEmpty ? "0" : controller6.text,
+      //'place_ids[0]': '1',
+      //'activities[0]': '1',
+    };
+
+    if (hotelId != '') {
+      body['hotel_id'] = hotelId;
+    }
+
+    if (onePlaneId != '') {
+      body['plane_trip_id'] = onePlaneId;
+    }
+
+    if (goingPlaneId != '') {
+      body['plane_trip_away_id'] = goingPlaneId;
+    }
+
+    if (returnPlaneId != '') {
+      body['plane_trip_away_id'] = returnPlaneId;
+    }
+
+    for (int i = 0; i < placeIds.length; i++) {
+      body['place_ids[$i]'] = placeIds[i].toString();
+    }
+
+    for (int i = 0; i < activities.length; i++) {
+      body['activities[$i]'] = activities[i].toString();
+    }
+
+    return body;
+  }
+
+  Future<void> dynamicTripBooking() async {
+    Map<String, String> tripRequestBody = buildRequestBody();
+    // emit(UserLoading());
+    http.Response response = await http.post(Uri.parse(EndPoint.dynamicBooking),
+        body: tripRequestBody,
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $myToken'
+        });
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body)['data'];
+      print("\n\n\n\n$data");
+      print("=========${data['dynamic_trip']['trip_name']}");
+      return data;
+      // bookingModel = DynamicTripModel.fromJson(data);
+      // emit(DynamicTripBookingSuccess(dynamicbookingModel: bookingModel!));
+    } else {
+      print(
+          "response.statusCode ${response.statusCode} , with body ${response.body}");
+      var message = jsonDecode(response.body)['message'];
+      print(message);
+      emit(BookingDynamicFail(errMessage: message));
+    }
+    return null;
   }
 }

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
-import 'package:tourism_project/core/functions/functions.dart';
 
 class DescriptionAndOverview extends StatelessWidget {
   final String placeId;

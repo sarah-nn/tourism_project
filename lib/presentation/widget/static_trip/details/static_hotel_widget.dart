@@ -38,8 +38,8 @@ class StaticHotelWidget extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8),
-            towText(tripModel!.hotel!.name!,
-                tripModel!.staticTrip!.tripCapacity!.toString())
+            towText(tripModel.hotel!.name!,
+                tripModel.staticTrip!.tripCapacity!.toString())
           ],
         ),
       ),

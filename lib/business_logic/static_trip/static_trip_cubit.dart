@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_project/core/utils/end_point.dart';
@@ -14,6 +15,10 @@ class StaticTripCubit extends Cubit<StaticTripState> {
 
   var data = [];
   List<AllStaticTripModel> tripList = [];
+  TextEditingController searchController = TextEditingController();
+  String firstDate = '';
+  String secondDate = '';
+  String type = '';
 
   Future<List<AllStaticTripModel>> getAllStaticTrip() async {
     var uri = Uri.parse(EndPoint.allStaticTrip);
@@ -28,6 +33,7 @@ class StaticTripCubit extends Cubit<StaticTripState> {
             .toList(growable: true);
         emit(AllStaticTripSuccess(allTripList: tripList));
       } else {
+        print("getAllStaticTrip");
         print("api error${response.statusCode}");
         print("=================${response.body}");
       }
@@ -57,5 +63,52 @@ class StaticTripCubit extends Cubit<StaticTripState> {
     } catch (e) {
       emit(StaticTripFail(errMessage: e.toString()));
     }
+  }
+
+  Map<String, String> buildRequestBody() {
+    Map<String, String> body = {
+      'type': type,
+    };
+    if (searchController.text.isNotEmpty) {
+      body['search_variable'] = searchController.text;
+    }
+    if (firstDate != '') {
+      body['first_date'] = firstDate;
+    }
+    if (secondDate != '') {
+      body['second_date'] = secondDate;
+    }
+    return body;
+  }
+
+  printll() {
+    print(buildRequestBody());
+  }
+
+  Future<List<AllStaticTripModel>> SearchTrip() async {
+    Map<String, String> tripRequestBody = buildRequestBody();
+    var uri = Uri.parse(EndPoint.searchTrip);
+    var header = {'Authorization': 'Bearer $myToken'};
+    var response = await http.post(uri, headers: header, body: tripRequestBody);
+    try {
+      emit(StaticTripLoading());
+      if (response.statusCode == 200) {
+        data = json.decode(response.body)['data'];
+        tripList = data
+            .map((e) => AllStaticTripModel.fromJson(e))
+            .toList(growable: true);
+        emit(AllStaticTripSuccess(allTripList: tripList));
+      } else {
+        print("getAllStaticTrip");
+        print("api error${response.statusCode}");
+        print("=================${response.body}");
+      }
+    } catch (e) {
+      print("exception in ");
+      emit(StaticTripFail(errMessage: e.toString()));
+    }
+    print(response.body);
+    print(tripList);
+    return tripList;
   }
 }

@@ -5,8 +5,14 @@ sealed class DynamicTripState {}
 
 final class DynamicTripInitial extends DynamicTripState {}
 
-final class DynamicTripValues extends DynamicTripState {
-  final DynamicBookingValueModel tripValues;
+final class DynamicTripBookingSuccess extends DynamicTripState {
+  final DynamicTripModel dynamicbookingModel;
 
-  DynamicTripValues({required this.tripValues});
+  DynamicTripBookingSuccess({required this.dynamicbookingModel});
+}
+
+final class BookingDynamicFail extends DynamicTripState {
+  final String errMessage;
+
+  BookingDynamicFail({required this.errMessage});
 }

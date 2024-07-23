@@ -20,6 +20,10 @@ class AppRoutes {
   static const String hotelPage = '/hotelPage';
   static const String flightPage = '/flightPage';
   static const String searchFlightPage = '/SearchFlightPage';
+  static const String test2 = '/test2';
+  static const String startDynamicPage = '/startDynamicPage';
+  static const String dynamicTripDetails = '/dynamictripdetailsPage';
+  static const String searchStaticTrip = '/searchStaticTripPage';
 
   static const String imagesview = '/imagesviewpage';
   static const String searchCountryPage = '/searchCountryPage';

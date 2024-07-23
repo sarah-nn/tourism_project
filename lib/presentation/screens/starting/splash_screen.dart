@@ -5,6 +5,7 @@ import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
 import 'package:tourism_project/core/database/cach_helper.dart';
 import 'package:tourism_project/core/functions/functions.dart';
+import 'package:tourism_project/core/utils/global.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,12 +17,18 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
+    //print("\n\n=========$myToken===================\n\n");
+
     bool isonboardingvisited =
         CacheHelper().getData(key: "isonboardingvisited?") ?? false;
+    bool isUserLoggedIn =
+        CacheHelper().getData(key: "isUserLoggedIn?") ?? false;
     if (isonboardingvisited == true) {
-      delayedNavigate(context, AppRoutes.login);
+      !isUserLoggedIn
+          ? delayedNavigate(context, AppRoutes.login)
+          : delayedNavigate(context, AppRoutes.homePage);
     } else {
-      delayedNavigate(context, AppRoutes.login);
+      delayedNavigate(context, AppRoutes.onBoarding);
     }
 
     super.initState();

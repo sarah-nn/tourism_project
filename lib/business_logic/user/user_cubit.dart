@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:tourism_project/core/utils/end_point.dart';
 import 'package:tourism_project/core/database/cach_helper.dart';
+import 'package:tourism_project/core/utils/global.dart';
 part 'user_state.dart';
 
 class UserCubit extends Cubit<UserState> {
@@ -43,7 +44,7 @@ class UserCubit extends Cubit<UserState> {
         emit(UserSuccess());
       } else {
         var message = jsonDecode(response.body);
-        print(message['message']);
+        print(" message['message']${message['message']}");
         emit(UserFailure(message: message['message']));
       }
     } else {
@@ -102,6 +103,24 @@ class UserCubit extends Cubit<UserState> {
       }
     } else {
       throw Exception("server or bad request error");
+    }
+  }
+
+  logOut() async {
+    var uri = Uri.parse("http://192.168.43.119:8000/api/logout");
+    var header = {'Authorization': 'Bearer $myToken'};
+    var response = await http.get(uri, headers: header);
+    try {
+      emit(UserLoading());
+      if (response.statusCode == 200) {
+        print("logout message : ${response.body}");
+        emit(UserLogOut());
+      } else {
+        var message = jsonDecode(response.body);
+        print("api error${response.statusCode}=======${message}");
+      }
+    } catch (e) {
+      emit(UserFailure(message: e.toString()));
     }
   }
 }

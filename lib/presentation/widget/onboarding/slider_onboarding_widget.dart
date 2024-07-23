@@ -47,7 +47,7 @@ class CustomSliderOnBoarding extends StatelessWidget {
                         onTap: () {
                           CacheHelper().saveData(
                               key: "isonboardingvisited?", value: true);
-                          replace(context, AppRoutes.homePage);
+                          replace(context, AppRoutes.register);
                         },
                         child: const Text(
                           "Skip",

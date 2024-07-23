@@ -40,12 +40,12 @@ class _StaticTripPageState extends State<StaticTripPage> {
             floatingActionButton: FloatingActionButton(
               backgroundColor: AppColor.primaryColor,
               onPressed: () {
-                goRoute(context, AppRoutes.dynamicTrip);
+                goRoute(context, AppRoutes.startDynamicPage);
               },
               child: Icon(Icons.add),
             ),
             backgroundColor: Color.fromARGB(255, 230, 230, 230),
-            appBar: myAppBar(),
+            appBar: myAppBar(context),
             body: Container(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Column(
@@ -60,6 +60,7 @@ class _StaticTripPageState extends State<StaticTripPage> {
                         shrinkWrap: true,
                         itemBuilder: (context, i) {
                           return StaticTripItem(
+                            isSearch: false,
                             index: i,
                             location: " Agra, India",
                             price: "489.0 ",
@@ -116,9 +117,16 @@ class _StaticTripPageState extends State<StaticTripPage> {
   }
 }
 
-PreferredSizeWidget myAppBar() {
+PreferredSizeWidget myAppBar(BuildContext context) {
   return AppBar(
     backgroundColor: AppColor.primaryColor,
+    actions: [
+      IconButton(
+          onPressed: () {
+            goRoute(context, AppRoutes.searchStaticTrip);
+          },
+          icon: Icon(Icons.search))
+    ],
     title: const Text(" Pre_Made Trip"),
     titleTextStyle: MyTextStyle.headers.copyWith(
       height: 0,

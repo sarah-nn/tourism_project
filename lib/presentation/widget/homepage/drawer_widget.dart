@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:tourism_project/business_logic/user/user_cubit.dart';
 import 'package:tourism_project/core/localization/chang_language_buttom.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/core/functions/functions.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/presentation/widget/homepage/list_tile_home_widget.dart';
 
 class WidgetDrawer extends StatelessWidget {
@@ -76,6 +79,20 @@ class WidgetDrawer extends StatelessWidget {
                 widgetListTile(
                   icon: Iconsax.logout,
                   text: "Logout",
+                  onTap: () {
+                    CustomAlertDialog(
+                        context,
+                        "Logout",
+                        "Are you sure, do you want to logOut ?",
+                        'Yes',
+                        'No', () {
+                      BlocProvider.of<UserCubit>(context).logOut();
+                      myToken = '';
+                      replace(context, AppRoutes.login);
+                    }, () {
+                      Navigator.of(context).pop();
+                    });
+                  },
                 ),
                 const Divider(
                   color: Colors.black,

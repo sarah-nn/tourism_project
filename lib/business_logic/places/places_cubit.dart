@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:tourism_project/core/utils/end_point.dart';
 import 'package:tourism_project/core/utils/global.dart';
+import 'package:tourism_project/data/models/place_country_model.dart';
 import 'package:tourism_project/data/models/places_depend_on_category_model.dart';
 import 'package:tourism_project/data/models/places_model.dart';
 import 'package:http/http.dart' as http;
@@ -15,6 +16,7 @@ class PlacesCubit extends Cubit<PlacesState> {
   List<Place> placeList = [];
   List<PlaceDependOnCategoryModel> place_category_list = [];
   List<Map<String, dynamic>> placesCountry = [];
+
   List<Place> places_country = [];
 
   Future<List<Place>> getAllPlace() async {
@@ -70,6 +72,24 @@ class PlacesCubit extends Cubit<PlacesState> {
     if (response.statusCode == 200) {
       return json.decode(response.body)['data'];
     } else {
+      print(response.body);
+      // print("api error ${response.statusCode} ==== ${response.body}");
+    }
+    return [];
+  }
+
+  Future<PlaceResponse> sarah() async {
+    var header = {'Authorization': 'Bearer $myToken'};
+    final response = await http.get(
+        Uri.parse(
+            'http://192.168.43.119:8000/api/user/places-depending-on-country/2'),
+        headers: header);
+
+    if (response.statusCode == 200) {
+      print(response.body);
+      return PlaceResponse.fromJson(jsonDecode(response.body)['data']);
+    } else {
+      //emit(PlacesFailure(errMessage: e.toString()))
       throw Exception('Failed to load data');
     }
   }

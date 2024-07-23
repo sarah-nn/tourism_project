@@ -44,12 +44,15 @@ class SearchFlightCubit extends Cubit<SearchFlightState> {
       } else {
         var message = json.decode(response.body);
         emit(SearchFlightFailure(errMessage: message['message'].toString()));
-        print("api error${response.statusCode}");
+        print("api error ${response.statusCode} , with body ${response.body}");
       }
     } catch (e) {
       print("$e");
       emit(SearchFlightFailure(errMessage: e.toString()));
     }
+    //! comment print here becuase it make null check operator
+    // print(
+    //     "this is the cubit result of flight going and return ${goingAndReturnPlaneTrip!.data.goingTrip.map((e) => e.airportDestination)}");
     return goingAndReturnPlaneTrip;
   }
 
@@ -82,7 +85,7 @@ class SearchFlightCubit extends Cubit<SearchFlightState> {
       } else {
         var message = json.decode(response.body);
         emit(SearchFlightFailure(errMessage: message['message'].toString()));
-        print("api error${response.statusCode}");
+        print("api error ${response.statusCode} , with body ${response.body}");
       }
     } catch (e) {
       print("$e");

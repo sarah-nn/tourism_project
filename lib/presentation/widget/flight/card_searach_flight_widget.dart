@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
 
 import 'package:tourism_project/core/utils/app_color.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/going_and_return_plane_trip.dart';
 import 'package:tourism_project/data/models/going_plane_trip.dart';
 
@@ -11,14 +14,22 @@ class WidgetSearchFlight extends StatelessWidget {
       {@required this.goingPlaneTrip,
       @required this.goingTrip,
       @required this.returnTrip,
+      @required this.goingId,
+      @required this.returnId,
+      @required this.onePlane,
+      required this.isTrip,
       required this.departflight,
       required this.round,
       super.key});
   GoingTrip? goingTrip;
   ReturnTrip? returnTrip;
   GoingPlaneTrip? goingPlaneTrip;
+  String? goingId;
+  String? returnId;
+  String? onePlane;
   bool departflight;
   bool round;
+  bool isTrip;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -115,62 +126,101 @@ class WidgetSearchFlight extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        const Text(
-                          "The cost :",
-                          style: TextStyle(
-                              backgroundColor:
-                                  Color.fromARGB(255, 236, 168, 163),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              ' \$',
-                              style: TextStyle(
-                                  fontSize: 22, color: AppColor.primaryColor),
+                //! chang this row if it trip
+                !isTrip
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              const Text(
+                                "The cost :",
+                                style: TextStyle(
+                                    backgroundColor:
+                                        Color.fromARGB(255, 236, 168, 163),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    ' \$',
+                                    style: TextStyle(
+                                        fontSize: 22,
+                                        color: AppColor.primaryColor),
+                                  ),
+                                  Text(
+                                    '${round ? departflight ? goingTrip?.currentPrice : returnTrip?.currentPrice : goingPlaneTrip?.currentPrice}',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColor.fifeColor,
+                                        fontSize: 17),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              GoRouter.of(context).push(
+                                  '/flightDetails/${round ? departflight ? goingTrip?.id : returnTrip?.id : goingPlaneTrip?.id}');
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: AppColor.thirdColor.withAlpha(35),
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                      width: 1, color: AppColor.primaryColor)),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 20, right: 20, top: 10, bottom: 10),
+                                child: Text(
+                                  'more details...',
+                                  style: TextStyle(
+                                      fontFamily: 'Philosopher',
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColor.primaryColor),
+                                ),
+                              ),
                             ),
-                            Text(
-                              '${round ? departflight ? goingTrip?.currentPrice : returnTrip?.currentPrice : goingPlaneTrip?.currentPrice}',
+                          )
+                        ],
+                      )
+                    : GestureDetector(
+                        onTap: () {
+                          print(
+                              "var flight = context.read<DynamicTripCubit>();");
+                          onePlaneId = onePlane ?? '';
+                          goingPlaneId = goingId ?? '';
+                          returnPlaneId = returnId ?? '';
+                          Navigator.pop(context);
+                          // var flight =
+                          //     BlocProvider.of<DynamicTripCubit>(context);
+                          // print("=============${flight.startDate}");
+                          // flight.plane_trip_id = goingId ?? '1';
+                          // flight.plane_trip_away_id = returnId ?? '1';
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          width: double.maxFinite,
+                          decoration: BoxDecoration(
+                              color: AppColor.thirdColor.withAlpha(35),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                  width: 1, color: AppColor.primaryColor)),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 20, right: 20, top: 10, bottom: 10),
+                            child: Text(
+                              'Tap to Select',
                               style: TextStyle(
+                                  fontFamily: 'Philosopher',
+                                  fontSize: 19,
                                   fontWeight: FontWeight.bold,
-                                  color: AppColor.fifeColor,
-                                  fontSize: 17),
+                                  color: AppColor.primaryColor),
                             ),
-                          ],
-                        )
-                      ],
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        GoRouter.of(context).push(
-                            '/flightDetails/${round ? departflight ? goingTrip?.id : returnTrip?.id : goingPlaneTrip?.id}');
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: AppColor.thirdColor.withAlpha(35),
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                                width: 1, color: AppColor.primaryColor)),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20, right: 20, top: 10, bottom: 10),
-                          child: Text(
-                            'more details...',
-                            style: TextStyle(
-                                fontFamily: 'Philosopher',
-                                fontWeight: FontWeight.bold,
-                                color: AppColor.primaryColor),
                           ),
                         ),
-                      ),
-                    )
-                  ],
-                )
+                      )
               ],
             ),
           ),

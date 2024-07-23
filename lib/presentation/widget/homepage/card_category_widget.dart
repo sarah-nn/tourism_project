@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/functions/functions.dart';
+import 'package:tourism_project/core/utils/global.dart';
 
 // ignore: must_be_immutable
 class CardCategouries extends StatelessWidget {
@@ -19,6 +20,7 @@ class CardCategouries extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () {
+            print("===================${myToken}");
             goRoute(context, path);
           },
           child: Container(

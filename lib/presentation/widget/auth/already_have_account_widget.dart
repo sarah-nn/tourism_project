@@ -24,6 +24,7 @@ class AlreadyHaveAnAccount extends StatelessWidget {
         ),
         InkWell(
           onTap: () {
+            print("[[[[[[[[[[object]]]]]]]]]]");
             replace(context, routeName);
           },
           child: Text(

@@ -27,11 +27,13 @@ class PlaceDescCubit extends Cubit<PlaceDescState> {
       if (response.statusCode == 200) {
         var data = json.decode(response.body)['data'];
         emit(PlaceDescSuccess(PlaceDescModel.fromJson(data)));
+        print(response.body);
       } else {
         print("api error${response.statusCode}");
       }
     } catch (e) {
       print("$e");
+      print(response.body);
       emit(PlaceDescFailure(errMessage: e.toString()));
     }
     print(placeDesList);

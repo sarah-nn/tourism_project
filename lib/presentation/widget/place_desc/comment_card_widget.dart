@@ -41,7 +41,10 @@ class CommentCaredWidget extends StatelessWidget {
                     Colors.white
                   ]),
                   border: Border.all(width: 0.2, color: Colors.black45),
-                  borderRadius: BorderRadius.circular(20)),
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20),
+                      topRight: Radius.circular(20))),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

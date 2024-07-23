@@ -4,46 +4,43 @@ import 'package:tourism_project/core/utils/app_color.dart';
 class CustomSearch extends StatelessWidget {
   final String title;
   final void Function()? onPressedIcon;
-  final void Function()? onPressedSearch;
-  final void Function()? onPressedIconfavorite;
-  const CustomSearch(
-      {super.key,
-      required this.title,
-      this.onPressedIcon,
-      this.onPressedSearch,
-      required this.onPressedIconfavorite});
+  final TextEditingController myController;
+  const CustomSearch({
+    super.key,
+    required this.title,
+    this.onPressedIcon,
+    required this.myController,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 44),
+      margin: const EdgeInsets.only(top: 14),
       child: Row(
         children: [
           Expanded(
-            child: TextFormField(
-              decoration: InputDecoration(
-                prefixIcon: IconButton(
-                  icon: Icon(
-                    Icons.search,
-                    color: AppColor.primaryColor,
-                  ),
-                  onPressed: onPressedSearch,
+            child: SizedBox(
+              height: 53,
+              child: TextFormField(
+                controller: myController,
+                decoration: InputDecoration(
+                  hintText: title,
+                  hintStyle:
+                      TextStyle(fontSize: 18, color: AppColor.primaryColor),
+                  border: const OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.all(Radius.circular(12))),
+                  filled: true,
+                  fillColor: const Color.fromARGB(255, 230, 230, 230),
                 ),
-                hintText: title,
-                hintStyle:
-                    TextStyle(fontSize: 20, color: AppColor.primaryColor),
-                border: const OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.all(Radius.circular(12))),
-                filled: true,
-                fillColor: const Color.fromARGB(255, 230, 230, 230),
               ),
             ),
           ),
           const SizedBox(
-            width: 10,
+            width: 7,
           ),
           Container(
+            height: 53,
             decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 230, 230, 230),
                 borderRadius: BorderRadius.all(Radius.circular(12))),
@@ -51,8 +48,7 @@ class CustomSearch extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 6),
             child: IconButton(
               onPressed: onPressedIcon,
-              icon: const Icon(Icons.favorite_outline,
-                  size: 32, color: Colors.red),
+              icon: Icon(Icons.search, size: 32, color: AppColor.primaryColor),
             ),
           ),
         ],

@@ -74,7 +74,7 @@ class RegisterPage extends StatelessWidget {
                     mycontroller: context.read<UserCubit>().password,
                     hintText: "Enter Your password",
                     labelText: "Password : ",
-                    passToggle: false,
+                    passToggle: true,
                     isPassword: true,
                     iconData: Icons.lock,
                   ),

@@ -17,11 +17,23 @@ abstract class AppImage {
   static const flight = 'assets/images/flight.png';
   static const map = 'assets/images/search_flight.png';
   static const dottedRoute = 'assets/images/2.png';
-   static const starting2 = 'assets/images/starting2.jpg';
+  static const starting2 = 'assets/images/starting2.jpg';
+  static const arrowForword = 'assets/images/arrow.png';
+  static const countryType = 'assets/images/Country1.jfif';
+  static const noResult = 'assets/images/noResult.png';
+
+  //Animation
+  static const startDynamicPage = 'assets/lottie/starting_dynamic_page.json';
+  static const loading = 'assets/lottie/loading.json';
 }
 
 abstract class AppIcon {
   static const plan = 'assets/icons/flight.svg';
   static const hotel = 'assets/icons/hotel.svg';
   static const trip = 'assets/icons/trip.svg';
+  static const couple = 'assets/icons/couple.png';
+  static const friend = 'assets/icons/friends.png';
+  static const family = 'assets/icons/large-family.png';
+  static const single = 'assets/icons/single_person.png';
+  static const climping = 'assets/icons/climbing.png';
 }
