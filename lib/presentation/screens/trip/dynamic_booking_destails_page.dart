@@ -1,20 +1,50 @@
-// import 'package:flutter/material.dart';
-// import 'package:tourism_project/data/models/dynamic_booking_details_model.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
+import 'package:tourism_project/data/models/dynamic_booking_details_model.dart';
 
-// class DynamicTripDetailsPage extends StatelessWidget {
-//   final DynamicTripModel bookingModel;
+class DynamicTripBookingDetailsPage extends StatefulWidget {
+  final String tripId;
+  const DynamicTripBookingDetailsPage({
+    super.key,
+    required this.tripId,
+  });
 
-//   const DynamicTripDetailsPage({super.key, required this.bookingModel});
+  @override
+  State<DynamicTripBookingDetailsPage> createState() =>
+      _DynamicTripBookingDetailsPageState();
+}
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Center(
-//         child: Text(bookingModel.dynamicTrip!.endDate!),
-//       ),
-//     );
-//   }
-// }
+class _DynamicTripBookingDetailsPageState
+    extends State<DynamicTripBookingDetailsPage> {
+  Data? mymodel;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<DynamicTripCubit>().dynamicTripBookingdetails(widget.tripId);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<DynamicTripCubit, DynamicTripState>(
+      listener: (context, state) {
+        if (state is DynamicTripBookingSuccess) {
+          mymodel = (state).dynamicbookingModel;
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
+            body: Center(
+                child: state is DynamicTripBookingSuccess
+                    ? Text(mymodel!.tripName)
+                    : const Center(
+                        child: CircularProgressIndicator(),
+                      )));
+      },
+    );
+  }
+}
 
 
 // import 'package:flutter/material.dart';

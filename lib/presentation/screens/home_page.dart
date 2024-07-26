@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:tourism_project/core/database/cach_helper.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_images.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
@@ -10,9 +13,15 @@ import 'package:tourism_project/presentation/widget/homepage/card_category_widge
 import 'package:tourism_project/presentation/widget/homepage/card_top_visit_widget.dart';
 import 'package:tourism_project/presentation/widget/homepage/drawer_widget.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  String saveImage = CacheHelper().getData(key: "profileImage") ?? '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,6 +29,16 @@ class HomePage extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.black, size: 30),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: Icon(
+              Icons.notifications_active,
+              color: AppColor.primaryColor,
+              size: 27,
+            ),
+          )
+        ],
       ),
       drawer: const WidgetDrawer(),
       body: Padding(
@@ -39,13 +58,47 @@ class HomePage extends StatelessWidget {
                           letterSpacing: 1)
                       //TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                       ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.notifications_active,
-                      color: AppColor.primaryColor,
-                    ),
-                    onPressed: () {},
-                  )
+                  // IconButton(
+                  //   icon: Icon(
+                  //     Icons.notifications_active,
+                  //     color: AppColor.primaryColor,
+                  //   ),
+                  //   onPressed: () {},
+                  // )
+                  saveImage == ''
+                      ? CircleAvatar(
+                          radius: 22,
+                          backgroundColor: Colors.grey[200],
+                          child: const Center(
+                            child: Icon(
+                              Icons.person,
+                              size: 22,
+                              color: Colors.grey,
+                            ),
+                          ))
+                      : CircleAvatar(
+                          radius: 22,
+                          backgroundColor: Colors.white,
+                          backgroundImage: FileImage(
+                            File(CacheHelper().getData(key: "profileImage")),
+                          )
+                          //AssetImage(context.read<UploadImageCubit>().profilePic)
+                          // NetworkImage(
+                          //     EndPoint.imageBaseUrl +
+                          //         state.userInfo.image!)
+                          )
+                  // Container(
+                  //   padding: EdgeInsets.all(3),
+                  //   decoration: BoxDecoration(
+                  //     shape: BoxShape.circle,
+                  //     color: AppColor.secondColor,
+                  //   ),
+                  //   child: const CircleAvatar(
+                  //       radius: 22,
+                  //       backgroundImage: AssetImage(
+                  //           AppImage.person) //AssetImage(AppImage.person),
+                  //       ),
+                  // )
                 ],
               ),
               Text("The world...",

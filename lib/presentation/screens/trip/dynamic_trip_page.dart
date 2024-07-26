@@ -1,15 +1,16 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tourism_project/business_logic/activity/activity_cubit.dart';
 import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
 import 'package:tourism_project/business_logic/hotel/searchHotel_cubit.dart';
+
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
+import 'package:tourism_project/core/utils/app_images.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
-import 'package:tourism_project/core/utils/global.dart';
-import 'package:tourism_project/data/models/dynamic_booking_details_model.dart';
 import 'package:tourism_project/data/models/going_plane_trip.dart';
 import 'package:tourism_project/presentation/widget/dynamic_trip/activity_dynamic_windget.dart';
 import 'package:tourism_project/presentation/widget/dynamic_trip/custom_trip_filed.dart';
@@ -32,6 +33,8 @@ class _DynamicTripPageState extends State<DynamicTripPage> {
   int currentStep = 0;
   String countryId = '';
   List<GoingPlaneTrip> planesList = [];
+  String? tripId;
+  bool isSuccess = false;
 
   // DynamicTripModel? bookingModel;
 
@@ -39,8 +42,9 @@ class _DynamicTripPageState extends State<DynamicTripPage> {
   Widget build(BuildContext context) {
     return BlocConsumer<DynamicTripCubit, DynamicTripState>(
       listener: (context, state) {
-        if (state is DynamicTripBookingSuccess) {
-          // bookingModel = (state).dynamicbookingModel;
+        if (state is BookingSuccess) {
+          showBookingDoneDialog(context, AppRoutes.dynamicTripDetails, tripId);
+          tripId = (state).tripId;
         }
         //  print("❗${bookingModel}");
         //print("❗❤${bookingModel?}");
@@ -60,7 +64,7 @@ class _DynamicTripPageState extends State<DynamicTripPage> {
             body: Column(
               children: [
                 Expanded(
-                  flex: 20,
+                  flex: 25,
                   child: Theme(
                     data: Theme.of(context).copyWith(
                         colorScheme:
@@ -100,68 +104,38 @@ class _DynamicTripPageState extends State<DynamicTripPage> {
                                       .read<SearchHotelCubit>()
                                       .getAllHotel(countryId);
                             }
-                            if (index == 5) {
-                              // var flighData = context.read<SearchFlightCubit>();
-                              // var tripData = context.read<DynamicTripCubit>();
-                              // flighData.getallPlaneTripGoing(
-                              //     country_source_id: tripData.sourceTripId,
-                              //     country_destination_id:
-                              //         tripData.destinationTripId,
-                              //     flight_date: tripData.startDate);
-                              // flighData.getallPlaneTripGoingAndReturn(
-                              //     country_source_id: tripData.sourceTripId,
-                              //     country_destination_id:
-                              //         tripData.destinationTripId,
-                              //     flight_date: tripData.startDate);
-                            }
                           });
                         },
                         steps: [
                           Step(
                             isActive: currentStep >= 0,
-                            // state: currentStep >= 0
-                            //     ? StepState.complete
-                            //     : StepState.disabled,
-                            title: stepTitle("Trip Name"),
+                            title: stepTitle("Trip Name", ""),
                             content: CustomTripField(),
                           ),
                           Step(
                               isActive: currentStep >= 1,
-                              // state: currentStep >= 1
-                              //     ? StepState.complete
-                              //     : StepState.disabled,
-                              title: stepTitle("Trip Date"),
-                              content: TripDate()),
+                              title: stepTitle("Trip Date", "required"),
+                              content: TripDate(),
+                              subtitle: stepSubTitle("'required'")),
                           Step(
-                              // state: currentStep >= 2
-                              //     ? StepState.complete
-                              //     : StepState.disabled,
+                              subtitle: stepSubTitle("'required'"),
                               isActive: currentStep >= 2,
-                              title: stepTitle("From_To"),
-                              //to be deleted after check it
-                              // content: DropDown(),
+                              title: stepTitle("From_To", "required"),
                               content: FromToDynamicTrip()),
                           Step(
-                            // state: currentStep >= 4
-                            //     ? StepState.complete
-                            //     : StepState.disabled,
-                            isActive: currentStep >= 3,
-                            title: stepTitle("Number of Tourist"),
-                            content: NumberOfTourist(),
-                          ),
+                              isActive: currentStep >= 3,
+                              title:
+                                  stepTitle("Number of Tourist", "'required'"),
+                              content: NumberOfTourist(),
+                              subtitle: stepSubTitle("'required'")),
                           Step(
-                              // state: currentStep >= 5
-                              //     ? StepState.complete
-                              //     : StepState.disabled,
                               isActive: currentStep >= 4,
-                              title: stepTitle("Flight"),
+                              title: stepTitle("Flight", ""),
                               content: FlightDynamicTrip()),
                           Step(
-                              // state: currentStep >= 6
-                              //     ? StepState.complete
-                              //     : StepState.disabled,
                               isActive: currentStep >= 5,
-                              title: stepTitle("Places"),
+                              title: stepTitle("Places", ""),
+                              subtitle: stepSubTitle("'required'"),
                               content: const Align(
                                   alignment: Alignment.centerLeft,
                                   child: PlacesDynamicWidget())),
@@ -170,32 +144,28 @@ class _DynamicTripPageState extends State<DynamicTripPage> {
                               //     ? StepState.complete
                               //     : StepState.disabled,
                               isActive: currentStep >= 6,
-                              title: stepTitle("Activity"),
+                              title: stepTitle("Activity", "'required'"),
                               content: BlocProvider(
                                 create: (context) => ActivityCubit(),
                                 child: ActivityDynamicWidget(),
                               )),
                           Step(
-                            // state: currentStep >= 3
-                            //     ? StepState.complete
-                            //     : StepState.disabled,
                             isActive: currentStep >= 7,
-                            title: stepTitle("Hotel"),
+                            title: stepTitle("Hotel", ""),
                             content: HotelDynamicTrip(),
                           ),
                           Step(
-                            // state: currentStep >= 3
-                            //     ? StepState.complete
-                            //     : StepState.disabled,
+                            subtitle: stepSubTitle(
+                                "add your checkPoint or important events"),
                             isActive: currentStep >= 8,
-                            title: stepTitle("Trip Notes"),
+                            title: stepTitle("Trip Notes", ""),
                             content: TripNoteWidget(),
                           ),
                         ]),
                   ),
                 ),
                 Expanded(
-                    flex: 2,
+                    flex: 3,
                     child: Padding(
                         padding: const EdgeInsets.symmetric(
                             vertical: 10, horizontal: 21),
@@ -203,17 +173,16 @@ class _DynamicTripPageState extends State<DynamicTripPage> {
                           minWidth: double.maxFinite,
                           //  minWidth: MediaQuery.of(context).size.width / 1.4,
                           onPressed: () {
+                            print(tripId);
                             BlocProvider.of<DynamicTripCubit>(context)
                                 .printList();
                             context
                                 .read<DynamicTripCubit>()
                                 .dynamicTripBooking();
-
-                            // goRoute(context, AppRoutes.dynamicTripDetails);
-
-                            // GoRouter.of(context).push(
-                            //     AppRoutes.dynamicTripDetails,
-                            //     extra: bookingModel);
+                            // isSuccess
+                            // ? showBookingDoneDialog(context,
+                            //     AppRoutes.dynamicTripDetails, tripId)
+                            //     : null;
                           },
                           color: AppColor.primaryColor,
                           shape: const RoundedRectangleBorder(
@@ -236,9 +205,19 @@ class _DynamicTripPageState extends State<DynamicTripPage> {
   }
 }
 
-Widget stepTitle(String stepName) {
+Widget stepTitle(String stepName, String data) {
+  return Container(
+    color: AppColor.secondColor.withOpacity(0.6),
+    child: Text(
+      stepName,
+      style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+    ),
+  );
+}
+
+Widget stepSubTitle(String stepName) {
   return Text(
     stepName,
-    style: TextStyle(fontSize: 27),
+    style: const TextStyle(fontSize: 15),
   );
 }

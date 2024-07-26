@@ -39,7 +39,7 @@ class _FromToDynamicTripState extends State<FromToDynamicTrip> {
               height: 50,
               padding: EdgeInsets.only(left: 20),
               decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey, width: 1),
+                  border: Border.all(color: AppColor.IconAdd, width: 1),
                   borderRadius: BorderRadius.circular(15)),
               child: Padding(
                 padding: const EdgeInsets.only(right: 20),
@@ -74,7 +74,7 @@ class _FromToDynamicTripState extends State<FromToDynamicTrip> {
               height: 50,
               padding: EdgeInsets.only(left: 20),
               decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey, width: 1),
+                  border: Border.all(color: AppColor.IconAdd, width: 1),
                   borderRadius: BorderRadius.circular(15)),
               child: Padding(
                 padding: const EdgeInsets.only(right: 20),

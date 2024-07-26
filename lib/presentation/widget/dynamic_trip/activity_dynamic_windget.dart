@@ -21,7 +21,7 @@ class _ActivityDynamicWidgetState extends State<ActivityDynamicWidget> {
 
   void initState() {
     super.initState();
-    context.read<ActivityCubit>().getAllPlace();
+    context.read<ActivityCubit>().getAllActivity();
   }
 
   void _onItemTapped(int item) {
@@ -47,10 +47,18 @@ class _ActivityDynamicWidgetState extends State<ActivityDynamicWidget> {
               return Column(
                 children: [
                   Container(
-                    height: 12,
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.all(20),
+                    decoration: const BoxDecoration(
+                        border: Border(bottom: BorderSide(color: Colors.grey))),
+                    child: Text(
+                      "${activitiesList.length}  Activities ",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
                   ),
                   Expanded(
-                    flex: 15,
+                    flex: 18,
                     child: Container(
                       height: double.maxFinite,
                       child: ListView.builder(
@@ -80,7 +88,7 @@ class _ActivityDynamicWidgetState extends State<ActivityDynamicWidget> {
                     ),
                   ),
                   Expanded(
-                    flex: 2,
+                    flex: 3,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 30, vertical: 20),
@@ -90,6 +98,7 @@ class _ActivityDynamicWidgetState extends State<ActivityDynamicWidget> {
                             color: AppColor.primaryColor,
                             borderRadius: BorderRadius.circular(20)),
                         child: MaterialButton(
+                          height: 30,
                           onPressed: () {
                             Navigator.pop(context);
                           },
@@ -123,7 +132,7 @@ class _ActivityDynamicWidgetState extends State<ActivityDynamicWidget> {
             child: !isTapped
                 ? RichText(
                     text: TextSpan(
-                     // text: "And  ",
+                      // text: "And  ",
                       style: const TextStyle(
                           color: Colors.black87,
                           fontSize: 19.0,
@@ -131,7 +140,7 @@ class _ActivityDynamicWidgetState extends State<ActivityDynamicWidget> {
                           height: 1.5),
                       children: <TextSpan>[
                         const TextSpan(
-                           // text: "Finally ", style: MyTextStyle.bright
+                            // text: "Finally ", style: MyTextStyle.bright
                             ),
                         const TextSpan(
                           text:

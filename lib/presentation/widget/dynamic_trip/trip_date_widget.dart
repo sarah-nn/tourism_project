@@ -94,12 +94,13 @@ class _TripDateState extends State<TripDate> {
                             children: [
                               Icon(
                                 Icons.date_range_outlined,
-                                color: Color.fromARGB(255, 167, 179, 8),
+                                color: Color.fromARGB(255, 160, 165, 95),
                                 size: 28,
                               ),
                               Text(
                                 '   Enter Date Range',
-                                style: TextStyle(fontSize: 17.5),
+                                style: TextStyle(
+                                    fontSize: 17, color: Colors.black54),
                               ),
                             ],
                           )

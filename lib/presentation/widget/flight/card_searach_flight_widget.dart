@@ -9,7 +9,7 @@ import 'package:tourism_project/data/models/going_and_return_plane_trip.dart';
 import 'package:tourism_project/data/models/going_plane_trip.dart';
 
 // ignore: must_be_immutable
-class WidgetSearchFlight extends StatelessWidget {
+class WidgetSearchFlight extends StatefulWidget {
   WidgetSearchFlight(
       {@required this.goingPlaneTrip,
       @required this.goingTrip,
@@ -30,6 +30,13 @@ class WidgetSearchFlight extends StatelessWidget {
   bool departflight;
   bool round;
   bool isTrip;
+
+  @override
+  State<WidgetSearchFlight> createState() => _WidgetSearchFlightState();
+}
+
+class _WidgetSearchFlightState extends State<WidgetSearchFlight> {
+  bool isTapped = false;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -53,7 +60,7 @@ class WidgetSearchFlight extends StatelessWidget {
               children: [
                 Center(
                   child: Text(
-                    " ${round ? departflight ? goingTrip?.plane.name : returnTrip?.plane.name : goingPlaneTrip?.plane.name}",
+                    " ${widget.round ? widget.departflight ? widget.goingTrip?.plane.name : widget.returnTrip?.plane.name : widget.goingPlaneTrip?.plane.name}",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
@@ -68,23 +75,23 @@ class WidgetSearchFlight extends StatelessWidget {
                     Column(
                       children: [
                         Text(
-                          '${round ? departflight ? goingTrip?.airportSource.name : returnTrip?.airportSource.name : goingPlaneTrip?.airportSource.name}',
+                          '${widget.round ? widget.departflight ? widget.goingTrip?.airportSource.name : widget.returnTrip?.airportSource.name : widget.goingPlaneTrip?.airportSource.name}',
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20),
                         ),
                         Text(
-                            '${round ? departflight ? goingTrip?.countrySource.name : returnTrip?.countrySource.name : goingPlaneTrip?.countrySource.name}'),
+                            '${widget.round ? widget.departflight ? widget.goingTrip?.countrySource.name : widget.returnTrip?.countrySource.name : widget.goingPlaneTrip?.countrySource.name}'),
                       ],
                     ),
                     Column(
                       children: [
                         Text(
-                          '${round ? departflight ? goingTrip?.airportDestination.name : returnTrip?.airportDestination.name : goingPlaneTrip?.airportDestination.name}',
+                          '${widget.round ? widget.departflight ? widget.goingTrip?.airportDestination.name : widget.returnTrip?.airportDestination.name : widget.goingPlaneTrip?.airportDestination.name}',
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20),
                         ),
                         Text(
-                            "${round ? departflight ? goingTrip?.countryDestination.name : returnTrip?.countryDestination.name : goingPlaneTrip?.countryDestination.name}"),
+                            "${widget.round ? widget.departflight ? widget.goingTrip?.countryDestination.name : widget.returnTrip?.countryDestination.name : widget.goingPlaneTrip?.countryDestination.name}"),
                       ],
                     )
                   ],
@@ -107,7 +114,7 @@ class WidgetSearchFlight extends StatelessWidget {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
-                            '${round ? departflight ? goingTrip?.flightDate : returnTrip?.flightDate : goingPlaneTrip?.flightDate}'),
+                            '${widget.round ? widget.departflight ? widget.goingTrip?.flightDate : widget.returnTrip?.flightDate : widget.goingPlaneTrip?.flightDate}'),
                       ],
                     ),
                     Column(
@@ -118,7 +125,7 @@ class WidgetSearchFlight extends StatelessWidget {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
-                            '${round ? departflight ? goingTrip?.landingDate : returnTrip?.landingDate : goingPlaneTrip?.landingDate}'),
+                            '${widget.round ? widget.departflight ? widget.goingTrip?.landingDate : widget.returnTrip?.landingDate : widget.goingPlaneTrip?.landingDate}'),
                       ],
                     ),
                   ],
@@ -127,7 +134,7 @@ class WidgetSearchFlight extends StatelessWidget {
                   height: 10,
                 ),
                 //! chang this row if it trip
-                !isTrip
+                !widget.isTrip
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -149,7 +156,7 @@ class WidgetSearchFlight extends StatelessWidget {
                                         color: AppColor.primaryColor),
                                   ),
                                   Text(
-                                    '${round ? departflight ? goingTrip?.currentPrice : returnTrip?.currentPrice : goingPlaneTrip?.currentPrice}',
+                                    '${widget.round ? widget.departflight ? widget.goingTrip?.currentPrice : widget.returnTrip?.currentPrice : widget.goingPlaneTrip?.currentPrice}',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: AppColor.fifeColor,
@@ -162,7 +169,7 @@ class WidgetSearchFlight extends StatelessWidget {
                           GestureDetector(
                             onTap: () {
                               GoRouter.of(context).push(
-                                  '/flightDetails/${round ? departflight ? goingTrip?.id : returnTrip?.id : goingPlaneTrip?.id}');
+                                  '/flightDetails/${widget.round ? widget.departflight ? widget.goingTrip?.id : widget.returnTrip?.id : widget.goingPlaneTrip?.id}');
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -189,10 +196,14 @@ class WidgetSearchFlight extends StatelessWidget {
                         onTap: () {
                           print(
                               "var flight = context.read<DynamicTripCubit>();");
-                          onePlaneId = onePlane ?? '';
-                          goingPlaneId = goingId ?? '';
-                          returnPlaneId = returnId ?? '';
-                          Navigator.pop(context);
+                          onePlaneId = widget.onePlane ?? '';
+                          goingPlaneId = widget.goingId ?? '';
+                          returnPlaneId = widget.returnId ?? '';
+                          //  Navigator.pop(context);
+                          setState(() {
+                            isTapped = !isTapped;
+                          });
+                          print(isTapped);
                           // var flight =
                           //     BlocProvider.of<DynamicTripCubit>(context);
                           // print("=============${flight.startDate}");
@@ -203,7 +214,9 @@ class WidgetSearchFlight extends StatelessWidget {
                           alignment: Alignment.center,
                           width: double.maxFinite,
                           decoration: BoxDecoration(
-                              color: AppColor.thirdColor.withAlpha(35),
+                              color: !isTapped
+                                  ? AppColor.thirdColor.withAlpha(35)
+                                  : Color.fromARGB(255, 202, 208, 209),
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
                                   width: 1, color: AppColor.primaryColor)),

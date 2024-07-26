@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:tourism_project/business_logic/static_trip/book_static_trip/book_static_trip_cubit.dart';
+import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
+import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
 import 'package:tourism_project/data/models/check_trip_num_model.dart';
 
@@ -32,6 +36,7 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
   int _counter = 1;
   int discount = 0;
   CheckNum? model;
+  bool finish = false;
   late Future<CheckNum> checkModel;
   void _incrementCounter() {
     setState(() {
@@ -52,6 +57,12 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
         if (state is CheckNumSuccess) {
           model = (state).checkNum;
         }
+        if (state is BookSuccess) {
+          showBookingDoneDialog(context, AppRoutes.staticTripdetails, "id");
+          setState(() {
+            finish = true;
+          });
+        }
       },
       builder: (context, state) {
         return Container(
@@ -63,18 +74,53 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
               const SizedBox(height: 10),
               isCheck
                   ? state is CheckNumSuccess
-                      ? Container(
-                          height: 250,
-                          color: Colors.purple,
-                        )
+                      ? bookingStaticTrip()
                       : state is BookFail
-                          ? bookingStaticTrip()
-                          : const Center(
+                          ? Padding(
+                              padding: const EdgeInsets.only(bottom: 12),
+                              child: Card(
+                                color: Color.fromARGB(255, 243, 243, 243),
+                                elevation: 3,
+                                child: Container(
+                                  padding: const EdgeInsets.all(30),
+                                  alignment: Alignment.center,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Row(
+                                        children: [
+                                          Icon(
+                                            Iconsax.warning_2_copy,
+                                            color: Colors.red,
+                                          ),
+                                          Text(
+                                            "  Booking Fail with message :",
+                                            style: TextStyle(
+                                                color: Colors.red,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18),
+                                          )
+                                        ],
+                                      ),
+                                      Text(
+                                        "${state.errMessage}",
+                                        style:
+                                            TextStyle(height: 2, fontSize: 18),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Center(
                               child: Padding(
                                 padding: EdgeInsets.all(20.0),
                                 child: Text(
-                                  "Wait a moment ...",
-                                  style: TextStyle(fontSize: 16.5),
+                                  !finish ? "Wait a moment ..." : "Done ..",
+                                  style: TextStyle(
+                                      fontSize: 16.5,
+                                      fontWeight: FontWeight.w600),
                                 ),
                               ),
                             )
@@ -91,13 +137,15 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Divider(
-          color: Color.fromARGB(255, 27, 27, 27),
+          color: Color.fromARGB(255, 114, 114, 114),
           thickness: 1,
         ),
         Text(
           "Details :",
-          style: MyTextStyle.headers.copyWith(
-              color: Colors.black,
+          style: MyTextStyle.bright.copyWith(
+              color: AppColor.primaryColor,
+              letterSpacing: 0.5,
+              fontWeight: FontWeight.w600,
               decoration: TextDecoration.underline,
               fontSize: 25),
         ),
@@ -156,17 +204,20 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
                   padding: EdgeInsets.all(8),
                   child: MaterialButton(
                     onPressed: () {
+                      print(discount);
                       setState(() {
-                        discount = 1;
+                        model?.priceAfterDiscount != null ? discount = 1 : null;
                       });
                     },
                     color: AppColor.secondColor,
                     shape: Border.all(
                         color: AppColor.primaryColor.withOpacity(0.4)),
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text("Use Points To Pay"),
+                        model?.priceAfterDiscount != null
+                            ? Text("Use Points To Pay")
+                            : Text("Don't Have Enough Points"),
                         Icon(
                           Icons.payments_outlined,
                           color: Colors.black54,
@@ -192,6 +243,7 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
                     model!.totalPrice.toString(),
                     model!.priceAfterDiscount.toString(),
                     discount.toString());
+                //!finish ? context.pop(context) : null;
               },
               color: AppColor.primaryColor,
               child: const Text(

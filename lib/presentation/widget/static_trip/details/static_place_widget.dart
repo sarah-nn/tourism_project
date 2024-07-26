@@ -16,7 +16,7 @@ class StaticPlaceWidget extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         decoration: BoxDecoration(
           color: AppColor.staticTripContainer,
-          border: Border(
+          border:const Border(
             left: BorderSide(width: 5, color: Color.fromARGB(255, 26, 73, 112)),
           ),
         ),
@@ -42,7 +42,7 @@ class StaticPlaceWidget extends StatelessWidget {
                           Row(
                             children: [
                               Text(
-                                "$index.",
+                                "${index + 1}.",
                                 style: MyTextStyle.splashLogoText.copyWith(
                                     fontSize: 16,
                                     color: Colors.black87,

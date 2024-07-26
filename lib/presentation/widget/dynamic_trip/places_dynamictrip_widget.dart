@@ -116,21 +116,28 @@ class _PlacesDynamicWidgetState extends State<PlacesDynamicWidget> {
                             ),
                           ),
                   ),
-                  TextButton(
+                  SizedBox(height: 15),
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: AppColor.secondColor),
                       onPressed: _navigateToPlacePage,
-                      // goRoute(context, AppRoutes.test2);
-                      // setState(() {
-                      //   thereSelected = placeNames.isEmpty ? true : false;
-                      // });
-
-                      child: Text(
-                        "Edit .. Add or remove Places ",
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            decoration: TextDecoration.underline,
-                            height: 2,
-                            fontSize: 18),
-                      ))
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.add_circle_outline,
+                              color: AppColor.primaryColor,
+                            ),
+                            Text("  add or remove Places",
+                                style: TextStyle(
+                                    color: AppColor.primaryColor,
+                                    // height: 2,
+                                    fontSize: 18))
+                          ],
+                        ),
+                      )),
                 ],
               )
         // Expanded(

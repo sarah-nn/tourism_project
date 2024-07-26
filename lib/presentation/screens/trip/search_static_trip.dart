@@ -4,7 +4,6 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:tourism_project/business_logic/static_trip/static_trip_cubit.dart';
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
-import 'package:tourism_project/core/utils/app_images.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
 import 'package:tourism_project/data/models/all_static_trip_model.dart';
 import 'package:tourism_project/presentation/widget/static_trip/custom_search_widget.dart';
@@ -19,7 +18,7 @@ class SearchStaticTripPage extends StatefulWidget {
 
 class _SearchStaticTripPageState extends State<SearchStaticTripPage> {
   List<AllStaticTripModel> tripList = [];
-  List<String> type = ['place', 'activity', 'country', 'date'];
+  List<String> type = ['country', 'place', 'activity', 'date'];
   List<IconData> icons = [
     Icons.location_on_outlined,
     Iconsax.activity_copy,
@@ -76,29 +75,31 @@ class _SearchStaticTripPageState extends State<SearchStaticTripPage> {
                                         color: Colors.white, fontSize: 24),
                                   ),
                                   SizedBox(height: 8),
-                                  CustomSearch(
-                                      myController: controller,
-                                      title: "Search For $typeVal ..",
-                                      onPressedIcon: () {
-                                        setState(() {
-                                          isSearch = true;
-                                          (controller.text.isEmpty &&
-                                                  tripList.isEmpty)
-                                              ? isEmptyOrError = true
-                                              : false;
-                                        });
-                                        print(typeVal);
-                                        print(controller.text);
-                                        context
-                                            .read<StaticTripCubit>()
-                                            .printll();
-                                        context
-                                            .read<StaticTripCubit>()
-                                            .SearchTrip();
-                                      }),
+                                  isChoose
+                                      ? CustomSearch(
+                                          myController: controller,
+                                          title: "Search Trip in $typeVal ..",
+                                          onPressedIcon: () {
+                                            setState(() {
+                                              isSearch = true;
+                                              (controller.text.isEmpty &&
+                                                      tripList.isEmpty)
+                                                  ? isEmptyOrError = true
+                                                  : false;
+                                            });
+                                            print(typeVal);
+                                            print(controller.text);
+                                            context
+                                                .read<StaticTripCubit>()
+                                                .printll();
+                                            context
+                                                .read<StaticTripCubit>()
+                                                .SearchTrip();
+                                          })
+                                      : customDateRang(false)
                                 ],
                               )
-                            : customDateRang()),
+                            : customDateRang(true)),
                   ),
                 ],
               ),
@@ -113,7 +114,7 @@ class _SearchStaticTripPageState extends State<SearchStaticTripPage> {
                     ),
               Expanded(
                 child: Container(
-                    alignment: Alignment.center,
+                    alignment: Alignment.topCenter,
                     child: !isChoose
                         ? selectTypeContainer()
                         : isSearch
@@ -143,60 +144,62 @@ class _SearchStaticTripPageState extends State<SearchStaticTripPage> {
   }
 
   Widget selectTypeContainer() {
-    return ListView.builder(
-        shrinkWrap: true,
-        itemCount: type.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: GestureDetector(
-                onTap: () {
-                  print(type[index]);
-                  setState(() {
-                    context.read<StaticTripCubit>().type = type[index];
-                    isChoose = true;
-                    typeVal = type[index];
-                    if (typeVal == 'date') {
-                      isDate = true;
+    return Padding(
+      padding: const EdgeInsets.only(top: 20),
+      child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: type.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GestureDetector(
+                  onTap: () {
+                    print(type[index]);
+                    setState(() {
+                      context.read<StaticTripCubit>().type = type[index];
                       isChoose = true;
-                    }
-                  });
-                },
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-                  child: Container(
-                      padding: EdgeInsets.only(left: 36),
-                      height: 60,
-                      decoration: BoxDecoration(
-                          color: AppColor.secondColor,
-                          borderRadius: BorderRadius.circular(30),
-                          border: Border.all()),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            type[index],
-                            style: MyTextStyle.poppins
-                                .copyWith(fontSize: 21, color: Colors.black54),
-                          ),
-                          Container(
-                              width: 70,
-                              height: double.maxFinite,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                  border:
-                                      Border.all(color: AppColor.primaryColor)),
-                              child: Icon(
-                                icons[index],
-                                size: 35,
-                                color: AppColor.primaryColor,
-                              ))
-                        ],
-                      )),
-                )),
-          );
-        });
+                      typeVal = type[index];
+                      if (typeVal == 'date') {
+                        isDate = true;
+                        isChoose = true;
+                      }
+                    });
+                  },
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+                    child: Container(
+                        padding: EdgeInsets.only(left: 36),
+                        height: 60,
+                        decoration: BoxDecoration(
+                            color: AppColor.secondColor,
+                            borderRadius: BorderRadius.circular(30),
+                            border: Border.all()),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              type[index],
+                              style: MyTextStyle.poppins.copyWith(
+                                  fontSize: 21, color: AppColor.primaryColor),
+                            ),
+                            Container(
+                                width: 60,
+                                height: double.maxFinite,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(30),
+                                    border: Border.all(color: Colors.black54)),
+                                child: Icon(
+                                  icons[index],
+                                  size: 33,
+                                  color: AppColor.primaryColor,
+                                ))
+                          ],
+                        )),
+                  )),
+            );
+          }),
+    );
   }
 
   Future<void> _selectDateRange() async {
@@ -238,13 +241,13 @@ class _SearchStaticTripPageState extends State<SearchStaticTripPage> {
     }
   }
 
-  Widget customDateRang() {
+  Widget customDateRang(bool isDate) {
     return Row(
       children: [
         Expanded(
           child: GestureDetector(
             onTap: () {
-              _selectDateRange();
+              isDate ? _selectDateRange() : null;
             },
             child: Container(
               alignment: Alignment.center,
@@ -258,7 +261,7 @@ class _SearchStaticTripPageState extends State<SearchStaticTripPage> {
                       child: showSelectedDateRange(),
                     )
                   : Text(
-                      "Tap to Choose Date Range",
+                      isDate ? "Tap to Choose Date Range" : "Select To Search",
                       style:
                           TextStyle(fontSize: 18, color: AppColor.primaryColor),
                     ),

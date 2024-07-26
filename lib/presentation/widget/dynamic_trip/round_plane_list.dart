@@ -24,6 +24,16 @@ class _RoundPlaneListState extends State<RoundPlaneList> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 20),
+              child: Text(
+                "Save",
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor, fontSize: 18),
+              ),
+            )),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           child: Row(

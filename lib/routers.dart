@@ -48,6 +48,7 @@ import 'package:tourism_project/presentation/widget/dynamic_trip/flight_dynamict
 import 'package:tourism_project/presentation/widget/profile/top_with_image.dart';
 import 'package:tourism_project/test.dart';
 import 'package:tourism_project/test2.dart';
+import 'package:tourism_project/test3.dart';
 
 final GoRouter router = GoRouter(
   routes: [
@@ -59,6 +60,7 @@ final GoRouter router = GoRouter(
             )),
 
     GoRoute(path: "/", builder: (context, state) => const SplashScreen()),
+    // GoRoute(path: "/", builder: (context, state) => const ProductItemScreen()),
     GoRoute(
         path: AppRoutes.test2,
         builder: (context, state) => MultiBlocProvider(providers: [
@@ -92,6 +94,9 @@ final GoRouter router = GoRouter(
           BlocProvider<ProfileCubit>(
             create: (context) => ProfileCubit(),
           ),
+          BlocProvider<CountryCubit>(
+            create: (context) => CountryCubit(),
+          ),
           BlocProvider<UploadImageCubit>(
             create: (context) => UploadImageCubit(),
           ),
@@ -101,7 +106,13 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
         path: AppRoutes.viewProfileImage,
-        builder: (context, state) => ViewImage()),
+        builder: (context, state) {
+          final String image = state.extra as String;
+          return BlocProvider(
+            create: (context) => UploadImageCubit(),
+            child: ViewImage(image: image),
+          );
+        }),
 //=============================================================
     GoRoute(
         path: AppRoutes.register,
@@ -162,6 +173,15 @@ final GoRouter router = GoRouter(
               BlocProvider(create: (context) => SearchHotelCubit()),
               BlocProvider(create: (context) => SearchFlightCubit())
             ], child: const DynamicTripPage())),
+    GoRoute(
+        path: "/bookingDynamicDetails/:id",
+        builder: (context, state) => BlocProvider(
+              create: (context) => DynamicTripCubit(),
+              child: DynamicTripBookingDetailsPage(
+                tripId: state.pathParameters['id']!,
+              ),
+            )),
+
     GoRoute(
         path: "/StaticTripDetailsPage/:id",
         builder: (context, state) => MultiBlocProvider(

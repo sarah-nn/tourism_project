@@ -13,41 +13,68 @@ class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit() : super(ProfileInitial());
 
   GlobalKey<FormState> profileKey = GlobalKey();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneNumber = TextEditingController();
+  String userPosition = '';
+  String errMessage = '';
 
-  //   updateProfile() async {
-  //   if (profileKey.currentState!.validate()) {
-  //     emit(ProfileLoading());
-  //     http.Response response =
-  //         await http.post(Uri.parse(EndPoint.updateProfile), body: {
-  //       'email': loginEmail.text,
-  //       'password': loginPassword.text
-  //     }, headers: {
-  //       'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
-  //       'Accept': 'application/json'
-  //     });
-  //     if (response.statusCode == 200) {
-  //       var message = jsonDecode(response.body);
-  //       print(message);
-  //       emit(UserSuccess());
-  //     } else {
-  //       var message = jsonDecode(response.body);
-  //       print(message['message']);
-  //       emit(UserFailure(message: message['message']));
-  //     }
-  //   } else {
-  //     print("Not Valid");
-  //   }
+  Map<String, String> buildRequestBody() {
+    Map<String, String> body = {};
 
-  // }
+    if (nameController.text != '') {
+      body['name'] = nameController.text;
+    }
+    if (phoneNumber.text != '') {
+      body['phone_number'] = phoneNumber.text;
+    }
+
+    if (userPosition != '') {
+      body['position'] = userPosition;
+    }
+
+    return body;
+  }
 
   getUserInfo() async {
+    var data;
     var uri = Uri.parse(EndPoint.profile);
     var header = {'Authorization': 'Bearer $myToken'};
     try {
       var response = await http.get(uri, headers: header);
-      print(response.body);
-      var data = json.decode(response.body)['data'];
-      emit(ProfileInfo(userInfo: UserInfoModel.fromJson(data)));
+      if (response.statusCode == 200) {
+        print(response.body);
+        data = json.decode(response.body);
+        emit(ProfileInfo(userInfo: UserInfoModel.fromJson(data['data'])));
+      } else {
+        var message = jsonDecode(response.body);
+        print(
+            "Profile api error with ${response.statusCode} and ${response.body}");
+        emit(ProfileChangeFaliure(errMessage: message['message']));
+      }
+    } catch (e) {
+      print(e.toString());
+      emit(ProfileChangeFaliure(errMessage: e.toString()));
+    }
+  }
+
+  updateUserInfo() async {
+    var data;
+    Map<String, String> requestBody = buildRequestBody();
+    var uri = Uri.parse(EndPoint.updateProfile);
+    var header = {'Authorization': 'Bearer $myToken'};
+    try {
+      var response = await http.post(uri, headers: header, body: requestBody);
+      if (response.statusCode == 200) {
+        print(response.body);
+        data = json.decode(response.body);
+        errMessage = '';
+        emit(ProfileInfo(userInfo: UserInfoModel.fromJson(data['data'])));
+      } else {
+        var message = jsonDecode(response.body);
+        print(
+            "Profile api error with ${response.statusCode}and ${message['message']}");
+        errMessage = message['message'];
+      }
     } catch (e) {
       print(e.toString());
       emit(ProfileChangeFaliure(errMessage: e.toString()));

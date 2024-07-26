@@ -60,19 +60,25 @@ class _CommentPageState extends State<CommentPage> {
                 children: [
                   Container(
                       height: MediaQuery.of(context).size.height - 150,
-                      child: myCommentsList.isNotEmpty
-                          ? ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: myCommentsList.length,
-                              itemBuilder: (context, index) {
-                                return CommentCaredWidget(
-                                    comment: myCommentsList[index]);
-                              },
-                            )
-                          : const Text(
-                              "No Comment Added",
-                              style: TextStyle(
-                                  height: 15, fontSize: 20, color: Colors.grey),
+                      child: state is PLaceCommentsList
+                          ? myCommentsList.isNotEmpty
+                              ? ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: myCommentsList.length,
+                                  itemBuilder: (context, index) {
+                                    return CommentCaredWidget(
+                                        comment: myCommentsList[index]);
+                                  },
+                                )
+                              : const Text(
+                                  "No Comment Added",
+                                  style: TextStyle(
+                                      height: 15,
+                                      fontSize: 20,
+                                      color: Colors.grey),
+                                )
+                          : Center(
+                              child: CircularProgressIndicator(),
                             )),
                   WriteCommentField(
                       placeId: widget.placeId,

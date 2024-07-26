@@ -16,7 +16,8 @@ class NumberOfTourist extends StatefulWidget {
 class _NumberOfTouristState extends State<NumberOfTourist> {
   bool isNumer = false;
   int _counter = 1;
-
+  bool isChoose = false;
+  int choosenNum = 0;
   void _incrementCounter() {
     setState(() {
       _counter++;
@@ -36,6 +37,7 @@ class _NumberOfTouristState extends State<NumberOfTourist> {
       builder: (context, state) {
         return SizedBox(
             child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Align(
               alignment: Alignment.topLeft,
@@ -55,6 +57,10 @@ class _NumberOfTouristState extends State<NumberOfTourist> {
                 const SizedBox(width: 15),
                 customGridFeild("Single", AppIcon.single, () {
                   context.read<DynamicTripCubit>().numOfPeople = 1;
+                  setState(() {
+                    isChoose = true;
+                    choosenNum = 1;
+                  });
                 }),
               ],
             ),
@@ -63,6 +69,10 @@ class _NumberOfTouristState extends State<NumberOfTourist> {
               children: [
                 customGridFeild("Couple", AppIcon.couple, () {
                   context.read<DynamicTripCubit>().numOfPeople = 2;
+                  setState(() {
+                    isChoose = true;
+                    choosenNum = 2;
+                  });
                 }),
                 const SizedBox(width: 15),
                 customGridFeild("Family", AppIcon.family, () {
@@ -77,7 +87,18 @@ class _NumberOfTouristState extends State<NumberOfTourist> {
                 ? determineNum("How many Memmbers ?")
                 : const SizedBox(
                     height: 1,
+                  ),
+            isChoose
+                ? Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    width: double.maxFinite,
+                    color: const Color.fromARGB(255, 233, 233, 233),
+                    child: Text(
+                      "-> Book for $choosenNum",
+                      style: TextStyle(fontSize: 18),
+                    ),
                   )
+                : Container(),
           ],
         ));
       },
@@ -128,6 +149,8 @@ class _NumberOfTouristState extends State<NumberOfTourist> {
                   context.read<DynamicTripCubit>().numOfPeople = _counter;
                   setState(() {
                     isNumer = false;
+                    isChoose = true;
+                    choosenNum = _counter;
                   });
                 },
                 icon: const Icon(
@@ -141,7 +164,7 @@ class _NumberOfTouristState extends State<NumberOfTourist> {
   }
 
   Widget customGridFeild(name, icon, ontap) {
-    return GestureDetector(
+    return InkWell(
       onTap: ontap,
       child: Container(
           height: 100,

@@ -17,6 +17,7 @@ class EndPoint {
   static const String profile = '$baseUrl/profile';
   static const String changeProfilePhoto = '$baseUrl/user/change-profile-photo';
   static const String updateProfile = '$baseUrl/user/update-profile';
+  static const String deleteImage = '$baseUrl/user/delete-profile-photo';
 
 //======================== Places ====================
   static const String places = '$baseUrl/user/places';
@@ -44,6 +45,8 @@ class EndPoint {
 
 //======================= Dynamic Trip ==================
   static const String dynamicBooking = '$baseUrl/user/Add_booking_User';
+  static const String dynamicBookingDetails =
+      '$baseUrl/user/show_dynamic_trip/';
 
 //==================== Flight ==========================
   static const String searchFlight = '$baseUrl/user/search-for-plane-trip';

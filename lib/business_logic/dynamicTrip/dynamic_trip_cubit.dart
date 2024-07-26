@@ -26,6 +26,7 @@ class DynamicTripCubit extends Cubit<DynamicTripState> {
   String destinationTripId = '';
   String hotelId = '';
   int numOfPeople = 0;
+  int tripDynamicId = 0;
 
   // for Room Capacity
   TextEditingController controller2 = TextEditingController();
@@ -38,7 +39,8 @@ class DynamicTripCubit extends Cubit<DynamicTripState> {
   //for trip note
   TextEditingController tripNote = TextEditingController();
 
-  DynamicTripModel? bookingModel;
+  //DynamicTripModel? bookingModel;
+  Data? data2;
 
   void addPlaceIds(int value) {
     placeIds.add(value);
@@ -64,7 +66,6 @@ class DynamicTripCubit extends Cubit<DynamicTripState> {
       'number_of_people': numOfPeople.toString(),
       'start_date': startDate,
       'end_date': endDate,
-      'trip_note': tripNote.text,
       // 'plane_trip_id': '1',
       // 'plane_trip_away_id': '2',
       'count_room_C2': controller2.text.isEmpty ? "0" : controller2.text,
@@ -74,6 +75,9 @@ class DynamicTripCubit extends Cubit<DynamicTripState> {
       //'activities[0]': '1',
     };
 
+    if (tripNote.text != '') {
+      body['trip_note'] = tripNote.text;
+    }
     if (hotelId != '') {
       body['hotel_id'] = hotelId;
     }
@@ -114,9 +118,12 @@ class DynamicTripCubit extends Cubit<DynamicTripState> {
       var data = jsonDecode(response.body)['data'];
       print("\n\n\n\n$data");
       print("=========${data['dynamic_trip']['trip_name']}");
-      return data;
+      tripDynamicId = data['dynamic_trip']['id'];
+      print(tripDynamicId);
+
       // bookingModel = DynamicTripModel.fromJson(data);
-      // emit(DynamicTripBookingSuccess(dynamicbookingModel: bookingModel!));
+      emit(BookingSuccess(tripId: tripDynamicId.toString()));
+      return data;
     } else {
       print(
           "response.statusCode ${response.statusCode} , with body ${response.body}");
@@ -125,5 +132,26 @@ class DynamicTripCubit extends Cubit<DynamicTripState> {
       emit(BookingDynamicFail(errMessage: message));
     }
     return null;
+  }
+
+  Future<Data?> dynamicTripBookingdetails(String id) async {
+    http.Response response = await http
+        .get(Uri.parse(EndPoint.dynamicBookingDetails + id), headers: {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $myToken'
+    });
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body)['data'];
+      data2 = Data.fromJson(data['dynamic_trip']);
+      emit(DynamicTripBookingSuccess(dynamicbookingModel: data2!));
+      return data2;
+    } else {
+      print(
+          "response.statusCode ${response.statusCode} , with body ${response.body}");
+      var message = jsonDecode(response.body)['message'];
+      print(message);
+      emit(BookingDynamicFail(errMessage: message));
+    }
+    return data2;
   }
 }

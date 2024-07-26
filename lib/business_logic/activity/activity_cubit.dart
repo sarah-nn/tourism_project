@@ -10,7 +10,7 @@ part 'activity_state.dart';
 class ActivityCubit extends Cubit<ActivityState> {
   ActivityCubit() : super(ActivityInitial());
 
-  Future<void> getAllPlace() async {
+  Future<void> getAllActivity() async {
     var uri = Uri.parse(EndPoint.getAllActivity);
     var header = {'Authorization': 'Bearer $myToken'};
     var response = await http.get(uri, headers: header);

@@ -55,19 +55,22 @@ class _StaticTripPageState extends State<StaticTripPage> {
                   const SizedBox(height: 8),
                   Expanded(
                       child: Container(
-                    child: ListView.builder(
-                        itemCount: tripList.length,
-                        shrinkWrap: true,
-                        itemBuilder: (context, i) {
-                          return StaticTripItem(
-                            isSearch: false,
-                            index: i,
-                            location: " Agra, India",
-                            price: "489.0 ",
-                            tripmodel: tripList[i],
-                          );
-                        }),
-                  ))
+                          child: state is AllStaticTripSuccess
+                              ? ListView.builder(
+                                  itemCount: tripList.length,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, i) {
+                                    return StaticTripItem(
+                                      isSearch: false,
+                                      index: i,
+                                      location: " Agra, India",
+                                      price: "489.0 ",
+                                      tripmodel: tripList[i],
+                                    );
+                                  })
+                              : Center(
+                                  child: CircularProgressIndicator(),
+                                )))
                 ],
               ),
             ));
