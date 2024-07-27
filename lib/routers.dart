@@ -5,7 +5,7 @@ import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.da
 import 'package:tourism_project/business_logic/flight/detailsTrip_cubit.dart';
 import 'package:tourism_project/business_logic/flight/searchFlight_cubit.dart';
 import 'package:tourism_project/business_logic/forgetpassword/forgetpassword_cubit.dart';
-import 'package:tourism_project/business_logic/hotel/room_cubit.dart';
+import 'package:tourism_project/business_logic/hotel/roomAndBook_cubit.dart';
 import 'package:tourism_project/business_logic/hotel/searchHotel_cubit.dart';
 import 'package:tourism_project/business_logic/places/place_desc_cubit.dart';
 import 'package:tourism_project/business_logic/places/places_cubit.dart';
@@ -15,7 +15,7 @@ import 'package:tourism_project/business_logic/static_trip/static_trip_cubit.dar
 import 'package:tourism_project/business_logic/upload_image/upload_image_cubit.dart';
 import 'package:tourism_project/business_logic/user/user_cubit.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
-import 'package:tourism_project/data/models/dynamic_booking_details_model.dart';
+import 'package:tourism_project/presentation/screens/Booking_details/public_booking.dart';
 import 'package:tourism_project/presentation/screens/auth/forget_password_page.dart';
 import 'package:tourism_project/presentation/screens/flight/flight_details.dart';
 import 'package:tourism_project/presentation/screens/flight/flight_page.dart';
@@ -45,10 +45,10 @@ import 'package:tourism_project/presentation/screens/starting/starting_page.dart
 import 'package:tourism_project/presentation/screens/trip/static_trip_page.dart';
 import 'package:tourism_project/presentation/screens/auth/verify_code_page.dart';
 import 'package:tourism_project/presentation/widget/dynamic_trip/flight_dynamictrip_widget.dart';
+import 'package:tourism_project/presentation/widget/hotel/search_hotel_widget.dart';
 import 'package:tourism_project/presentation/widget/profile/top_with_image.dart';
 import 'package:tourism_project/test.dart';
 import 'package:tourism_project/test2.dart';
-import 'package:tourism_project/test3.dart';
 
 final GoRouter router = GoRouter(
   routes: [
@@ -295,12 +295,25 @@ final GoRouter router = GoRouter(
 
     GoRoute(
         path: "/InfoBookingHotelPage/:id",
-        builder: (context, state) => BlocProvider(
-              create: (context) => RoomCubit(),
-              child: InfoBookingHotelPage(
-                HotelId: state.pathParameters['id']!,
-              ),
-            )),
+        builder: (context, state) {
+          final args = state.extra as SearchHotelArgs;
+          return BlocProvider(
+            create: (context) => RoomCubit(),
+            child: InfoBookingHotelPage(
+              HotelId: args.hotelId,
+              countryId: args.countryId,
+              endDate: args.endDate,
+              startDate: args.statrDate,
+            ),
+          );
+        }),
+
+    //================details booking==================
+    GoRoute(
+        path: AppRoutes.detailsBookHotel,
+        builder: (context, state) {
+          return BookUser();
+        }),
   ],
 );
 

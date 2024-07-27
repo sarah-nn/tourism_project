@@ -1,6 +1,6 @@
 class EndPoint {
-  static const String baseUrl = 'http://192.168.43.119:8000/api'; //for me
-  //static const String baseUrl = 'http://192.168.43.176:8000/api';//for Oula
+  //static const String baseUrl = 'http://192.168.43.119:8000/api'; //for me
+  static const String baseUrl = 'http://192.168.43.176:8000/api'; //for Oula
   static const String imageBaseUrl = 'http://192.168.43.119:8000/';
 
 //======================== Auth ========================
@@ -52,9 +52,15 @@ class EndPoint {
   static const String searchFlight = '$baseUrl/user/search-for-plane-trip';
   static const String flightDetails = '$baseUrl/user/show-plane-trip-details/';
 
-//======================== Hotel =====================
+//======================== Hotel=====================
   static const String searchHotel = '$baseUrl/user/get_Hotel_By_Country/';
   static const String roomHotel = '$baseUrl/user/get_all_room/';
+  static const String bookHotel = '$baseUrl/user/hotel_book';
+  //===================details booking=================
+  static const String detailsBookHotel = '$baseUrl/user/all_my_hotel_trip';
+  static const String showDetailsBookHotel = '$baseUrl/user/show_hotel_trip/';
+  static const String deleteBookinHotel = '$baseUrl/user/delete_dynamic_trip/';
+  static const String editBookHotel = '$baseUrl/user/update_hotel_book/';
 
 //======================== Activity =====================
   static const String getAllActivity = '$baseUrl/user/get-all-activity/';

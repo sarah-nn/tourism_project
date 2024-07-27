@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tourism_project/business_logic/hotel/room_cubit.dart';
+import 'package:tourism_project/business_logic/hotel/roomAndBook_cubit.dart';
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
-import 'package:tourism_project/core/utils/info_user.dart';
+import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/data/models/room_model.dart';
 import 'package:tourism_project/presentation/widget/hotel/custom_elevated_buttom.dart';
 import 'package:tourism_project/presentation/widget/hotel/info_book_room_widget.dart';
 
 // ignore: must_be_immutable
 class InfoBookingHotelPage extends StatefulWidget {
+  String HotelId;
+  String countryId;
+  String startDate;
+  String endDate;
   InfoBookingHotelPage({
     super.key,
-    // ignore: non_constant_identifier_names
     required this.HotelId,
+    required this.countryId,
+    required this.endDate,
+    required this.startDate,
   });
-  // ignore: non_constant_identifier_names
-  String HotelId;
+
   @override
   State<InfoBookingHotelPage> createState() => _InfoBookingHotelPageState();
 }
@@ -25,19 +30,16 @@ class _InfoBookingHotelPageState extends State<InfoBookingHotelPage> {
   int numTowCapacity = 0;
   int numFourCapacity = 0;
   int numSixCapacity = 0;
-  int priceTowCapacity = 100;
-  int priceFourCapacity = 300;
-  int priceSixCapacity = 400;
-  int numDay = 0;
-  int total = 0;
+  String tripName = 'booking';
   late RoomModel roomModel;
+  late RoomCubit myBloc;
+
   @override
   void initState() {
     super.initState();
     context.read<RoomCubit>().getRooms(
-        hotelId: widget.HotelId,
-        start: User.dateStatrtHotel,
-        end: User.dateEndHotel);
+        hotelId: widget.HotelId, start: widget.startDate, end: widget.endDate);
+    myBloc = BlocProvider.of<RoomCubit>(context);
   }
 
   @override
@@ -45,13 +47,33 @@ class _InfoBookingHotelPageState extends State<InfoBookingHotelPage> {
     return BlocConsumer<RoomCubit, RoomState>(listener: (context, state) {
       if (state is RoomSuccess) {
         roomModel = (state).roomModel;
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("state.success")));
+      }
+      if (state is BookHotelSuccess) {
+        showBookingDialog(context, AppRoutes.detailsBookHotel);
+        // showAlertSuccess(
+        //     context,
+        //     ' bokking this hotel \n if you see details or edit click here',
+        //     'view book',
+        //     AppRoutes.detailsBookHotel);
+        numTowCapacity = 0;
+        numFourCapacity = 0;
+        numSixCapacity = 0;
       }
       if (state is RoomFailure) {
-        // ScaffoldMessenger.of(context)
-        //     .showSnackBar(SnackBar(content: Text("state.fauil")));
         showAlertDialog(context, state.errMessage);
+      }
+      if (state is BookHotelFailure) {
+        if (numTowCapacity == 0 &&
+            numFourCapacity == 0 &&
+            numSixCapacity == 0) {
+          showAlertDialog(context,
+              'please enter the number of rooms you would like to book');
+        } else {
+          showAlertDialog(context, state.errMessage);
+        }
+        numTowCapacity = 0;
+        numFourCapacity = 0;
+        numSixCapacity = 0;
       }
     }, builder: (context, state) {
       return Scaffold(
@@ -67,13 +89,15 @@ class _InfoBookingHotelPageState extends State<InfoBookingHotelPage> {
                   child: Text(
                 'Enter information to booking :',
                 style: TextStyle(
+                    fontFamily: 'Philosopher',
                     color: Colors.white,
-                    fontSize: 18,
+                    fontSize: 21,
                     fontWeight: FontWeight.bold),
               ))),
           Expanded(
             flex: 10,
             child: Container(
+              clipBehavior: Clip.antiAlias,
               width: double.infinity,
               decoration: const BoxDecoration(
                 color: Colors.white,
@@ -84,17 +108,20 @@ class _InfoBookingHotelPageState extends State<InfoBookingHotelPage> {
               ),
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.all(28),
-                  child: state is RoomSuccess
+                  padding: const EdgeInsets.all(24),
+                  child: state is RoomSuccess ||
+                          state is BookHotelSuccess ||
+                          state is BookHotelFailure
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                              const Text(
+                              Text(
                                 'Select number room :',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    // fontFamily: 'normal',
-                                    fontSize: 18),
+                                    fontFamily: 'normal',
+                                    fontSize: 21,
+                                    color: AppColor.fifeColor),
                               ),
                               WidgetInfoBookRoom(
                                 num: 'Tow',
@@ -107,6 +134,8 @@ class _InfoBookingHotelPageState extends State<InfoBookingHotelPage> {
                                         setState(() {
                                           numTowCapacity++;
                                         });
+
+                                        print(roomModel.data?.capacity2!.count);
                                       }
                                     : null,
                                 onTapMinus: numTowCapacity > 0
@@ -186,68 +215,62 @@ class _InfoBookingHotelPageState extends State<InfoBookingHotelPage> {
                                     : AppColor.IconAdd,
                               ),
                               const SizedBox(
-                                height: 20,
+                                height: 15,
                               ),
-                              // Row(
-                              //   children: [
-                              //     const Text(
-                              //       'Select number day :',
-                              //       style:
-                              //           TextStyle(fontWeight: FontWeight.bold),
-                              //     ),
-                              //     const SizedBox(
-                              //       width: 10,
-                              //     ),
-                              //     WidgetAddAndMinus(
-                              //       onTap: numDay > 0
-                              //           ? () {
-                              //               setState(() {
-                              //                 numDay--;
-                              //               });
-                              //             }
-                              //           : null,
-                              //       icon: Icons.horizontal_rule,
-                              //       color: numDay == 0
-                              //           ? AppColor.IconMinus
-                              //           : AppColor.IconAdd,
-                              //     ),
-                              //     const SizedBox(
-                              //       width: 10,
-                              //     ),
-                              //     Text('$numDay'),
-                              //     const SizedBox(
-                              //       width: 10,
-                              //     ),
-                              //     WidgetAddAndMinus(
-                              //       onTap: () {
-                              //         setState(() {
-                              //           numDay++;
-                              //         });
-                              //       },
-                              //       icon: Icons.add,
-                              //       color: AppColor.IconAdd,
-                              //     ),
-                              //   ],
-                              // ),
-
+                              Text(
+                                'Select name booking :',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'normal',
+                                    fontSize: 21,
+                                    color: AppColor.fifeColor),
+                              ),
+                              const SizedBox(height: 10),
+                              Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: AppColor.secondColor,
+                                ),
+                                child: TextFormField(
+                                  cursorColor: AppColor.primaryColor,
+                                  onChanged: (val) {
+                                    tripName = val;
+                                  },
+                                  decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: "  name booking",
+                                      hintStyle:
+                                          TextStyle(color: Colors.black54)),
+                                ),
+                              ),
+                              const SizedBox(height: 20),
                               WidgetElevatedButton(
                                 height: 55,
                                 onTap: () {
-                                  // showDialog(
-                                  //     context: context,
-                                  //     builder: (BuildContext context) {
-                                  //       return WidgetDialogInfoBook(
-                                  //         numDay: numDay,
-                                  //         numFourCapacity: numFourCapacity,
-                                  //         numSixCapacity: numSixCapacity,
-                                  //         numTowCapacity: numTowCapacity,
-                                  //         priceFourCapacity: priceFourCapacity,
-                                  //         priceSixCapacity: priceSixCapacity,
-                                  //         priceTowCapacity: priceTowCapacity,
-                                  //       );
-                                  //     });
+                                  if ((roomModel.data?.capacity2!.count)!.toInt() == 0 &&
+                                      (roomModel.data?.capacity4!.count)!
+                                              .toInt() ==
+                                          0 &&
+                                      (roomModel.data?.capacity6!.count)!
+                                              .toInt() ==
+                                          0) {
+                                    showAlertDialog(context,
+                                        'Sorry , there are no vacant rooms in this date');
+                                  } else {
+                                    myBloc.bookHotel(
+                                        tripName: tripName,
+                                        destinationTripId: widget.countryId,
+                                        hotelId: widget.HotelId,
+                                        startDate: widget.startDate,
+                                        endDate: widget.endDate,
+                                        countRoomC2: numTowCapacity.toString(),
+                                        countRoomC4: numFourCapacity.toString(),
+                                        countRoomC6: numSixCapacity.toString());
+                                  }
                                 },
-                                text: 'Done -->',
+                                text: 'Book Now',
                               ),
                             ])
                       : const Center(

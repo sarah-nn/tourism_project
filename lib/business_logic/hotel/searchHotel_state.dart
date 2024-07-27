@@ -1,5 +1,4 @@
-part of'searchHotel_cubit.dart';
-
+part of 'searchHotel_cubit.dart';
 
 sealed class SearchHotelState {}
 

@@ -19,8 +19,9 @@ class HotelPage extends StatefulWidget {
 
 class _HotelPageState extends State<HotelPage> {
   late List<CountryModel> allCountry;
-  String Country = 'Enter The Country';
   int CountryId = 0;
+  bool style = false;
+  String Country = 'Enter the country';
   @override
   void initState() {
     super.initState();
@@ -32,13 +33,10 @@ class _HotelPageState extends State<HotelPage> {
     return BlocConsumer<CountryCubit, CountryState>(listener: (context, state) {
       if (state is CountrySuccess) {
         allCountry = (state).countryList;
-        // ScaffoldMessenger.of(context)
-        //     .showSnackBar(SnackBar(content: Text("state.success")));
-        print('success');
       }
       if (state is CountryFailure) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("state.fauil")));
+            .showSnackBar(const SnackBar(content: Text("state.fauil")));
       }
     }, builder: (context, state) {
       return Scaffold(
@@ -89,33 +87,29 @@ class _HotelPageState extends State<HotelPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // const Text(
-                  //   "If you want to search for a hotel to book within a cetain country .",
-                  //   style: TextStyle(
-                  //       fontWeight: FontWeight.bold,
-                  //       height: 1.5,
-                  //       fontSize: 16,
-                  //       color: Color(0xff112D4E)
-                  //       //Color.fromARGB(255, 65, 64, 64)
-                  //       ),
-                  //  ),
                   const Text(
                     " Destination : ",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'normal',
+                        fontSize: 24),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   WidgetListTileComplete(
+                      style: style
+                          ? const TextStyle(
+                              color: Colors.black,
+                            )
+                          : const TextStyle(color: Colors.black45),
                       enableIcon: false,
                       enableIconButton: true,
                       enableCenterText: false,
                       text: Country,
                       selected: false,
                       onTap: () {
-                        // context.read<CountryCubit>().getAllCountrey();
                         showModalBottomSheet(
-                            // backgroundColor: AppColor.secondColor,
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(30),
@@ -141,6 +135,7 @@ class _HotelPageState extends State<HotelPage> {
                                                   setState(() {
                                                     Country =
                                                         allCountry[index].name;
+                                                    style = true;
                                                     User.countryShow = Country;
                                                   });
                                                   Navigator.pop(context);
@@ -166,8 +161,9 @@ class _HotelPageState extends State<HotelPage> {
                       if (CountryId == 0) {
                         showAlertDialog(context, 'Please chose country !');
                       } else {
-                        GoRouter.of(context)
-                            .push('/SearchHotelPage/${CountryId}');
+                        GoRouter.of(context).push(
+                          '/SearchHotelPage/${CountryId}',
+                        );
                       }
                     },
                     text: 'Search Hotel',

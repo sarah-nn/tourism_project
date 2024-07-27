@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tourism_project/business_logic/hotel/room_cubit.dart';
+import 'package:tourism_project/business_logic/hotel/roomAndBook_cubit.dart';
 import 'package:tourism_project/business_logic/hotel/searchHotel_cubit.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/data/models/search_hotel_model.dart';
@@ -28,8 +28,8 @@ class _SearchHotelPageState extends State<SearchHotelPage> {
         listener: (context, state) {
       if (state is SearchHotelSuccess) {
         Hotel = (state).HotelList;
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("state.success")));
+        // ScaffoldMessenger.of(context)
+        //     .showSnackBar(SnackBar(content: Text("state.success")));
       }
       if (state is SearchHotelFailure) {
         ScaffoldMessenger.of(context)
@@ -61,7 +61,7 @@ class _SearchHotelPageState extends State<SearchHotelPage> {
                 clipBehavior: Clip.antiAlias,
                 decoration: const BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(45),
                     topLeft: Radius.circular(45),
                   ),

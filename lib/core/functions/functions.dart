@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_images.dart';
-import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
 import 'package:tourism_project/presentation/widget/hotel/custom_elevated_buttom.dart';
 
@@ -11,9 +10,8 @@ showAlertDialog(BuildContext context, String message) {
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
     content: SizedBox(
-      height: 300,
       child: Column(
-          mainAxisSize: MainAxisSize.max,
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
@@ -27,12 +25,10 @@ showAlertDialog(BuildContext context, String message) {
                   fontSize: 20),
             ),
             const SizedBox(height: 10),
-            Expanded(
-              child: Text(
-                message,
-                style: const TextStyle(
-                    color: Colors.black45, fontWeight: FontWeight.bold),
-              ),
+            Text(
+              message,
+              style: const TextStyle(
+                  color: Colors.black45, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
             Padding(
@@ -51,6 +47,63 @@ showAlertDialog(BuildContext context, String message) {
 
   // show the dialog
   showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+showAlertDialogQuestion(BuildContext context, void Function()? onTapOk,
+    void Function()? onTapCancel) {
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Image.asset(
+            "assets/images/question.png",
+            scale: 5,
+          ),
+          const SizedBox(height: 20),
+          const Text(
+            'You want cancel book ?',
+            style:
+                TextStyle(fontWeight: FontWeight.bold, color: Colors.black54),
+          ),
+          const SizedBox(height: 30),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              GestureDetector(
+                onTap: onTapCancel,
+                child: Text(
+                  'cancel',
+                  style: TextStyle(
+                      color: AppColor.primaryColor,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(width: 30),
+              GestureDetector(
+                onTap: onTapOk,
+                child: Text(
+                  'ok',
+                  style: TextStyle(
+                      color: AppColor.primaryColor,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          )
+        ]),
+  );
+
+  // show the dialog
+  showDialog(
+    barrierDismissible: false,
     context: context,
     builder: (BuildContext context) {
       return alert;
@@ -132,6 +185,93 @@ showBookingDoneDialog(BuildContext context, path, id) {
                     "Ok",
                     style: TextStyle(
                         color: Theme.of(context).primaryColor, fontSize: 15),
+                  )),
+            ],
+          )
+        ],
+      ),
+    ),
+  );
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+showBookingDialog(BuildContext context, path) {
+  Dialog alert = Dialog(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+    child: Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25),
+          gradient: LinearGradient(colors: [
+            AppColor.secondColor.withOpacity(0.2),
+            Colors.white,
+            AppColor.secondColor.withOpacity(0.2)
+          ])),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 25),
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              Container(
+                  height: 80,
+                  width: 80,
+                  child: Image.asset(AppImage.checkMark)),
+              SizedBox(width: 8),
+              Expanded(
+                child: AnimatedTextKit(
+                  displayFullTextOnTap: false,
+                  totalRepeatCount: 1,
+                  animatedTexts: [
+                    TyperAnimatedText("Congrats !",
+                        textStyle: MyTextStyle.poppins.copyWith(
+                            color: AppColor.primaryColor,
+                            fontSize: 28,
+                            //letterSpacing: 1,
+                            fontWeight: FontWeight.bold),
+                        speed: const Duration(milliseconds: 65)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 18),
+          const Text(
+            "Booking Complete Successfuly ... Enjoy your trip !",
+            style: TextStyle(
+                color: Colors.black54,
+                fontSize: 20,
+                height: 1.5,
+                fontFamily: 'normal',
+                fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 30),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                  onPressed: () {
+                    GoRouter.of(context).push(path);
+                  },
+                  child: Text(
+                    "View details",
+                    style:
+                        TextStyle(color: AppColor.primaryColor, fontSize: 15),
+                  )),
+              TextButton(
+                  onPressed: () {
+                    context.pop();
+                  },
+                  child: Text(
+                    "Ok",
+                    style:
+                        TextStyle(color: AppColor.primaryColor, fontSize: 15),
                   )),
             ],
           )

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:tourism_project/business_logic/user/user_cubit.dart';
 import 'package:tourism_project/core/localization/chang_language_buttom.dart';
@@ -61,7 +62,10 @@ class WidgetDrawer extends StatelessWidget {
                 ),
                 widgetListTile(
                   icon: Iconsax.location,
-                  text: "Nearby",
+                  text: "My Booking",
+                  onTap: () {
+                    GoRouter.of(context).push(AppRoutes.detailsBookHotel);
+                  },
                 ),
                 const Divider(
                   color: Colors.black,
