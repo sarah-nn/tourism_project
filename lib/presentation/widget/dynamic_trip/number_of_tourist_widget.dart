@@ -42,14 +42,14 @@ class _NumberOfTouristState extends State<NumberOfTourist> {
             Align(
               alignment: Alignment.topLeft,
               child: Text(
-                "who did you Travel with ?",
+                "who do you Want to Travel with ?",
                 style: MyTextStyle.normal.copyWith(fontSize: 25),
               ),
             ),
             const SizedBox(height: 30),
             Row(
               children: [
-                customGridFeild("Friend", AppIcon.friend, () {
+                customGridFeild("Friends", AppIcon.friend, () {
                   setState(() {
                     isNumer = true;
                   });

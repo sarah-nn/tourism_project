@@ -31,7 +31,7 @@ class CountryCubit extends Cubit<CountryState> {
       }
     } catch (e) {
       print("$e");
-      emit(CountryFailure(errMessage: e.toString()));
+      // emit(CountryFailure(errMessage: e.toString()));
     }
     print(countryList);
     return countryList;

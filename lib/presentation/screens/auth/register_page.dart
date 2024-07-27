@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_project/business_logic/user/user_cubit.dart';
+import 'package:tourism_project/core/database/cach_helper.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/validation.dart';
@@ -94,6 +95,8 @@ class RegisterPage extends StatelessWidget {
                       ? const Center(child: CircularProgressIndicator())
                       : CustomButtomAuth(
                           onPressed: () {
+                            CacheHelper()
+                                .saveData(key: "isFirstTime", value: true);
                             print('==============Tapped!!===');
                             context.read<UserCubit>().register();
                           },

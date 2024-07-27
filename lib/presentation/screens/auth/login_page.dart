@@ -20,9 +20,12 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(
       listener: (context, state) {
+        bool isFirstTime = CacheHelper().getData(key: "isFirstTime") ?? false;
         if (state is UserSuccess) {
           myToken = CacheHelper().getData(key: 'token');
-          goRoute(context, AppRoutes.homePage);
+          isFirstTime
+              ? goRoute(context, AppRoutes.profile)
+              : goRoute(context, AppRoutes.homePage);
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text("success"),

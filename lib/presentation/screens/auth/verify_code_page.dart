@@ -18,7 +18,7 @@ class VerfiyCodeSignUp extends StatelessWidget {
       listener: (context, state) {
         if (state is UserSuccess) {
           showAlertSuccess(
-              context, "create your account", "Go Home", AppRoutes.homePage);
+              context, "create your account", "Log in", AppRoutes.login);
         } else if (state is UserFailure) {
           showAlertDialog(context, state.message);
         }

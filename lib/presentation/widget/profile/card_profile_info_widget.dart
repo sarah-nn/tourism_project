@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tourism_project/business_logic/profile/profile_cubit.dart';
-import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/data/models/user_model.dart';
 import 'package:tourism_project/presentation/widget/profile/profile_field_widget.dart';
 import 'package:tourism_project/presentation/widget/profile/reset_delete_widget.dart';
@@ -50,7 +47,7 @@ class _CardProfileInfoState extends State<CardProfileInfo> {
                       onTap: () {},
                       title: "Location",
                       userInfo:
-                          widget.userInfo.position!.name.toString() ?? "null",
+                          widget.userInfo.position?.name.toString() ?? "null",
                       index: false),
                   const SizedBox(height: 50),
                   const ResetAndDelete()

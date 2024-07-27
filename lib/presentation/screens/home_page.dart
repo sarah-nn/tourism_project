@@ -65,28 +65,30 @@ class _HomePageState extends State<HomePage> {
                   //   ),
                   //   onPressed: () {},
                   // )
-                  saveImage == ''
-                      ? CircleAvatar(
-                          radius: 22,
-                          backgroundColor: Colors.grey[200],
-                          child: const Center(
-                            child: Icon(
-                              Icons.person,
-                              size: 22,
-                              color: Colors.grey,
-                            ),
-                          ))
-                      : CircleAvatar(
-                          radius: 22,
-                          backgroundColor: Colors.white,
-                          backgroundImage: FileImage(
-                            File(CacheHelper().getData(key: "profileImage")),
-                          )
-                          //AssetImage(context.read<UploadImageCubit>().profilePic)
-                          // NetworkImage(
-                          //     EndPoint.imageBaseUrl +
-                          //         state.userInfo.image!)
-                          )
+                  //!-----------------------------
+                  // saveImage != ''
+                  //     ? CircleAvatar(
+                  //         radius: 22,
+                  //         backgroundColor: Colors.grey[200],
+                  //         child: const Center(
+                  //           child: Icon(
+                  //             Icons.person,
+                  //             size: 22,
+                  //             color: Colors.grey,
+                  //           ),
+                  //         ))
+                  //     : CircleAvatar(
+                  //         radius: 22,
+                  //         backgroundColor: Colors.white,
+                  //         backgroundImage: FileImage(
+                  //           File(CacheHelper().getData(key: "profileImage")),
+                  //         )
+                  //!-------------------------------
+                  //AssetImage(context.read<UploadImageCubit>().profilePic)
+                  // NetworkImage(
+                  //     EndPoint.imageBaseUrl +
+                  //         state.userInfo.image!)
+                  // )
                   // Container(
                   //   padding: EdgeInsets.all(3),
                   //   decoration: BoxDecoration(

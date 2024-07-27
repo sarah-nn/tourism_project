@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_project/business_logic/profile/profile_cubit.dart';
+import 'package:tourism_project/core/database/cach_helper.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/core/functions/functions.dart';
+import 'package:tourism_project/core/utils/global.dart';
+import 'package:tourism_project/data/models/user_model.dart';
 import 'package:tourism_project/presentation/widget/profile/card_profile_info_widget.dart';
 import 'package:tourism_project/presentation/widget/profile/edit_image.dart';
 import 'package:tourism_project/presentation/widget/profile/top_with_image.dart';
@@ -16,6 +19,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  bool isEnterPosition = false;
   @override
   void initState() {
     super.initState();
@@ -27,6 +31,12 @@ class _ProfilePageState extends State<ProfilePage> {
     return BlocConsumer<ProfileCubit, ProfileState>(
       listener: (context, state) {
         if (state is ProfileInfo) {
+          setState(() {
+            state.userInfo.position != null
+                ? isEnterPosition = false
+                : isEnterPosition = true;
+          });
+          print(isEnterPosition);
           print("get profile info success");
         } else {
           print("profile info not done");
@@ -39,9 +49,18 @@ class _ProfilePageState extends State<ProfilePage> {
                 ? ListView(
                     children: [
                       TopWithImage(profileImage: state.userInfo.image ?? ''),
-                      //const SizedBox(height: 5),
                       const EditImage(),
                       const SizedBox(height: 10),
+                      isEnterPosition
+                          ? Container(
+                              padding: EdgeInsets.only(left: 30),
+                              child: const Text(
+                                "!! Position is requierd",
+                                style:
+                                    TextStyle(color: Colors.red, fontSize: 16),
+                              ),
+                            )
+                          : Container(),
                       CardProfileInfo(
                         userInfo: state.userInfo,
                       ),
@@ -53,25 +72,29 @@ class _ProfilePageState extends State<ProfilePage> {
       },
     );
   }
-}
 
-PreferredSizeWidget profileAppBar(BuildContext context) {
-  return AppBar(
-    backgroundColor: AppColor.primaryColor,
-    elevation: 0,
-    actions: [
-      TextButton(
-          onPressed: () {
-            replace(context, AppRoutes.homePage);
-          },
-          child: const Text(
-            "Save",
-            style: TextStyle(
-              color: Colors.white,
-              letterSpacing: 1,
-              fontSize: 15,
-            ),
-          ))
-    ],
-  );
+  PreferredSizeWidget profileAppBar(BuildContext context) {
+    bool isPositionNull = CacheHelper().getData(key: "userPosition") ?? false;
+    return AppBar(
+      backgroundColor: AppColor.primaryColor,
+      elevation: 0,
+      actions: [
+        TextButton(
+            onPressed: () {
+              print(isPositionNull);
+
+              isPositionNull ? replace(context, AppRoutes.homePage) : null;
+              //  !isEnterPosition ? null : replace(context, AppRoutes.homePage);
+            },
+            child: const Text(
+              "Save",
+              style: TextStyle(
+                color: Colors.white,
+                letterSpacing: 1,
+                fontSize: 15,
+              ),
+            ))
+      ],
+    );
+  }
 }

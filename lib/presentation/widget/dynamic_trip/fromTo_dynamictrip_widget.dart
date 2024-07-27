@@ -80,7 +80,7 @@ class _FromToDynamicTripState extends State<FromToDynamicTrip> {
                 padding: const EdgeInsets.only(right: 20),
                 child: DropdownButton<CountryModel>(
                     value: countryModel2,
-                    hint: const Text("Choose Dist Country"),
+                    hint: const Text("Choose destination Country"),
                     icon: const Icon(Icons.arrow_drop_down),
                     iconSize: 36,
                     isExpanded: true,

@@ -94,12 +94,14 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
                                             Iconsax.warning_2_copy,
                                             color: Colors.red,
                                           ),
-                                          Text(
-                                            "  Booking Fail with message :",
-                                            style: TextStyle(
-                                                color: Colors.red,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18),
+                                          Expanded(
+                                            child: Text(
+                                              "  Booking Fail with message :",
+                                              style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 18),
+                                            ),
                                           )
                                         ],
                                       ),

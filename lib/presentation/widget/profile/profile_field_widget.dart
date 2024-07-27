@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tourism_project/business_logic/country/country_cubit.dart';
 import 'package:tourism_project/business_logic/profile/profile_cubit.dart';
+import 'package:tourism_project/core/database/cach_helper.dart';
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/country_model.dart';
 
 class ProfileField extends StatefulWidget {
@@ -187,6 +189,9 @@ class _ProfileFieldState extends State<ProfileField> {
                                 myCubit.userPosition =
                                     name[index].id.toString();
                               });
+                              CacheHelper()
+                                  .saveData(key: "userPosition", value: true);
+
                               await myCubit.updateUserInfo();
                               print(myCubit.buildRequestBody());
                             },
