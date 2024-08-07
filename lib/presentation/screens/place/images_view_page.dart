@@ -3,9 +3,12 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_images.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
+import 'package:tourism_project/core/utils/end_point.dart';
+import 'package:tourism_project/data/models/place_desc_model.dart';
 
 class ImageViewPage extends StatelessWidget {
-  const ImageViewPage({super.key});
+  final List<Images> images;
+  const ImageViewPage({super.key, required this.images});
 
   @override
   Widget build(BuildContext context) {
@@ -39,102 +42,119 @@ class ImageViewPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4),
                 child: StaggeredGrid.count(
-                  crossAxisCount: 4,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                  children: [
-                    StaggeredGridTile.count(
-                        crossAxisCellCount: 2,
-                        mainAxisCellCount: 2,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.asset(
-                            AppImage.hotel,
-                            fit: BoxFit.cover,
-                          ),
-                        )),
-                    StaggeredGridTile.count(
-                        crossAxisCellCount: 2,
-                        mainAxisCellCount: 4,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.asset(
-                            AppImage.starting,
-                            fit: BoxFit.cover,
-                          ),
-                        )),
-                    StaggeredGridTile.count(
-                        crossAxisCellCount: 2,
-                        mainAxisCellCount: 3,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.asset(
-                            AppImage.tajMahal,
-                            fit: BoxFit.cover,
-                          ),
-                        )),
-                    StaggeredGridTile.count(
-                        crossAxisCellCount: 2,
-                        mainAxisCellCount: 3,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.asset(
-                            AppImage.two,
-                            fit: BoxFit.cover,
-                          ),
-                        )),
-                    StaggeredGridTile.count(
-                        crossAxisCellCount: 2,
-                        mainAxisCellCount: 4,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.asset(
-                            AppImage.onboarding1,
-                            fit: BoxFit.cover,
-                          ),
-                        )),
-                    StaggeredGridTile.count(
-                        crossAxisCellCount: 2,
-                        mainAxisCellCount: 4,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.asset(
-                            AppImage.nearMe,
-                            fit: BoxFit.cover,
-                          ),
-                        )),
-                    StaggeredGridTile.count(
-                        crossAxisCellCount: 2,
-                        mainAxisCellCount: 3,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.asset(
-                            AppImage.offers,
-                            fit: BoxFit.cover,
-                          ),
-                        )),
-                    StaggeredGridTile.count(
-                        crossAxisCellCount: 2,
-                        mainAxisCellCount: 3,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.asset(
-                            AppImage.one,
-                            fit: BoxFit.cover,
-                          ),
-                        )),
-                    StaggeredGridTile.count(
-                        crossAxisCellCount: 2,
-                        mainAxisCellCount: 4,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.asset(
-                            AppImage.nearMe,
-                            fit: BoxFit.cover,
-                          ),
-                        ))
-                  ],
-                ),
+                    crossAxisCount: 4,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
+                    children: [
+                      ...List.generate(
+                          images.length,
+                          (index) => StaggeredGridTile.count(
+                                crossAxisCellCount: 2,
+                                mainAxisCellCount: (index % 2 == 0) ? 3 : 2,
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image(
+                                      image: NetworkImage(
+                                          EndPoint.imageBaseUrl +
+                                              images[index].image!),
+                                      fit: BoxFit.cover,
+                                    )),
+                              ))
+                    ]
+
+                    //  [
+                    //   StaggeredGridTile.count(
+                    //       crossAxisCellCount: 2,
+                    //       mainAxisCellCount: 2,
+                    //       child: ClipRRect(
+                    //         borderRadius: BorderRadius.circular(10),
+                    //         child: Image.asset(
+                    //           AppImage.hotel,
+                    //           fit: BoxFit.cover,
+                    //         ),
+                    //       )),
+                    //   StaggeredGridTile.count(
+                    //       crossAxisCellCount: 2,
+                    //       mainAxisCellCount: 4,
+                    //       child: ClipRRect(
+                    //         borderRadius: BorderRadius.circular(10),
+                    //         child: Image.asset(
+                    //           AppImage.starting,
+                    //           fit: BoxFit.cover,
+                    //         ),
+                    //       )),
+                    //   StaggeredGridTile.count(
+                    //       crossAxisCellCount: 2,
+                    //       mainAxisCellCount: 3,
+                    //       child: ClipRRect(
+                    //         borderRadius: BorderRadius.circular(10),
+                    //         child: Image.asset(
+                    //           AppImage.tajMahal,
+                    //           fit: BoxFit.cover,
+                    //         ),
+                    //       )),
+                    //   StaggeredGridTile.count(
+                    //       crossAxisCellCount: 2,
+                    //       mainAxisCellCount: 3,
+                    //       child: ClipRRect(
+                    //         borderRadius: BorderRadius.circular(10),
+                    //         child: Image.asset(
+                    //           AppImage.two,
+                    //           fit: BoxFit.cover,
+                    //         ),
+                    //       )),
+                    //   StaggeredGridTile.count(
+                    //       crossAxisCellCount: 2,
+                    //       mainAxisCellCount: 4,
+                    //       child: ClipRRect(
+                    //         borderRadius: BorderRadius.circular(10),
+                    //         child: Image.asset(
+                    //           AppImage.onboarding1,
+                    //           fit: BoxFit.cover,
+                    //         ),
+                    //       )),
+                    //   StaggeredGridTile.count(
+                    //       crossAxisCellCount: 2,
+                    //       mainAxisCellCount: 4,
+                    //       child: ClipRRect(
+                    //         borderRadius: BorderRadius.circular(10),
+                    //         child: Image.asset(
+                    //           AppImage.nearMe,
+                    //           fit: BoxFit.cover,
+                    //         ),
+                    //       )),
+                    //   StaggeredGridTile.count(
+                    //       crossAxisCellCount: 2,
+                    //       mainAxisCellCount: 3,
+                    //       child: ClipRRect(
+                    //         borderRadius: BorderRadius.circular(10),
+                    //         child: Image.asset(
+                    //           AppImage.offers,
+                    //           fit: BoxFit.cover,
+                    //         ),
+                    //       )),
+                    //   StaggeredGridTile.count(
+                    //       crossAxisCellCount: 2,
+                    //       mainAxisCellCount: 3,
+                    //       child: ClipRRect(
+                    //         borderRadius: BorderRadius.circular(10),
+                    //         child: Image.asset(
+                    //           AppImage.one,
+                    //           fit: BoxFit.cover,
+                    //         ),
+                    //       )),
+                    //   StaggeredGridTile.count(
+                    //       crossAxisCellCount: 2,
+                    //       mainAxisCellCount: 4,
+                    //       child: ClipRRect(
+                    //         borderRadius: BorderRadius.circular(10),
+                    //         child: Image.asset(
+                    //           AppImage.nearMe,
+                    //           fit: BoxFit.cover,
+                    //         ),
+                    //       ))
+                    // ],
+                    ),
               ),
             ]),
           ),

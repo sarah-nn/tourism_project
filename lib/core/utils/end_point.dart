@@ -47,6 +47,9 @@ class EndPoint {
   static const String dynamicBooking = '$baseUrl/user/Add_booking_User';
   static const String dynamicBookingDetails =
       '$baseUrl/user/show_dynamic_trip/';
+  static const String getAllDynamicList = '$baseUrl/user/all_my_dynamic_trip';
+  static const String updateDynamicTrip = '$baseUrl/user/update_dynamic_trip/';
+  static const String deleteDynamicTrip = '$baseUrl/user/delete_dynamic_trip/';
 
 //==================== Flight ==========================
   static const String searchFlight = '$baseUrl/user/search-for-plane-trip';
@@ -56,7 +59,8 @@ class EndPoint {
   static const String searchHotel = '$baseUrl/user/get_Hotel_By_Country/';
   static const String roomHotel = '$baseUrl/user/get_all_room/';
   static const String bookHotel = '$baseUrl/user/hotel_book';
-  //===================details booking=================
+
+//===================details booking=================
   static const String detailsBookHotel = '$baseUrl/user/all_my_hotel_trip';
   static const String showDetailsBookHotel = '$baseUrl/user/show_hotel_trip/';
   static const String deleteBookinHotel = '$baseUrl/user/delete_dynamic_trip/';

@@ -204,6 +204,8 @@ class _WidgetSearchFlightState extends State<WidgetSearchFlight> {
                             isTapped = !isTapped;
                           });
                           print(isTapped);
+                          print(
+                              "one $onePlaneId   going $goingPlaneId return $returnPlaneId");
                           // var flight =
                           //     BlocProvider.of<DynamicTripCubit>(context);
                           // print("=============${flight.startDate}");

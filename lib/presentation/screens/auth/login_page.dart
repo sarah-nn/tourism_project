@@ -22,6 +22,7 @@ class LoginPage extends StatelessWidget {
       listener: (context, state) {
         bool isFirstTime = CacheHelper().getData(key: "isFirstTime") ?? false;
         if (state is UserSuccess) {
+          CacheHelper().saveData(key: "isUserLoggedIn?", value: true);
           myToken = CacheHelper().getData(key: 'token');
           isFirstTime
               ? goRoute(context, AppRoutes.profile)
@@ -97,8 +98,6 @@ class LoginPage extends StatelessWidget {
                             ? const Center(child: CircularProgressIndicator())
                             : CustomButtomAuth(
                                 onPressed: () {
-                                  CacheHelper().saveData(
-                                      key: "isUserLoggedIn?", value: true);
                                   context.read<UserCubit>().login();
 
                                   //goRoute(context, AppRoutes.homePage);

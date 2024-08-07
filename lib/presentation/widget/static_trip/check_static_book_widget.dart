@@ -26,9 +26,13 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
   List<String> headlines = [
     'Rooms needed :',
     'Price details for ',
-    'room price :',
-    'going_plane Ticket :',
-    'return_plane Ticket :',
+    'Room price :',
+    'days * price * rooms needed :',
+    'going_plane Tickets :',
+    "sarah nn",
+    'return_plane Tickets :',
+    'place Ticket :',
+    'ticket price * tourist number :',
     'price after Discount :'
   ];
   bool isCheck = false;
@@ -38,6 +42,7 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
   CheckNum? model;
   bool finish = false;
   late Future<CheckNum> checkModel;
+  bool isSuccess = false;
   void _incrementCounter() {
     setState(() {
       _counter++;
@@ -56,6 +61,9 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
       listener: (context, state) {
         if (state is CheckNumSuccess) {
           model = (state).checkNum;
+          setState(() {
+            isSuccess = true;
+          });
         }
         if (state is BookSuccess) {
           showBookingDoneDialog(context, AppRoutes.staticTripdetails, "id");
@@ -67,10 +75,11 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
       builder: (context, state) {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 18),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+          child: ListView(
+            shrinkWrap: true,
+            //  mainAxisSize: MainAxisSize.min,
             children: [
-              determineNum(),
+              isSuccess ? Container() : determineNum(),
               const SizedBox(height: 10),
               isCheck
                   ? state is CheckNumSuccess
@@ -138,15 +147,17 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Divider(
-          color: Color.fromARGB(255, 114, 114, 114),
-          thickness: 1,
-        ),
+        isSuccess
+            ? Container()
+            : const Divider(
+                color: Color.fromARGB(255, 114, 114, 114),
+                thickness: 1,
+              ),
         Text(
           "Details :",
           style: MyTextStyle.bright.copyWith(
               color: AppColor.primaryColor,
-              letterSpacing: 0.5,
+              letterSpacing: 1.2,
               fontWeight: FontWeight.w600,
               decoration: TextDecoration.underline,
               fontSize: 25),
@@ -166,17 +177,48 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
                   ),
                 ),
-                customRow(headlines[0], "( ${model?.roomsNeeded} )"),
-                customRow(headlines[1], ""),
-                customRow(headlines[2], "\$ ${model?.roomPrice}"),
-                customRow(headlines[3], "\$ ${model?.ticketPriceForGoingTrip}"),
+                customRow(headlines[0], "( ${model?.roomsNeeded} )", 18, false,
+                    false),
+                customRow(headlines[1], "", 18, false, false),
                 customRow(
-                    headlines[4], "\$ ${model?.ticketPriceForReturnTrip}"),
+                    headlines[2], "\$ ${model!.roomPrice}", 18, true, true),
+                customRow(
+                    headlines[3],
+                    "\$ ${(model!.days * model!.roomPrice * model!.roomsNeeded)}",
+                    15,
+                    false,
+                    false),
+                customRow(headlines[4], "\$ ${model!.ticketPriceForGoingTrip}",
+                    18, true, true),
+                customRow(
+                    "total room price ",
+                    "${model!.ticketPriceForGoingTrip * _counter}",
+                    15,
+                    false,
+                    false),
+                //customRow(headlines[6], "second", 15, true),
+                customRow(headlines[6], "\$ ${model?.ticketPriceForReturnTrip}",
+                    18, true, true),
+                customRow(
+                    "ticket price * tourist number ",
+                    "${model!.ticketPriceForReturnTrip * _counter}",
+                    15,
+                    false,
+                    false),
+                customRow("${headlines[7]} ",
+                    "\$${model!.ticket_price_for_places}", 18, true, true),
+                customRow(
+                    headlines[8],
+                    "\$ ${(model!.ticket_price_for_places * _counter)}",
+                    15,
+                    false,
+                    false),
                 model?.priceAfterDiscount == null
                     ? Container()
-                    : customRow(
-                        headlines[5], "\$ ${model?.priceAfterDiscount}"),
+                    : customRow(headlines[9], "\$ ${model?.priceAfterDiscount}",
+                        18, false, false),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 5),
@@ -189,6 +231,7 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
                       ),
                     ),
                     Container(
+                      padding: const EdgeInsets.only(right: 30),
                       child: Text(
                         "\$ ${model?.totalPrice}",
                         style: const TextStyle(
@@ -244,7 +287,9 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
                     model!.roomsNeeded.toString(),
                     model!.totalPrice.toString(),
                     model!.priceAfterDiscount.toString(),
-                    discount.toString());
+                    discount.toString(),
+                    model!.days.toString(),
+                    model!.roomPrice.toString());
                 //!finish ? context.pop(context) : null;
               },
               color: AppColor.primaryColor,
@@ -260,21 +305,27 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
     );
   }
 
-  Widget customRow(String first, String second) {
+  Widget customRow(
+      String first, String second, double size, bool isGrey, bool isSpace) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 3),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment:
+            !isSpace ? MainAxisAlignment.spaceBetween : MainAxisAlignment.start,
         children: [
           Text(
             first,
-            style: TextStyle(fontSize: 18, color: Colors.black54),
+            style: TextStyle(fontSize: size, color: Colors.black54),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 30),
             child: Text(
               second,
-              style: TextStyle(fontSize: 18, color: Colors.black),
+              style: TextStyle(
+                  fontSize: 18,
+                  color: isGrey
+                      ? const Color.fromARGB(115, 117, 117, 117)
+                      : Colors.black),
             ),
           )
         ],

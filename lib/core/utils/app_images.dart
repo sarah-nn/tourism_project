@@ -37,4 +37,5 @@ abstract class AppIcon {
   static const family = 'assets/icons/large-family.png';
   static const single = 'assets/icons/single_person.png';
   static const climping = 'assets/icons/climbing.png';
+  static const telegramIcon = 'assets/icons/telegram_icon.png';
 }

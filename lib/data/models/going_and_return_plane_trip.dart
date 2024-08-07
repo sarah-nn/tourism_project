@@ -42,23 +42,23 @@ class Data {
 }
 
 class GoingTrip {
-  GoingTrip({
-    required this.id,
-    required this.planeId,
-    required this.airportSourceId,
-    required this.airportDestinationId,
-    required this.countrySourceId,
-    required this.countryDestinationId,
-    required this.currentPrice,
-    required this.availableSeats,
-    required this.flightDate,
-    required this.landingDate,
-    required this.plane,
-    required this.countrySource,
-    required this.countryDestination,
-    required this.airportSource,
-    required this.airportDestination,
-  });
+  GoingTrip(
+      {required this.id,
+      required this.planeId,
+      required this.airportSourceId,
+      required this.airportDestinationId,
+      required this.countrySourceId,
+      required this.countryDestinationId,
+      required this.currentPrice,
+      required this.availableSeats,
+      required this.flightDate,
+      required this.landingDate,
+      required this.plane,
+      required this.countrySource,
+      required this.countryDestination,
+      required this.airportSource,
+      required this.airportDestination,
+      required this.flight_duration});
   late final int id;
   late final int planeId;
   late final int airportSourceId;
@@ -69,6 +69,7 @@ class GoingTrip {
   late final int availableSeats;
   late final String flightDate;
   late final String landingDate;
+  late final String flight_duration;
   late final Plane plane;
   late final CountrySource countrySource;
   late final CountryDestination countryDestination;
@@ -86,6 +87,7 @@ class GoingTrip {
     availableSeats = json['available_seats'];
     flightDate = json['flight_date'];
     landingDate = json['landing_date'];
+    flight_duration = json['flight_duration'];
     plane = Plane.fromJson(json['plane']);
     countrySource = CountrySource.fromJson(json['country_source']);
     countryDestination =
@@ -107,6 +109,7 @@ class GoingTrip {
     _data['available_seats'] = availableSeats;
     _data['flight_date'] = flightDate;
     _data['landing_date'] = landingDate;
+    _data['flight_duration'] = flight_duration;
     _data['plane'] = plane.toJson();
     _data['country_source'] = countrySource.toJson();
     _data['country_destination'] = countryDestination.toJson();
@@ -226,23 +229,23 @@ class AirportDestination {
 }
 
 class ReturnTrip {
-  ReturnTrip({
-    required this.id,
-    required this.planeId,
-    required this.airportSourceId,
-    required this.airportDestinationId,
-    required this.countrySourceId,
-    required this.countryDestinationId,
-    required this.currentPrice,
-    required this.availableSeats,
-    required this.flightDate,
-    required this.landingDate,
-    required this.plane,
-    required this.countrySource,
-    required this.countryDestination,
-    required this.airportSource,
-    required this.airportDestination,
-  });
+  ReturnTrip(
+      {required this.id,
+      required this.planeId,
+      required this.airportSourceId,
+      required this.airportDestinationId,
+      required this.countrySourceId,
+      required this.countryDestinationId,
+      required this.currentPrice,
+      required this.availableSeats,
+      required this.flightDate,
+      required this.landingDate,
+      required this.plane,
+      required this.countrySource,
+      required this.countryDestination,
+      required this.airportSource,
+      required this.airportDestination,
+      required this.flight_duration});
   late final int id;
   late final int planeId;
   late final int airportSourceId;
@@ -253,6 +256,7 @@ class ReturnTrip {
   late final int availableSeats;
   late final String flightDate;
   late final String landingDate;
+  late final String flight_duration;
   late final Plane plane;
   late final CountrySource countrySource;
   late final CountryDestination countryDestination;
@@ -270,6 +274,7 @@ class ReturnTrip {
     availableSeats = json['available_seats'];
     flightDate = json['flight_date'];
     landingDate = json['landing_date'];
+    flight_duration = json['flight_duration'];
     plane = Plane.fromJson(json['plane']);
     countrySource = CountrySource.fromJson(json['country_source']);
     countryDestination =
@@ -291,6 +296,7 @@ class ReturnTrip {
     _data['available_seats'] = availableSeats;
     _data['flight_date'] = flightDate;
     _data['landing_date'] = landingDate;
+    _data['flight_duration'] = flight_duration;
     _data['plane'] = plane.toJson();
     _data['country_source'] = countrySource.toJson();
     _data['country_destination'] = countryDestination.toJson();

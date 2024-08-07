@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_images.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
@@ -15,9 +17,11 @@ class PlacesDynamicWidget extends StatefulWidget {
 
 class _PlacesDynamicWidgetState extends State<PlacesDynamicWidget> {
   List<String>? places;
+  bool isChooseDestination = false;
 
-  void _navigateToPlacePage() async {
-    final result = await context.push(AppRoutes.test2);
+  Future<void> _navigateToPlacePage() async {
+    final result = await GoRouter.of(context)
+        .push(AppRoutes.test2, extra: tripDestination);
 
     if (result != null) {
       setState(() {
@@ -31,27 +35,48 @@ class _PlacesDynamicWidgetState extends State<PlacesDynamicWidget> {
   Widget build(BuildContext context) {
     return Container(
         child: places == null
-            ? Container(
-                child: Row(
-                  children: [
-                    Container(
-                      child: Text(
-                        "Navigate To Place Page ",
-                        style: TextStyle(
-                            color: AppColor.primaryColor, fontSize: 22),
-                      ),
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    child: Row(
+                      children: [
+                        Container(
+                          child: Text(
+                            "Navigate To Place Page ",
+                            style: TextStyle(
+                                color: AppColor.primaryColor, fontSize: 22),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () async {
+                            print("🌹$tripDestination");
+                            setState(() {
+                              tripDestination == ''
+                                  ? isChooseDestination = false
+                                  : isChooseDestination = true;
+                            });
+                            await isChooseDestination
+                                ? _navigateToPlacePage()
+                                : null;
+                          },
+                          child: Container(
+                              height: 25,
+                              width: 25,
+                              child: Image.asset(AppImage.arrowForword)),
+                        )
+                      ],
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        _navigateToPlacePage();
-                      },
-                      child: Container(
-                          height: 25,
-                          width: 25,
-                          child: Image.asset(AppImage.arrowForword)),
-                    )
-                  ],
-                ),
+                  ),
+                  tripDestination != ''
+                      ? Container()
+                      : Container(
+                          child: const Text(
+                            "Choose your Destination First",
+                            style: TextStyle(color: Colors.red, height: 2),
+                          ),
+                        )
+                ],
               )
             : Column(
                 children: [

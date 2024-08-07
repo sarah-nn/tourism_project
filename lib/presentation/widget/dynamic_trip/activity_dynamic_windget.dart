@@ -88,7 +88,7 @@ class _ActivityDynamicWidgetState extends State<ActivityDynamicWidget> {
                     ),
                   ),
                   Expanded(
-                    flex: 3,
+                    flex: 4,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 30, vertical: 20),

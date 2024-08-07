@@ -11,7 +11,8 @@ import 'package:tourism_project/presentation/widget/auth/text_form_auth_widget.d
 import 'package:tourism_project/presentation/widget/auth/text_title_auth_widget.dart';
 
 class ResetPasswordPage extends StatelessWidget {
-  const ResetPasswordPage({super.key});
+  final String? email;
+  const ResetPasswordPage({super.key, @required this.email});
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +75,9 @@ class ResetPasswordPage extends StatelessWidget {
                         )
                       : CustomButtomAuth(
                           onPressed: () {
-                            context.read<ForgetpasswordCubit>().reSetPassword();
+                            context
+                                .read<ForgetpasswordCubit>()
+                                .reSetPassword(email == '' ? '' : email);
                           },
                           textButtom: 'Reset',
                         ),

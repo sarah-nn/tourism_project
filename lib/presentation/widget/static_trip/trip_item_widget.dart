@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tourism_project/business_logic/static_trip/static_trip_cubit.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_images.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
+import 'package:tourism_project/core/utils/end_point.dart';
 import 'package:tourism_project/data/models/all_static_trip_model.dart';
 
-class StaticTripItem extends StatelessWidget {
+class StaticTripItem extends StatefulWidget {
   const StaticTripItem(
       {super.key,
       required this.location,
@@ -21,6 +24,22 @@ class StaticTripItem extends StatelessWidget {
   final bool isSearch;
 
   @override
+  State<StaticTripItem> createState() => _StaticTripItemState();
+}
+
+class _StaticTripItemState extends State<StaticTripItem> {
+  Future<List<dynamic>>? imageList;
+  List<dynamic> images = [];
+
+  @override
+  void initState() {
+    super.initState();
+    imageList = context
+        .read<StaticTripCubit>()
+        .getImagePlaces(widget.tripmodel.destination_trip_id.toString());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 18),
@@ -28,7 +47,7 @@ class StaticTripItem extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 15),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: isSearch
+          color: widget.isSearch
               ? const Color.fromARGB(255, 224, 236, 240)
               : Colors.white,
           border: Border.all(width: 0.5),
@@ -40,17 +59,31 @@ class StaticTripItem extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(6.0),
               child: Stack(children: [
-                Container(
-                  height: 162,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage(
-                            images[index],
-                          ),
-                          fit: BoxFit.cover),
-                      borderRadius: BorderRadius.circular(20)),
-                ),
-                tripmodel.newPrice == null ? Container() : offers()
+                FutureBuilder(
+                    future: imageList,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        images = snapshot.data!;
+                        print("------------------------${snapshot.data}");
+                        return Container(
+                          height: 162,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: NetworkImage(EndPoint.imageBaseUrl +
+                                      images[1]['image']),
+                                  fit: BoxFit.cover),
+                              borderRadius: BorderRadius.circular(20)),
+                        );
+                      } else {
+                        return Container(
+                            height: 162,
+                            child: Center(
+                                child: CircularProgressIndicator(
+                              color: Colors.grey,
+                            )));
+                      }
+                    }),
+                widget.tripmodel.newPrice == null ? Container() : offers()
               ]),
             ),
             Padding(
@@ -63,7 +96,7 @@ class StaticTripItem extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(" ${tripmodel.tripName!}",
+                      Text(" ${widget.tripmodel.tripName!}",
                           style: TextStyle(
                               color: AppColor.primaryColor,
                               fontWeight: FontWeight.bold,
@@ -76,7 +109,7 @@ class StaticTripItem extends StatelessWidget {
                               Icons.star,
                               color: Colors.amber,
                             ),
-                            Text("(${tripmodel.stars})")
+                            Text("(${widget.tripmodel.stars})")
                           ],
                         ),
                       )
@@ -87,7 +120,7 @@ class StaticTripItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
-                        child: priceRow(tripmodel.price),
+                        child: priceRow(widget.tripmodel.price),
                       ),
                       viewDetails(context)
                     ],
@@ -105,7 +138,9 @@ class StaticTripItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         //goRoute(context, AppRoutes.staticTripdetails);
-        GoRouter.of(context).push('/StaticTripDetailsPage/${tripmodel.id}');
+        GoRouter.of(context).push(
+            '/StaticTripDetailsPage/${widget.tripmodel.id}',
+            extra: images);
       },
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 17),

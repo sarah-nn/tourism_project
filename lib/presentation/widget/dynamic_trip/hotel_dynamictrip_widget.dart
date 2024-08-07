@@ -19,9 +19,9 @@ class _HotelDynamicTripState extends State<HotelDynamicTrip> {
   bool isChooseHotel = false;
   List<HotelModel> hotelList = [];
 
-  void _selectHotel(String restaurant, String id) {
+  void _selectHotel(String hotel, String id) {
     setState(() {
-      selectedName = restaurant;
+      selectedName = hotel;
       context.read<DynamicTripCubit>().hotelId = id;
       isChooseHotel = true;
     });
@@ -31,6 +31,9 @@ class _HotelDynamicTripState extends State<HotelDynamicTrip> {
 
   void openButtomSheet(BuildContext context, List<HotelModel> hotelModel) {
     showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20), topRight: Radius.circular(20))),
       context: context,
       builder: (BuildContext ctx) {
         return hotelList.isNotEmpty

@@ -111,4 +111,23 @@ class StaticTripCubit extends Cubit<StaticTripState> {
     print(tripList);
     return tripList;
   }
+
+  Future<List<dynamic>> getImagePlaces(String placeId) async {
+    var uri = Uri.parse(EndPoint.placeDesc + placeId);
+    var header = {'Authorization': 'Bearer $myToken'};
+    var response = await http.get(uri, headers: header);
+    try {
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body)['data'];
+        print("place image=======================${data['images']}");
+        return data['images'];
+      } else {
+        print("api error${response.statusCode}");
+      }
+    } catch (e) {
+      print("$e");
+      // print(response.body);
+    }
+    return [];
+  }
 }

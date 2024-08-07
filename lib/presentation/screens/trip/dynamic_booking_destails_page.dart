@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tourism_project/business_logic/activity/activity_cubit.dart';
 import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
+import 'package:tourism_project/business_logic/dynamicTrip/update_trip/update_trip_cubit.dart';
+import 'package:tourism_project/business_logic/flight/searchFlight_cubit.dart';
+import 'package:tourism_project/business_logic/hotel/searchHotel_cubit.dart';
+import 'package:tourism_project/core/utils/app_color.dart';
+import 'package:tourism_project/core/utils/app_text_style.dart';
 import 'package:tourism_project/data/models/dynamic_booking_details_model.dart';
+import 'package:tourism_project/presentation/screens/trip/dynamic_edit_booking_page.dart';
+import 'package:tourism_project/presentation/widget/dynamic_trip/dynamic_booking_details/activities&places_details.dart';
+import 'package:tourism_project/presentation/widget/dynamic_trip/dynamic_booking_details/check_pay_card.dart';
+import 'package:tourism_project/presentation/widget/dynamic_trip/dynamic_booking_details/custom_flight_details.dart';
+import 'package:tourism_project/presentation/widget/dynamic_trip/dynamic_booking_details/hotel_details.dart';
+import 'package:tourism_project/presentation/widget/dynamic_trip/dynamic_booking_details/top_detalsi_card.dart';
 
 class DynamicTripBookingDetailsPage extends StatefulWidget {
   final String tripId;
@@ -17,7 +29,14 @@ class DynamicTripBookingDetailsPage extends StatefulWidget {
 
 class _DynamicTripBookingDetailsPageState
     extends State<DynamicTripBookingDetailsPage> {
-  Data? mymodel;
+  DataModel? mymodel;
+  dynamic goingPlane;
+  dynamic returnPlane;
+  dynamic hotelTrip;
+  bool noGoing = false;
+  bool noRetutn = false;
+  bool isHotel = false;
+  bool dropHotel = false;
 
   @override
   void initState() {
@@ -31,108 +50,284 @@ class _DynamicTripBookingDetailsPageState
       listener: (context, state) {
         if (state is DynamicTripBookingSuccess) {
           mymodel = (state).dynamicbookingModel;
+          goingPlane = (state).going_plane;
+          returnPlane = (state).return_plane;
+          hotelTrip = (state).hotelTrip;
+          print("is there going trip  $goingPlane");
+          print(mymodel);
+          print("is there hotel $hotelTrip");
+          print("is there return trip  $returnPlane");
+          if (goingPlane is List) {
+            noGoing = true;
+          }
+          if (returnPlane is List) {
+            noRetutn = true;
+          }
+          if (hotelTrip is List) {
+            isHotel = true;
+          }
         }
       },
       builder: (context, state) {
         return Scaffold(
-            body: Center(
-                child: state is DynamicTripBookingSuccess
-                    ? Text(mymodel!.tripName)
-                    : const Center(
-                        child: CircularProgressIndicator(),
-                      )));
+          backgroundColor: AppColor.primaryColor,
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(),
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 14, bottom: 2),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Review Details",
+                          style: MyTextStyle.headers.copyWith(
+                            fontSize: 30,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        TextButton(
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => MultiBlocProvider(
+                                        providers: [
+                                          BlocProvider(
+                                            create: (context) =>
+                                                DynamicTripCubit(),
+                                          ),
+                                          BlocProvider(
+                                            create: (context) =>
+                                                SearchHotelCubit(),
+                                          ),
+                                          BlocProvider(
+                                            create: (context) =>
+                                                SearchFlightCubit(),
+                                          ),
+                                          BlocProvider(
+                                            create: (context) =>
+                                                UpdateTripCubit(),
+                                          ),
+                                        ],
+                                        child: DynamicTripBookingEditPage(
+                                            tripId: mymodel!.dynamicTrip!.id
+                                                .toString()),
+                                      )));
+                            },
+                            child: const Text(
+                              "Edit",
+                              style: TextStyle(color: Colors.white),
+                            ))
+                      ],
+                    ),
+                  ),
+                  Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 15),
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height - 80,
+                      decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20))),
+                      child: state is DynamicTripBookingSuccess
+                          ? ListView(
+                              children: [
+                                TopDetailsCard(
+                                    mymodel: mymodel!, isEdit: false),
+                                const SizedBox(height: 25),
+                                singleRow(
+                                    "Number of people  ",
+                                    mymodel!.dynamicTrip!.numberOfPeople
+                                        .toString()),
+                                !isHotel
+                                    ? HotelDetails(
+                                        newName: '',
+                                        hotelTrip: hotelTrip,
+                                        dropHotel: dropHotel,
+                                        customOnTap: () {
+                                          setState(() {
+                                            dropHotel = !dropHotel;
+                                          });
+                                        },
+                                        roomC2: roomC2(),
+                                        roomC4: roomC4(),
+                                        roomC6: roomC6(),
+                                        priceC2: roomC2() != 0 ? priceC2() : "",
+                                        priceC4: roomC4() != 0 ? priceC4() : "",
+                                        priceC6: roomC6() != 0 ? priceC6() : "",
+                                        isEdit: false,
+                                      )
+                                    : singleRow("Hotel booking : ", "no found"),
+                                !noGoing
+                                    ? CustomFlight(
+                                        model: mymodel,
+                                        returnEdit: false,
+                                        isEdit: false,
+                                        header: "Going Trip :  ",
+                                        planeName: goingPlane['going_plane']
+                                            ['name'],
+                                        price: goingPlane['going_plane']
+                                            ['ticket_price'],
+                                        source: goingPlane['airport_source']
+                                            ['name'],
+                                        destination:
+                                            goingPlane['airport_destination']
+                                                ['name'])
+                                    : CustomFlight(
+                                        model: mymodel,
+                                        returnEdit: false,
+                                        isEdit: false,
+                                        header: "Going Trip : ",
+                                        planeName: "No Plane Selected",
+                                        price: "",
+                                        source: "",
+                                        destination: ""),
+                                !noRetutn
+                                    ? CustomFlight(
+                                        model: mymodel,
+                                        returnEdit: false,
+                                        isEdit: false,
+                                        header: "Return Trip :  ",
+                                        planeName: returnPlane['return_plane']
+                                            ['name'],
+                                        price: returnPlane['return_plane']
+                                            ['ticket_price'],
+                                        source: returnPlane['airport_source']
+                                            ['name'],
+                                        destination:
+                                            returnPlane['airport_destination']
+                                                ['name'])
+                                    : CustomFlight(
+                                        model: mymodel!,
+                                        returnEdit: false,
+                                        isEdit: false,
+                                        header: "Return Trip :  ",
+                                        planeName: "No Plane selected",
+                                        price: "",
+                                        source: "",
+                                        destination: ""),
+                                BlocProvider(
+                                  create: (context) => ActivityCubit(),
+                                  child: ActivityAndPlaces(
+                                    mymodel: mymodel!,
+                                    isEdit: false,
+                                  ),
+                                ),
+                                mymodel!.dynamicTrip!.tripNote == null
+                                    ? Container()
+                                    : Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10, horizontal: 10),
+                                        decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey)),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              "Trip Note ",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 17.5),
+                                            ),
+                                            Container(
+                                              padding: const EdgeInsets.only(
+                                                  top: 10, left: 4),
+                                              child: Text(
+                                                mymodel!.dynamicTrip!.tripNote!,
+                                                style: const TextStyle(
+                                                    fontSize: 18),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                CheckPayCard(
+                                  mymodel: mymodel!,
+                                  noGoing: noGoing,
+                                  noRetutn: noRetutn,
+                                  goingPrice: !noGoing
+                                      ? double.parse(goingPlane['going_plane']
+                                          ['ticket_price'])
+                                      : 0.0,
+                                  returnPrice: !noRetutn
+                                      ? double.parse(returnPlane['return_plane']
+                                          ['ticket_price'])
+                                      : 0.0,
+                                  c2: roomC2() == 0
+                                      ? 0.0
+                                      : double.parse(priceC2()),
+                                  c4: roomC4() == 0
+                                      ? 0.0
+                                      : double.parse(priceC4()),
+                                  c6: roomC6() == 0
+                                      ? 0.0
+                                      : double.parse(priceC6()),
+                                )
+                              ],
+                            )
+                          : const Center(
+                              child: CircularProgressIndicator(),
+                            )),
+                ],
+              )
+            ],
+          ),
+        );
       },
     );
   }
+
+  int roomC2() {
+    return mymodel!.rooms!.where((room) => room.capacity == 2).length;
+  }
+
+  int roomC4() {
+    return mymodel!.rooms!.where((room) => room.capacity == 4).length;
+  }
+
+  int roomC6() {
+    return mymodel!.rooms!.where((room) => room.capacity == 6).length;
+  }
+
+  String priceC2() {
+    final c2 = mymodel!.rooms!.firstWhere((room) => room.capacity == 2);
+    return c2.price.toString();
+  }
+
+  String priceC4() {
+    final c4 = mymodel!.rooms!.firstWhere((room) => room.capacity == 4);
+    return c4.price.toString();
+  }
+
+  String priceC6() {
+    final c6 = mymodel!.rooms!.firstWhere((room) => room.capacity == 6);
+    return c6.price.toString();
+  }
+
+  Widget singleRow(header, value) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      decoration: BoxDecoration(
+          border: Border.all(color: Color.fromARGB(255, 197, 197, 197))),
+      child: Row(
+        children: [
+          Text(
+            header,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17.5),
+          ),
+          Text(
+            value,
+            style: const TextStyle(fontSize: 18),
+          ),
+        ],
+      ),
+    );
+  }
 }
-
-
-// import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
-// import 'package:tourism_project/core/utils/global.dart';
-// import 'dart:convert';
-
-// import 'package:tourism_project/data/models/dynamic_booking_details_model.dart';
-
-// class DynamicTripDetailsPage extends StatefulWidget {
-//   @override
-//   _DynamicTripDetailsPageState createState() => _DynamicTripDetailsPageState();
-// }
-
-// class _DynamicTripDetailsPageState extends State<DynamicTripDetailsPage> {
-//   DynamicTripModel? tripData;
-//   @override
-//   void initState() {
-//     super.initState();
-//     fetchTripDetails();
-//   }
-
-//   Future<void> fetchTripDetails() async {
-//     final response = await http.get(
-//         Uri.parse('http://192.168.43.119:8000/api/user/show_dynamic_trip/3'),
-//         headers: {'Authorization': 'Bearer $myToken'});
-
-//     var jsonResponse;
-//     if (response.statusCode == 200) {
-//       // jsonResponse = json.decode(response.body);
-//       // setState(() {
-//       //   tripData = DynamicTripModel.fromJson(jsonResponse['data']);
-//       // });
-//     } else {
-//       print(jsonResponse);
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     if (tripData == null) {
-//       return Center(child: CircularProgressIndicator());
-//     }
-
-//     return Scaffold(
-//       body: Padding(
-//         padding: const EdgeInsets.all(16.0),
-//         child: ListView(
-//           children: [
-//             Text('Trip Name: ${tripData!.tripName}',
-//                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-//             SizedBox(height: 10),
-//             Text('Price: ${tripData!.price}'),
-//             Text('Number of People: ${tripData!.numberOfPeople}'),
-//             Text('Start Date: ${tripData!.startDate}'),
-//             Text('End Date: ${tripData!.endDate}'),
-//             Text('Trip Note: ${tripData!.tripNote}'),
-//             Text('Type: ${tripData!.type}'),
-//             Text('Rooms Count: ${tripData!.roomsCount}'),
-//             SizedBox(height: 20),
-//             Text('Plane Trips:',
-//                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-//             ...List.generate(tripData!.planeTrips.length, (index) {
-//               var planeTrip = tripData!.planeTrips[index];
-//               return Card(
-//                 margin: EdgeInsets.symmetric(vertical: 10),
-//                 child: Padding(
-//                   padding: const EdgeInsets.all(16.0),
-//                   child: Column(
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     children: [
-//                       Text('Flight ${index + 1}:',
-//                           style: TextStyle(
-//                               fontSize: 18, fontWeight: FontWeight.bold)),
-//                       Text('Source: ${planeTrip.airportSource.name}'),
-//                       Text('Destination: ${planeTrip.airportDestination.name}'),
-//                       Text('Current Price: ${planeTrip.currentPrice}'),
-//                       Text('Available Seats: ${planeTrip.availableSeats}'),
-//                       Text('Flight Date: ${planeTrip.flightDate}'),
-//                       Text('Landing Date: ${planeTrip.landingDate}'),
-//                     ],
-//                   ),
-//                 ),
-//               );
-//             }),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }

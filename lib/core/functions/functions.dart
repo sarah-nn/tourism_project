@@ -167,9 +167,10 @@ showBookingDoneDialog(BuildContext context, path, id) {
             children: [
               TextButton(
                   onPressed: () {
+                    print("=====trip id======$id");
                     id != 'id'
                         ? GoRouter.of(context)
-                            .push('/bookingDynamicDetails/${id}')
+                            .push('/bookingDynamicDetails/${id.toString()}')
                         : context.pop();
                   },
                   child: Text(
@@ -243,7 +244,7 @@ showBookingDialog(BuildContext context, path) {
           ),
           const SizedBox(height: 18),
           const Text(
-            "Booking Complete Successfuly ... Enjoy your trip !",
+            "Booking Complete Successfully ... Enjoy your trip !",
             style: TextStyle(
                 color: Colors.black54,
                 fontSize: 20,

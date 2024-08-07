@@ -68,7 +68,7 @@ class _StaticTripPageState extends State<StaticTripPage> {
                                       tripmodel: tripList[i],
                                     );
                                   })
-                              : Center(
+                              : const Center(
                                   child: CircularProgressIndicator(),
                                 )))
                 ],

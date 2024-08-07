@@ -30,6 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
     } else {
       delayedNavigate(context, AppRoutes.onBoarding);
     }
+    print(isUserLoggedIn);
 
     super.initState();
   }

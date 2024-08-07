@@ -5,6 +5,8 @@ sealed class DynamicTripState {}
 
 final class DynamicTripInitial extends DynamicTripState {}
 
+final class DynamicTripLoading extends DynamicTripState {}
+
 final class BookingSuccess extends DynamicTripState {
   final String tripId;
 
@@ -12,9 +14,21 @@ final class BookingSuccess extends DynamicTripState {
 }
 
 final class DynamicTripBookingSuccess extends DynamicTripState {
-  final Data dynamicbookingModel;
+  final DataModel dynamicbookingModel;
+  final dynamic going_plane;
+  final dynamic return_plane;
+  final dynamic hotelTrip;
+  DynamicTripBookingSuccess(
+      {required this.dynamicbookingModel,
+      @required this.going_plane,
+      @required this.return_plane,
+      @required this.hotelTrip});
+}
 
-  DynamicTripBookingSuccess({required this.dynamicbookingModel});
+final class DynamicBookingList extends DynamicTripState {
+  final List<DynamicListBookingModel> bookList;
+
+  DynamicBookingList({required this.bookList});
 }
 
 final class BookingDynamicFail extends DynamicTripState {

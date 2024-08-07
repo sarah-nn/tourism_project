@@ -1,7 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tourism_project/business_logic/activity/activity_cubit.dart';
 import 'package:tourism_project/business_logic/country/country_cubit.dart';
 import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
+import 'package:tourism_project/business_logic/dynamicTrip/update_trip/update_trip_cubit.dart';
 import 'package:tourism_project/business_logic/flight/detailsTrip_cubit.dart';
 import 'package:tourism_project/business_logic/flight/searchFlight_cubit.dart';
 import 'package:tourism_project/business_logic/forgetpassword/forgetpassword_cubit.dart';
@@ -15,6 +19,7 @@ import 'package:tourism_project/business_logic/static_trip/static_trip_cubit.dar
 import 'package:tourism_project/business_logic/upload_image/upload_image_cubit.dart';
 import 'package:tourism_project/business_logic/user/user_cubit.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
+import 'package:tourism_project/data/models/place_desc_model.dart';
 import 'package:tourism_project/presentation/screens/Booking_details/public_booking.dart';
 import 'package:tourism_project/presentation/screens/auth/forget_password_page.dart';
 import 'package:tourism_project/presentation/screens/flight/flight_details.dart';
@@ -23,6 +28,7 @@ import 'package:tourism_project/presentation/screens/flight/search_flight_page.d
 import 'package:tourism_project/presentation/screens/hotel/hotel_details_page.dart';
 import 'package:tourism_project/presentation/screens/hotel/hotel_page.dart';
 import 'package:tourism_project/presentation/screens/hotel/search_hotel_page.dart';
+import 'package:tourism_project/presentation/screens/payment/payment_page.dart';
 import 'package:tourism_project/presentation/screens/place/comments.dart';
 import 'package:tourism_project/presentation/screens/place/images_view_page.dart';
 import 'package:tourism_project/presentation/screens/place/place_desc_page.dart';
@@ -32,6 +38,8 @@ import 'package:tourism_project/presentation/screens/profile_page.dart';
 import 'package:tourism_project/presentation/screens/search_country_page.dart';
 import 'package:tourism_project/presentation/screens/starting/splash_screen.dart';
 import 'package:tourism_project/presentation/screens/trip/dynamic_booking_destails_page.dart';
+import 'package:tourism_project/presentation/screens/trip/dynamic_edit_booking_page.dart';
+import 'package:tourism_project/presentation/screens/trip/dynamic_update_booking.dart';
 import 'package:tourism_project/presentation/screens/trip/search_static_trip.dart';
 import 'package:tourism_project/presentation/screens/trip/starting_dynamic_page.dart';
 import 'package:tourism_project/presentation/screens/trip/static_details_page.dart';
@@ -63,13 +71,21 @@ final GoRouter router = GoRouter(
     // GoRoute(path: "/", builder: (context, state) => const ProductItemScreen()),
     GoRoute(
         path: AppRoutes.test2,
-        builder: (context, state) => MultiBlocProvider(providers: [
-              BlocProvider(create: (context) => DynamicTripCubit()),
-              BlocProvider(create: (context) => PlacesCubit()),
-            ], child: const TestPage2())),
+        builder: (context, state) {
+          final String destination = state.extra as String;
+          return MultiBlocProvider(
+              providers: [
+                BlocProvider(create: (context) => DynamicTripCubit()),
+                BlocProvider(create: (context) => PlacesCubit()),
+              ],
+              child: TestPage2(
+                destinationId: destination,
+              ));
+        }),
     GoRoute(
         path: AppRoutes.homePage,
         builder: (context, state) => const HomePage()),
+//======================== Auth ===============================
     GoRoute(
         path: AppRoutes.login,
         builder: (context, state) => BlocProvider(
@@ -79,6 +95,36 @@ final GoRouter router = GoRouter(
     GoRoute(
         path: AppRoutes.startPage,
         builder: (context, state) => const StartingPage()),
+    GoRoute(
+        path: AppRoutes.register,
+        builder: (context, state) => BlocProvider(
+              create: (context) => UserCubit(),
+              child: const RegisterPage(),
+            )),
+    GoRoute(
+        path: AppRoutes.forgetPassword,
+        builder: (context, state) => BlocProvider(
+              create: (context) => ForgetpasswordCubit(),
+              child: const ForgetPasswordPage(),
+            )),
+    GoRoute(
+        path: AppRoutes.resetpassword,
+        builder: (context, state) {
+          final bool email = state.extra != null ? true : false;
+          return BlocProvider(
+              create: (context) => ForgetpasswordCubit(),
+              child: email
+                  ? ResetPasswordPage(
+                      email: state.extra as String,
+                    )
+                  : ResetPasswordPage());
+        }),
+    GoRoute(
+        path: AppRoutes.verifycodesignup,
+        builder: (context, state) => const VerfiyCodeSignUp()),
+    GoRoute(
+        path: AppRoutes.onBoarding,
+        builder: (context, state) => OnBoardingScreens()),
 
     GoRoute(
         path: AppRoutes.searchCountryPage,
@@ -113,40 +159,8 @@ final GoRouter router = GoRouter(
             child: ViewImage(image: image),
           );
         }),
-//=============================================================
-    GoRoute(
-        path: AppRoutes.register,
-        builder: (context, state) => BlocProvider(
-              create: (context) => UserCubit(),
-              child: const RegisterPage(),
-            )),
-    GoRoute(
-        path: AppRoutes.forgetPassword,
-        builder: (context, state) => BlocProvider(
-              create: (context) => ForgetpasswordCubit(),
-              child: const ForgetPasswordPage(),
-            )),
-    GoRoute(
-        path: AppRoutes.resetpassword,
-        builder: (context, state) => BlocProvider(
-              create: (context) => ForgetpasswordCubit(),
-              child: const ResetPasswordPage(),
-            )),
-    GoRoute(
-        path: AppRoutes.onBoarding,
-        builder: (context, state) => OnBoardingScreens()),
-    GoRoute(
-        path: "/placeCommentPage/:id",
-        builder: (context, state) => BlocProvider(
-              create: (context) => PlaceDescCubit(),
-              child: CommentPage(
-                placeId: state.pathParameters['id']!,
-              ),
-            )),
-    GoRoute(
-        path: AppRoutes.verifycodesignup,
-        builder: (context, state) => const VerfiyCodeSignUp()),
-//====================static trip=======================
+
+//==================== Static Trip =======================
     GoRoute(
         path: AppRoutes.staticTrip,
         builder: (context, state) => BlocProvider(
@@ -165,6 +179,57 @@ final GoRouter router = GoRouter(
     //           create: (context) => DynamicTripCubit(),
     //           child: const DynamicTripPage(),
     //         )),
+
+    GoRoute(
+        path: "/bookingDynamicDetails/:id",
+        builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(create: (context) => DynamicTripCubit()),
+                BlocProvider(create: (context) => ActivityCubit()),
+                BlocProvider(
+                  create: (context) => SearchHotelCubit(),
+                ),
+                BlocProvider(
+                  create: (context) => SearchFlightCubit(),
+                ),
+                BlocProvider(
+                  create: (context) => UpdateTripCubit(),
+                ),
+              ],
+              child: DynamicTripBookingDetailsPage(
+                tripId: state.pathParameters['id']!,
+              ),
+            )),
+
+    GoRoute(
+        path: "/StaticTripDetailsPage/:id",
+        builder: (context, state) {
+          final List<dynamic> imageList = state.extra as List<dynamic>;
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => StaticTripCubit()),
+              BlocProvider(
+                create: (context) => BookStaticTripCubit(),
+              )
+            ],
+            child: StaticTripDetailsPage(
+              tripId: state.pathParameters['id']!,
+              imageList: imageList,
+            ),
+          );
+        }),
+
+//================ Dynamic Trip =================
+    GoRoute(
+        path: AppRoutes.startDynamicPage,
+        builder: (context, state) => const StartingDaynamicPage()),
+    GoRoute(
+        path: AppRoutes.flightTrip,
+        builder: (context, state) => BlocProvider(
+              create: (context) => DynamicTripCubit(),
+              child: const FlightDynamicTrip(),
+            )),
+
     GoRoute(
         path: AppRoutes.dynamicTrip,
         builder: (context, state) => MultiBlocProvider(providers: [
@@ -174,48 +239,37 @@ final GoRouter router = GoRouter(
               BlocProvider(create: (context) => SearchFlightCubit())
             ], child: const DynamicTripPage())),
     GoRoute(
-        path: "/bookingDynamicDetails/:id",
-        builder: (context, state) => BlocProvider(
-              create: (context) => DynamicTripCubit(),
-              child: DynamicTripBookingDetailsPage(
-                tripId: state.pathParameters['id']!,
-              ),
-            )),
-
+        path: "/bookingDynamicUpdate/:id",
+        builder: (context, state) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => DynamicTripCubit()),
+              BlocProvider(create: (context) => UpdateTripCubit()),
+              BlocProvider(create: (context) => ActivityCubit())
+            ],
+            child: DynamicTripBookingEditPage(
+              tripId: state.pathParameters['id']!,
+            ),
+          );
+        }),
     GoRoute(
-        path: "/StaticTripDetailsPage/:id",
-        builder: (context, state) => MultiBlocProvider(
-              providers: [
-                BlocProvider(create: (context) => StaticTripCubit()),
-                BlocProvider(
-                  create: (context) => BookStaticTripCubit(),
-                )
-              ],
-              child: StaticTripDetailsPage(
-                tripId: state.pathParameters['id']!,
-              ),
-            )),
-
-//================ Dynamic Trip =================
-    GoRoute(
-        path: AppRoutes.flightTrip,
-        builder: (context, state) => BlocProvider(
-              create: (context) => DynamicTripCubit(),
-              child: const FlightDynamicTrip(),
-            )),
-    GoRoute(
-        path: AppRoutes.startDynamicPage,
-        builder: (context, state) => const StartingDaynamicPage()),
+        path: AppRoutes.testupdate,
+        builder: (context, state) => const DynamicUpdate()),
+    //         )),
     // GoRoute(
-    //     path: AppRoutes.dynamicTripDetails,
-    //     builder: (context, state) {
-    //       final DynamicTripModel bookingModel = state.extra as DynamicTripModel;
-    //       return BlocProvider(
-    //         create: (context) => DynamicTripCubit(),
-    //         child: DynamicTripDetailsPage(bookingModel: bookingModel),
-    //       );
-    //     }),
-//============== Places ================
+    //     path: AppRoutes.updateDynamic,
+    //     // path: "/updateDynamic/:id",
+    //     builder: (context, state) => DynamicTripBookingEditPage(tripId: "30")),
+    // // GoRoute(
+    // //     path: AppRoutes.dynamicTripDetails,
+    // //     builder: (context, state) {
+    // //       final DynamicTripModel bookingModel = state.extra as DynamicTripModel;
+    // //       return BlocProvider(
+    // //         create: (context) => DynamicTripCubit(),
+    // //         child: DynamicTripDetailsPage(bookingModel: bookingModel),
+    // //       );
+    // //     }),
+//============== Places Inspire ================
     GoRoute(
         path: AppRoutes.places,
         builder: (context, state) => BlocProvider(
@@ -232,7 +286,19 @@ final GoRouter router = GoRouter(
             )),
     GoRoute(
         path: AppRoutes.imagesview,
-        builder: (context, state) => ImageViewPage()),
+        builder: (context, state) {
+          final List<Images> images = state.extra as List<Images>;
+          return ImageViewPage(images: images);
+        }),
+
+    GoRoute(
+        path: "/placeCommentPage/:id",
+        builder: (context, state) => BlocProvider(
+              create: (context) => PlaceDescCubit(),
+              child: CommentPage(
+                placeId: state.pathParameters['id']!,
+              ),
+            )),
     GoRoute(
         path: "/placeCountryPage/:id",
         builder: (context, state) {
@@ -313,6 +379,13 @@ final GoRouter router = GoRouter(
         path: AppRoutes.detailsBookHotel,
         builder: (context, state) {
           return BookUser();
+        }),
+
+    //===========payment=======================
+    GoRoute(
+        path: AppRoutes.payment,
+        builder: (context, state) {
+          return const PaymentPage();
         }),
   ],
 );

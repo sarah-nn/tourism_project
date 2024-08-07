@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_project/core/utils/end_point.dart';
@@ -25,7 +24,11 @@ class ActivityCubit extends Cubit<ActivityState> {
       }
     } catch (e) {
       print("exception in $e ");
-      emit(ActivityFail(errMessage: e.toString()));
+      try {
+        emit(ActivityFail(errMessage: e.toString()));
+      } catch (e) {
+        print(e);
+      }
     }
   }
 }

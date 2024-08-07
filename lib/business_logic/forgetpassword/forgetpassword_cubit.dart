@@ -46,13 +46,15 @@ class ForgetpasswordCubit extends Cubit<ForgetpasswordState> {
     }
   }
 
-  reSetPassword() async {
+  reSetPassword(String? email) async {
     if (formKeyResetPassword.currentState!.validate()) {
       emit(ForgetpasswordLoading());
-      String myEmail = CacheHelper().getData(key: "reSetPasswordEmail");
+      // String myEmail = CacheHelper().getData(key: "reSetPasswordEmail");
       http.Response response =
           await http.post(Uri.parse(EndPoint.resetPassword), body: {
-        'email': myEmail,
+        'email': email == ''
+            ? CacheHelper().getData(key: "reSetPasswordEmail")
+            : email,
         'password': password.text,
         'password_confirmation': rePassword.text
       }, headers: {

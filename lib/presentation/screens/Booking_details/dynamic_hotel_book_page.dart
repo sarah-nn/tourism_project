@@ -82,7 +82,7 @@ class _HotelBookPageState extends State<HotelBookPage> {
                   ? Center(
                       child: detailsBookHotel.isEmpty
                           ? Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 // Image.asset(
                                 //   'assets/images/Hotel Illustration (2).png',
@@ -97,16 +97,21 @@ class _HotelBookPageState extends State<HotelBookPage> {
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black54),
                                 ),
-                               const SizedBox(height: 15),
+                                const SizedBox(height: 15),
 
                                 TextButton(
-                                   onPressed: () {                     GoRouter.of(context).push(AppRoutes.hotelPage);
-                                   }, child: Text('Booking now !',
-                                  style: TextStyle(
-                                    fontFamily: 'Pacifico',
-                                    fontSize: 24,
-                                    color: AppColor.primaryColor,
-                                  ),),
+                                  onPressed: () {
+                                    GoRouter.of(context)
+                                        .push(AppRoutes.hotelPage);
+                                  },
+                                  child: Text(
+                                    'Booking now !',
+                                    style: TextStyle(
+                                      fontFamily: 'Pacifico',
+                                      fontSize: 24,
+                                      color: AppColor.primaryColor,
+                                    ),
+                                  ),
                                 ),
                                 const SizedBox(height: 10)
                               ],

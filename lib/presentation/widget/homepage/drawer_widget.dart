@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:tourism_project/business_logic/user/user_cubit.dart';
+import 'package:tourism_project/core/database/cach_helper.dart';
 import 'package:tourism_project/core/localization/chang_language_buttom.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
@@ -78,7 +79,10 @@ class WidgetDrawer extends StatelessWidget {
                 ),
                 widgetListTile(
                   icon: Icons.help_outline,
-                  text: "Help",
+                  text: "Payment",
+                  onTap: () {
+                    goRoute(context, AppRoutes.payment);
+                  },
                 ),
                 widgetListTile(
                   icon: Iconsax.logout,
@@ -92,6 +96,8 @@ class WidgetDrawer extends StatelessWidget {
                         'No', () {
                       BlocProvider.of<UserCubit>(context).logOut();
                       myToken = '';
+                      CacheHelper()
+                          .saveData(key: "isUserLoggedIn?", value: false);
                       replace(context, AppRoutes.login);
                     }, () {
                       Navigator.of(context).pop();

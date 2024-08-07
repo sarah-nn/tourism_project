@@ -27,7 +27,11 @@ class SearchHotelCubit extends Cubit<SearchHotelState> {
       }
     } catch (e) {
       print("$e");
-      emit(SearchHotelFailure(errMessage: e.toString()));
+      try {
+        emit(SearchHotelFailure(errMessage: e.toString()));
+      } catch (e) {
+        print(e);
+      }
     }
     print(HotelList);
     return HotelList;

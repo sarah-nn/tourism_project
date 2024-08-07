@@ -1,76 +1,148 @@
 class Place {
-  final int id;
-  final String name;
-  final double placePrice;
-  final String text;
-  final List<Category> categories;
-  final Area area;
+  int? id;
+  String? name;
+  String? placePrice;
+  String? text;
+  int? areaId;
+  int? visible;
+  List<Images>? images;
+  List<Categories>? categories;
+  Area? area;
 
-  Place({
-    required this.id,
-    required this.name,
-    required this.placePrice,
-    required this.text,
-    required this.categories,
-    required this.area,
-  });
+  Place(
+      {this.id,
+      this.name,
+      this.placePrice,
+      this.text,
+      this.areaId,
+      this.visible,
+      this.images,
+      this.categories,
+      this.area});
 
-  factory Place.fromJson(Map<String, dynamic> json) {
-    final categories = List<Category>.from(
-        json['categories'].map((category) => Category.fromJson(category)));
-    final area = Area.fromJson(json['area']);
-    return Place(
-      id: json['id'],
-      name: json['name'],
-      placePrice: double.parse(json['place_price']),
-      text: json['text'],
-      categories: categories,
-      area: area,
-    );
+  Place.fromJson(Map<String, dynamic> json) {
+    id = json["id"];
+    name = json["name"];
+    placePrice = json["place_price"];
+    text = json["text"];
+    areaId = json["area_id"];
+    visible = json["visible"];
+    images = json["images"] == null
+        ? null
+        : (json["images"] as List).map((e) => Images.fromJson(e)).toList();
+    categories = json["categories"] == null
+        ? null
+        : (json["categories"] as List)
+            .map((e) => Categories.fromJson(e))
+            .toList();
+    area = json["area"] == null ? null : Area.fromJson(json["area"]);
   }
-}
 
-class Category {
-  final int id;
-  final String name;
-
-  Category({required this.id, required this.name});
-
-  factory Category.fromJson(Map<String, dynamic> json) {
-    return Category(
-      id: json['id'],
-      name: json['name'],
-    );
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["id"] = id;
+    _data["name"] = name;
+    _data["place_price"] = placePrice;
+    _data["text"] = text;
+    _data["area_id"] = areaId;
+    _data["visible"] = visible;
+    if (images != null) {
+      _data["images"] = images?.map((e) => e.toJson()).toList();
+    }
+    if (categories != null) {
+      _data["categories"] = categories?.map((e) => e.toJson()).toList();
+    }
+    if (area != null) {
+      _data["area"] = area?.toJson();
+    }
+    return _data;
   }
 }
 
 class Area {
-  final int id;
-  final String name;
-  final Country country;
+  int? id;
+  String? name;
+  int? countryId;
+  Country? country;
 
-  Area({required this.id, required this.name, required this.country});
+  Area({this.id, this.name, this.countryId, this.country});
 
-  factory Area.fromJson(Map<String, dynamic> json) {
-    final country = Country.fromJson(json['country']);
-    return Area(
-      id: json['id'],
-      name: json['name'],
-      country: country,
-    );
+  Area.fromJson(Map<String, dynamic> json) {
+    id = json["id"];
+    name = json["name"];
+    countryId = json["country_id"];
+    country =
+        json["country"] == null ? null : Country.fromJson(json["country"]);
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["id"] = id;
+    _data["name"] = name;
+    _data["country_id"] = countryId;
+    if (country != null) {
+      _data["country"] = country?.toJson();
+    }
+    return _data;
   }
 }
 
 class Country {
-  final int id;
-  final String name;
+  int? id;
+  String? name;
 
-  Country({required this.id, required this.name});
+  Country({this.id, this.name});
 
-  factory Country.fromJson(Map<String, dynamic> json) {
-    return Country(
-      id: json['id'],
-      name: json['name'],
-    );
+  Country.fromJson(Map<String, dynamic> json) {
+    id = json["id"];
+    name = json["name"];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["id"] = id;
+    _data["name"] = name;
+    return _data;
+  }
+}
+
+class Categories {
+  int? id;
+  String? name;
+
+  Categories({this.id, this.name});
+
+  Categories.fromJson(Map<String, dynamic> json) {
+    id = json["id"];
+    name = json["name"];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["id"] = id;
+    _data["name"] = name;
+    return _data;
+  }
+}
+
+class Images {
+  int? id;
+  int? placeId;
+  String? image;
+
+  Images({this.id, this.placeId, this.image});
+
+  Images.fromJson(Map<String, dynamic> json) {
+    id = json["id"];
+    placeId = json["place_id"];
+    image = json["image"];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["id"] = id;
+    _data["place_id"] = placeId;
+    _data["image"] = image;
+    return _data;
   }
 }

@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:tourism_project/business_logic/static_trip/book_static_trip/book_static_trip_cubit.dart';
 import 'package:tourism_project/core/utils/end_point.dart';
 import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/dynamic_booking_details_model.dart';
+import 'package:tourism_project/data/models/dynamic_booklist_model.dart';
 
 part 'dynamic_trip_state.dart';
 
@@ -15,12 +15,9 @@ class DynamicTripCubit extends Cubit<DynamicTripState> {
 
   TextEditingController tripName = TextEditingController();
   List<String> triplist = [];
-  // List<int> placeIds = [];
-  // List<int> activities = [1, 2];
+  List<DynamicListBookingModel> bookingList = [];
   String tripNameVal = '';
   String startDate = '';
-  //String plane_trip_id = goingPlaneId;
-  //String plane_trip_away_id = returnPlaneId;
   String endDate = '';
   String sourceTripId = '';
   String destinationTripId = '';
@@ -39,8 +36,7 @@ class DynamicTripCubit extends Cubit<DynamicTripState> {
   //for trip note
   TextEditingController tripNote = TextEditingController();
 
-  //DynamicTripModel? bookingModel;
-  Data? data2;
+  DataModel? data2;
 
   void addPlaceIds(int value) {
     placeIds.add(value);
@@ -52,11 +48,11 @@ class DynamicTripCubit extends Cubit<DynamicTripState> {
     activities.add(value);
   }
 
-  void printList() {
-    Map<String, String> tripRequestBody = buildRequestBody();
+  // void printList() {
+  //   Map<String, String> tripRequestBody = updateRequestBody();
 
-    // print("\n\n\n==$tripRequestBody==");
-  }
+  //   print("\n\n\n✅==$tripRequestBody==");
+  // }
 
   Map<String, String> buildRequestBody() {
     Map<String, String> body = {
@@ -66,13 +62,9 @@ class DynamicTripCubit extends Cubit<DynamicTripState> {
       'number_of_people': numOfPeople.toString(),
       'start_date': startDate,
       'end_date': endDate,
-      // 'plane_trip_id': '1',
-      // 'plane_trip_away_id': '2',
       'count_room_C2': controller2.text.isEmpty ? "0" : controller2.text,
       'count_room_C4': controller4.text.isEmpty ? "0" : controller4.text,
       'count_room_C6': controller6.text.isEmpty ? "0" : controller6.text,
-      //'place_ids[0]': '1',
-      //'activities[0]': '1',
     };
 
     if (tripNote.text != '') {
@@ -87,7 +79,7 @@ class DynamicTripCubit extends Cubit<DynamicTripState> {
     }
 
     if (goingPlaneId != '') {
-      body['plane_trip_away_id'] = goingPlaneId;
+      body['plane_trip_id'] = goingPlaneId;
     }
 
     if (returnPlaneId != '') {
@@ -134,24 +126,101 @@ class DynamicTripCubit extends Cubit<DynamicTripState> {
     return null;
   }
 
-  Future<Data?> dynamicTripBookingdetails(String id) async {
+  Future<DataModel?> dynamicTripBookingdetails(String id) async {
     http.Response response = await http
         .get(Uri.parse(EndPoint.dynamicBookingDetails + id), headers: {
       'Accept': 'application/json',
       'Authorization': 'Bearer $myToken'
     });
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body)['data'];
-      data2 = Data.fromJson(data['dynamic_trip']);
-      emit(DynamicTripBookingSuccess(dynamicbookingModel: data2!));
-      return data2;
-    } else {
-      print(
-          "response.statusCode ${response.statusCode} , with body ${response.body}");
-      var message = jsonDecode(response.body)['message'];
-      print(message);
-      emit(BookingDynamicFail(errMessage: message));
+    try {
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body)['data'];
+        print("===data of dynmic trip deatals $data");
+        data2 = DataModel.fromJson(data);
+        var goingPlane = data['going_trip'];
+        var returnPlane = data['return_trip'];
+        var hotelTrip = data['hotel'];
+        print("🔴🔴$hotelTrip");
+        emit(returnPlane == [] && goingPlane == []
+            ? hotelTrip == []
+                ? DynamicTripBookingSuccess(dynamicbookingModel: data2!)
+                : DynamicTripBookingSuccess(
+                    dynamicbookingModel: data2!, hotelTrip: hotelTrip)
+            : returnPlane == []
+                ? hotelTrip == []
+                    ? DynamicTripBookingSuccess(
+                        dynamicbookingModel: data2!, going_plane: goingPlane)
+                    : DynamicTripBookingSuccess(
+                        dynamicbookingModel: data2!,
+                        going_plane: goingPlane,
+                        hotelTrip: hotelTrip)
+                : goingPlane == []
+                    ? hotelTrip == []
+                        ? DynamicTripBookingSuccess(
+                            dynamicbookingModel: data2!,
+                            return_plane: returnPlane)
+                        : DynamicTripBookingSuccess(
+                            dynamicbookingModel: data2!,
+                            return_plane: returnPlane,
+                            hotelTrip: hotelTrip)
+                    : hotelTrip == []
+                        ? DynamicTripBookingSuccess(
+                            dynamicbookingModel: data2!,
+                            going_plane: goingPlane,
+                            return_plane: returnPlane)
+                        : DynamicTripBookingSuccess(
+                            dynamicbookingModel: data2!,
+                            going_plane: goingPlane,
+                            return_plane: returnPlane,
+                            hotelTrip: hotelTrip));
+      } else {
+        print(
+            "response.statusCode ${response.statusCode} , with body ${response.body}");
+        var message = jsonDecode(response.body)['message'];
+        print(message);
+        emit(BookingDynamicFail(errMessage: message));
+      }
+    } catch (e) {
+      print(response.body);
+      print(e.toString());
     }
     return data2;
+  }
+
+  Future<List<DynamicListBookingModel>> getAllDynamicBook(String pre_Up) async {
+    var uri = Uri.parse(EndPoint.getAllDynamicList);
+    var header = {'Authorization': 'Bearer $myToken'};
+    var response = await http.get(uri, headers: header);
+    try {
+      emit(DynamicTripLoading());
+      if (response.statusCode == 200) {
+        print(response.body);
+        final data = json.decode(response.body)['data']['$pre_Up'] as List;
+
+        bookingList =
+            data.map((json) => DynamicListBookingModel.fromJson(json)).toList();
+        print(bookingList);
+        emit(DynamicBookingList(bookList: bookingList));
+      } else {
+        print("api error${response.statusCode}");
+      }
+    } catch (e) {
+      print("exception in ");
+      emit(BookingDynamicFail(errMessage: e.toString()));
+    }
+    print(bookingList);
+    return bookingList;
+  }
+
+  Future<void> deleteDynamicTrip(String tripId) async {
+    var uri = Uri.parse(EndPoint.deleteDynamicTrip + tripId);
+    var header = {'Authorization': 'Bearer $myToken'};
+    var response = await http.delete(uri, headers: header);
+    if (response.statusCode == 200) {
+      getAllDynamicBook('future_trip');
+    } else {
+      // String mssg = jsonDecode(response.body)['message'];
+      print(response.body);
+    }
   }
 }

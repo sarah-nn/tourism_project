@@ -120,7 +120,7 @@ class _FlightDynamicTripState extends State<FlightDynamicTrip> {
                     groupValue: _selectedOption,
                     onChanged: (String? value) {
                       var params = context.read<DynamicTripCubit>();
-                      print("jkbjcj");
+                      print("round trip");
                       setState(() {
                         // state is SearchFlightFailure
                         //     ? errMessage = state.errMessage
@@ -160,6 +160,9 @@ class _FlightDynamicTripState extends State<FlightDynamicTrip> {
             elevation: 10,
             onPressed: () {
               // errMessage == '' ? null : showAlertDialog(context, errMessage);
+              //! it sometimes make null exception
+              //! it is because of not choose time
+              //! buttom sheet have new tree widget
               if (_selectedOption != null) {
                 _selectedOption == 'Round Trip'
                     ? errMessage == ''

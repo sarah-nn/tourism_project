@@ -91,6 +91,7 @@ class _FromToDynamicTripState extends State<FromToDynamicTrip> {
                         countryModel2 = newVal;
                         BlocProvider.of<DynamicTripCubit>(context)
                             .destinationTripId = newVal!.id.toString();
+                        tripDestination = newVal.id.toString();
                         // gSourceId = newVal!.id.toString();
                         // gdistinationId = newVal.id.toString();
                         // print(gSourceId);

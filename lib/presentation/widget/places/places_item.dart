@@ -101,7 +101,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
-import 'package:tourism_project/core/utils/app_images.dart';
+import 'package:tourism_project/core/utils/end_point.dart';
 import 'package:tourism_project/data/models/places_depend_on_category_model.dart';
 import 'package:tourism_project/data/models/places_model.dart';
 
@@ -135,15 +135,14 @@ class PlaceItem extends StatelessWidget {
                             border: Border.all(color: Colors.grey),
                             borderRadius: BorderRadius.circular(10)),
                         child: Card(
-                          elevation: 8,
-                          child: Image.asset(
-                            AppImage.onboarding1,
-
-                            // height: 95,
-                            // width: 95,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
+                            elevation: 8,
+                            child: Image(
+                              image: NetworkImage(EndPoint.imageBaseUrl +
+                                  (place != null
+                                      ? place!.images![1].image!
+                                      : placeCat!.images![0].image!)),
+                              fit: BoxFit.cover,
+                            )),
                       ),
                       const SizedBox(width: 18),
                       Column(
@@ -151,34 +150,34 @@ class PlaceItem extends StatelessWidget {
                         children: [
                           const SizedBox(height: 3),
                           Text(
-                            place != null ? place!.name : placeCat!.name,
+                            place != null ? place!.name! : placeCat!.name!,
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 18),
                           ),
                           const SizedBox(height: 5),
                           Text(
-                              "${place != null ? place!.area.country.name : placeCat!.area.country.name} , ${place != null ? place!.area.name : placeCat!.area.name}"),
+                              "${place != null ? place!.area!.country!.name! : placeCat!.area!.country!.name} , ${place != null ? place!.area!.name : placeCat!.area!.name}"),
                           const SizedBox(height: 7),
-                          Expanded(
-                            child: Row(
-                              children: [
-                                ...List.generate(
-                                    3,
-                                    (index) => const Icon(
-                                          Icons.star,
-                                          color: Colors.amber,
-                                          size: 19,
-                                        )),
-                                ...List.generate(
-                                    2,
-                                    (index) => const Icon(
-                                          Icons.star,
-                                          size: 19,
-                                          color: Colors.grey,
-                                        )),
-                              ],
-                            ),
-                          )
+                          // Expanded(
+                          //   child: Row(
+                          //     children: [
+                          //       ...List.generate(
+                          //           3,
+                          //           (index) => const Icon(
+                          //                 Icons.star,
+                          //                 color: Colors.amber,
+                          //                 size: 19,
+                          //               )),
+                          //       ...List.generate(
+                          //           2,
+                          //           (index) => const Icon(
+                          //                 Icons.star,
+                          //                 size: 19,
+                          //                 color: Colors.grey,
+                          //               )),
+                          //     ],
+                          //   ),
+                          // )
                         ],
                       ),
                     ],

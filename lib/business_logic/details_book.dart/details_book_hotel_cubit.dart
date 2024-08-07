@@ -30,7 +30,11 @@ class DetailsBookHotelCubit extends Cubit<DetailsBookHotelState> {
         print("api error${response.statusCode}");
       }
     } catch (e) {
-      emit(DetailsBookHotelFailure(errMessage: e.toString()));
+      try {
+        emit(DetailsBookHotelFailure(errMessage: e.toString()));
+      } catch (e) {
+        print("object");
+      }
     }
     print(detailsBookHotel);
     return detailsBookHotel;

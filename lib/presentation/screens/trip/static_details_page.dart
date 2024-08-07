@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tourism_project/business_logic/static_trip/static_trip_cubit.dart';
+import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_images.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
+import 'package:tourism_project/core/utils/end_point.dart';
 import 'package:tourism_project/data/models/static_trip_details_model.dart';
 import 'package:tourism_project/presentation/widget/static_trip/details/custom_onelineContainer.dart';
 import 'package:tourism_project/presentation/widget/static_trip/details/custom_twolineContainer.dart';
@@ -13,16 +15,29 @@ import 'package:tourism_project/presentation/widget/static_trip/details/static_a
 import 'package:tourism_project/presentation/widget/static_trip/details/static_flight_widget.dart';
 import 'package:tourism_project/presentation/widget/static_trip/details/static_hotel_widget.dart';
 import 'package:tourism_project/presentation/widget/static_trip/details/static_place_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class StaticTripDetailsPage extends StatefulWidget {
   final String tripId;
-  const StaticTripDetailsPage({super.key, required this.tripId});
+  final List<dynamic> imageList;
+  const StaticTripDetailsPage(
+      {super.key, required this.tripId, required this.imageList});
 
   @override
   State<StaticTripDetailsPage> createState() => _StaticTripDetailsPageState();
 }
 
 class _StaticTripDetailsPageState extends State<StaticTripDetailsPage> {
+  final String telegramUsername = '+CaFDyE2sTd45YmU0';
+  void _launchTelegram() async {
+    var url = 'https://t.me/+CaFDyE2sTd45YmU0';
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   StaticDetailsModel? tripModel;
   @override
   void initState() {
@@ -52,10 +67,10 @@ class _StaticTripDetailsPageState extends State<StaticTripDetailsPage> {
                             CarouselSlider(
                               disableGesture: true,
                               items: [
-                                imageSlider(AppImage.onboarding1),
-                                imageSlider(AppImage.nearMe),
-                                imageSlider(AppImage.two),
-                                imageSlider(AppImage.tajMahal)
+                                ...List.generate(
+                                    widget.imageList.length,
+                                    (index) => imageSlider(
+                                        widget.imageList[index]['image']))
                               ],
                               options: CarouselOptions(
                                 enableInfiniteScroll: false,
@@ -67,7 +82,7 @@ class _StaticTripDetailsPageState extends State<StaticTripDetailsPage> {
                                 enlargeFactor: 0.3,
                               ),
                             ),
-                            const SizedBox(height: 30),
+                            const SizedBox(height: 10),
                             OneLineContainer(
                                 title: "Trip name",
                                 content: tripModel!.staticTrip!.tripName!),
@@ -94,13 +109,47 @@ class _StaticTripDetailsPageState extends State<StaticTripDetailsPage> {
                             OneLineContainer(
                                 title: "Trip notes",
                                 content: tripModel!.staticTrip!.tripNote!),
+                            Container(
+                              height: 65,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 10),
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      side: BorderSide(
+                                          color: AppColor.primaryColor)),
+                                  backgroundColor:
+                                      Color.fromARGB(255, 197, 222, 241),
+                                ),
+                                onPressed: _launchTelegram,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      'Join our trip Group',
+                                      style: TextStyle(
+                                          color:
+                                              Color.fromARGB(255, 26, 73, 112),
+                                          fontSize: 17),
+                                    ),
+                                    Container(
+                                      height: 55,
+                                      width: 55,
+                                      child: Image.asset(AppIcon.telegramIcon),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
                           ],
                         ),
                       ),
                       Expanded(
                           flex: 2,
                           child: PriceAndBookButtom(
-                            price: "\$ 569.0",
+                            price:
+                                "\$ ${tripModel!.staticTrip!.price.toString()}",
                             tripId: tripModel!.staticTrip!.id.toString(),
                           ))
                     ],
@@ -120,7 +169,7 @@ Widget imageSlider(String customImage) {
     width: 400,
     decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage(customImage),
+          image: NetworkImage(EndPoint.imageBaseUrl + customImage),
           fit: BoxFit.cover,
         ),
         borderRadius: BorderRadius.circular(20)),

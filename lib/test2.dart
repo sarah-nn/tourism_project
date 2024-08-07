@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
 import 'package:tourism_project/business_logic/places/places_cubit.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
@@ -12,7 +13,9 @@ import 'package:tourism_project/presentation/widget/dynamic_trip/pace_item_card_
 class TestPage2 extends StatefulWidget {
   const TestPage2({
     super.key,
+    required this.destinationId,
   });
+  final String destinationId;
 
   @override
   _TestPage2State createState() => _TestPage2State();
@@ -25,7 +28,8 @@ class _TestPage2State extends State<TestPage2> {
   @override
   void initState() {
     super.initState();
-    futureResponse = context.read<PlacesCubit>().sarah();
+    futureResponse =
+        context.read<PlacesCubit>().placesDependOnCountry(widget.destinationId);
   }
 
   @override

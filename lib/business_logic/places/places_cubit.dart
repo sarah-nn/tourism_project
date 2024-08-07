@@ -26,6 +26,7 @@ class PlacesCubit extends Cubit<PlacesState> {
     try {
       emit(PlacesLoading());
       if (response.statusCode == 200) {
+        print(response.body);
         data = json.decode(response.body)['data'];
         placeList = data.map((e) => Place.fromJson(e)).toList(growable: true);
         return placeList;
@@ -78,16 +79,17 @@ class PlacesCubit extends Cubit<PlacesState> {
     return [];
   }
 
-  Future<PlaceResponse> sarah() async {
+  Future<PlaceResponse> placesDependOnCountry(String tripDestinationId) async {
     var header = {'Authorization': 'Bearer $myToken'};
     final response = await http.get(
-        Uri.parse(
-            'http://192.168.43.119:8000/api/user/places-depending-on-country/2'),
+        Uri.parse(EndPoint.placeRealtedToCountry + tripDestinationId),
         headers: header);
 
     if (response.statusCode == 200) {
       print(response.body);
-      return PlaceResponse.fromJson(jsonDecode(response.body)['data']);
+      var myresponse =
+          PlaceResponse.fromJson(jsonDecode(response.body)['data']);
+      return myresponse;
     } else {
       //emit(PlacesFailure(errMessage: e.toString()))
       throw Exception('Failed to load data');
@@ -109,7 +111,7 @@ class PlacesCubit extends Cubit<PlacesState> {
             place_category_list.add(PlaceDependOnCategoryModel.fromJson(place));
           }
         }
-        print(place_category_list);
+        print(response.body);
         emit(PlacesSuccess(placesCategory: place_category_list));
       } else {
         print("api error${response.statusCode}");

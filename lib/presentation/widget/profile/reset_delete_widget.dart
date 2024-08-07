@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/core/functions/functions.dart';
 
 class ResetAndDelete extends StatelessWidget {
-  const ResetAndDelete({super.key});
+  final String Email;
+  const ResetAndDelete({super.key, required this.Email});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +15,8 @@ class ResetAndDelete extends StatelessWidget {
       children: [
         InkWell(
           onTap: () {
-            goRoute(context, AppRoutes.resetpassword);
+            print(Email);
+            GoRouter.of(context).push(AppRoutes.resetpassword, extra: Email);
           },
           child: Text(
             "Reset Password",

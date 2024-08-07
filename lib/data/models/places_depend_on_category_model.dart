@@ -1,90 +1,119 @@
 class PlaceDependOnCategoryModel {
-  int id;
-  String name;
-  String place_price;
-  String text;
-  int area_id;
-  List<ImageModel> images;
-  Area area;
+  int? id;
+  String? name;
+  String? placePrice;
+  String? text;
+  int? visible;
+  int? areaId;
+  List<Images>? images;
+  Area? area;
 
-  PlaceDependOnCategoryModel({
-    required this.id,
-    required this.name,
-    required this.place_price,
-    required this.text,
-    required this.area_id,
-    required this.images,
-    required this.area,
-  });
+  PlaceDependOnCategoryModel(
+      {this.id,
+      this.name,
+      this.placePrice,
+      this.text,
+      this.visible,
+      this.areaId,
+      this.images,
+      this.area});
 
-  factory PlaceDependOnCategoryModel.fromJson(Map<String, dynamic> json) {
-    return PlaceDependOnCategoryModel(
-      id: json['id'],
-      name: json['name'],
-      place_price: json['place_price'],
-      text: json['text'],
-      area_id: json['area_id'],
-      images: (json['images'] as List)
-          .map((imageJson) => ImageModel.fromJson(imageJson))
-          .toList(),
-      area: Area.fromJson(json['area']),
-    );
+  PlaceDependOnCategoryModel.fromJson(Map<String, dynamic> json) {
+    id = json["id"];
+    name = json["name"];
+    placePrice = json["place_price"];
+    text = json["text"];
+    visible = json["visible"];
+    areaId = json["area_id"];
+    images = json["images"] == null
+        ? null
+        : (json["images"] as List).map((e) => Images.fromJson(e)).toList();
+    area = json["area"] == null ? null : Area.fromJson(json["area"]);
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["id"] = id;
+    _data["name"] = name;
+    _data["place_price"] = placePrice;
+    _data["text"] = text;
+    _data["visible"] = visible;
+    _data["area_id"] = areaId;
+    if (images != null) {
+      _data["images"] = images?.map((e) => e.toJson()).toList();
+    }
+    if (area != null) {
+      _data["area"] = area?.toJson();
+    }
+    return _data;
   }
 }
 
 class Area {
-  int id;
-  String name;
-  int country_id;
-  Country country;
+  int? id;
+  String? name;
+  int? countryId;
+  Country? country;
 
-  Area({
-    required this.id,
-    required this.name,
-    required this.country_id,
-    required this.country,
-  });
+  Area({this.id, this.name, this.countryId, this.country});
 
-  factory Area.fromJson(Map<String, dynamic> json) {
-    return Area(
-      id: json['id'],
-      name: json['name'],
-      country_id: json['country_id'],
-      country: Country.fromJson(json['country']),
-    );
+  Area.fromJson(Map<String, dynamic> json) {
+    id = json["id"];
+    name = json["name"];
+    countryId = json["country_id"];
+    country =
+        json["country"] == null ? null : Country.fromJson(json["country"]);
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["id"] = id;
+    _data["name"] = name;
+    _data["country_id"] = countryId;
+    if (country != null) {
+      _data["country"] = country?.toJson();
+    }
+    return _data;
   }
 }
 
 class Country {
-  int id;
-  String name;
+  int? id;
+  String? name;
 
-  Country({
-    required this.id,
-    required this.name,
-  });
+  Country({this.id, this.name});
 
-  factory Country.fromJson(Map<String, dynamic> json) {
-    return Country(
-      id: json['id'],
-      name: json['name'],
-    );
+  Country.fromJson(Map<String, dynamic> json) {
+    id = json["id"];
+    name = json["name"];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["id"] = id;
+    _data["name"] = name;
+    return _data;
   }
 }
 
-class ImageModel {
-  int id;
-  String url;
+class Images {
+  int? id;
+  int? placeId;
+  String? image;
 
-  ImageModel({
-    required this.id,
-    required this.url,
-  });
+  Images({this.id, this.placeId, this.image});
 
-  factory ImageModel.fromJson(Map<String, dynamic> json) {
-    return ImageModel(
-      id: json['id'],
-      url: json['url'],
-    );
+  Images.fromJson(Map<String, dynamic> json) {
+    id = json["id"];
+    placeId = json["place_id"];
+    image = json["image"];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["id"] = id;
+    _data["place_id"] = placeId;
+    _data["image"] = image;
+    return _data;
   }
 }

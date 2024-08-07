@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tourism_project/business_logic/forgetpassword/forgetpassword_cubit.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/core/functions/functions.dart';
@@ -18,7 +19,8 @@ class ForgetPasswordPage extends StatelessWidget {
     return BlocConsumer<ForgetpasswordCubit, ForgetpasswordState>(
       listener: (context, state) {
         if (state is ForgetpasswordSuccess) {
-          goRoute(context, AppRoutes.resetpassword);
+          // goRoute(context, AppRoutes.resetpassword);
+          GoRouter.of(context).push(AppRoutes.resetpassword, extra: '');
           print("✅✅ ${state.messageSuccess}");
         } else if (state is ForgetpasswordFailure) {
           showAlertDialog(context, state.messageFail);
@@ -64,7 +66,7 @@ class ForgetPasswordPage extends StatelessWidget {
                             context
                                 .read<ForgetpasswordCubit>()
                                 .forgetPassword();
-                            goRoute(context, '/resetpassword');
+                            // goRoute(context, '/resetpassword');
                           }),
                   const SizedBox(height: 40),
                 ],

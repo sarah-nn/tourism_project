@@ -25,6 +25,9 @@ class AppRoutes {
   static const String dynamicTripDetails = '/dynamictripdetailsPage';
   static const String searchStaticTrip = '/searchStaticTripPage';
   static const String detailsBookHotel = '/BookUser';
+  static const String updateDynamic = '/updatedynamicpage';
+  static const String testupdate = '/testupdate';
+  static const String payment = '/payment';
 
   static const String imagesview = '/imagesviewpage';
   static const String searchCountryPage = '/searchCountryPage';

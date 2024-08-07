@@ -1,16 +1,14 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tourism_project/business_logic/activity/activity_cubit.dart';
 import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
 import 'package:tourism_project/business_logic/hotel/searchHotel_cubit.dart';
-
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
-import 'package:tourism_project/core/utils/app_images.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/going_plane_trip.dart';
 import 'package:tourism_project/presentation/widget/dynamic_trip/activity_dynamic_windget.dart';
 import 'package:tourism_project/presentation/widget/dynamic_trip/custom_trip_filed.dart';
@@ -43,10 +41,13 @@ class _DynamicTripPageState extends State<DynamicTripPage> {
     return BlocConsumer<DynamicTripCubit, DynamicTripState>(
       listener: (context, state) {
         if (state is BookingSuccess) {
-          showBookingDoneDialog(context, AppRoutes.dynamicTripDetails, tripId);
           tripId = (state).tripId;
+          print("===trip is from page==$tripId");
+          showBookingDoneDialog(context, AppRoutes.dynamicTripDetails, tripId);
+          placeIds.clear();
+          activities.clear();
         }
-        //  print("❗${bookingModel}");
+        //print("❗${bookingModel}");
         //print("❗❤${bookingModel?}");
       },
       builder: (context, state) {
@@ -103,6 +104,12 @@ class _DynamicTripPageState extends State<DynamicTripPage> {
                                   : context
                                       .read<SearchHotelCubit>()
                                       .getAllHotel(countryId);
+                            }
+                            if (currentStep == 5) {
+                              print(tripDestination);
+                              setState(() {
+                                tripDestination;
+                              });
                             }
                           });
                         },
@@ -173,16 +180,19 @@ class _DynamicTripPageState extends State<DynamicTripPage> {
                           minWidth: double.maxFinite,
                           //  minWidth: MediaQuery.of(context).size.width / 1.4,
                           onPressed: () {
+                            // GoRouter.of(context).push(
+                            //     '/bookingDynamicDetails/${39.toString()}');
                             print(tripId);
-                            BlocProvider.of<DynamicTripCubit>(context)
-                                .printList();
+                            // BlocProvider.of<DynamicTripCubit>(context)
+                            //     .printList();
+                            //!booking now
                             context
                                 .read<DynamicTripCubit>()
                                 .dynamicTripBooking();
-                            // isSuccess
-                            // ? showBookingDoneDialog(context,
-                            //     AppRoutes.dynamicTripDetails, tripId)
-                            //     : null;
+                            // placeIds.clear();
+                            // placeNames.clear();
+                            // activities.clear();
+                            //tripDestination = '';
                           },
                           color: AppColor.primaryColor,
                           shape: const RoundedRectangleBorder(

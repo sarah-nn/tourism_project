@@ -50,7 +50,7 @@ class _CardProfileInfoState extends State<CardProfileInfo> {
                           widget.userInfo.position?.name.toString() ?? "null",
                       index: false),
                   const SizedBox(height: 50),
-                  const ResetAndDelete()
+                  ResetAndDelete(Email: widget.userInfo.email!)
                 ],
               ),
             ),

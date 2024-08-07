@@ -35,8 +35,15 @@ class BookStaticTripCubit extends Cubit<BookStaticTripState> {
     return checkNum;
   }
 
-  Future<void> bookStaticTrip(String tripId, String num, String roomNeeded,
-      String totalPrice, String discountPrice, String discount) async {
+  Future<void> bookStaticTrip(
+      String tripId,
+      String num,
+      String roomNeeded,
+      String totalPrice,
+      String discountPrice,
+      String discount,
+      String days,
+      String roomPrice) async {
     emit(BookLoading());
     var header = {'Authorization': 'Bearer $myToken'};
     http.Response response =
@@ -45,6 +52,8 @@ class BookStaticTripCubit extends Cubit<BookStaticTripState> {
               'trip_id': tripId,
               'number_of_friend': num,
               'rooms_needed': roomNeeded,
+              'room_price': roomPrice,
+              'days': days,
               'total_price': totalPrice,
               'price_after_discount': discountPrice,
               'discount': discount

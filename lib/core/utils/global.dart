@@ -5,6 +5,7 @@ String myToken = CacheHelper().getData(key: 'token');
 List<int> placeIds = [];
 List<String> placeNames = [];
 List<int> activities = [];
+String tripDestination = '';
 String goingPlaneId = '';
 String returnPlaneId = '';
 String onePlaneId = '';
