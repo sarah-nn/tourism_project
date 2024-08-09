@@ -130,7 +130,7 @@ class _ViewImageState extends State<ViewImage> {
                         await CacheHelper().removeData(key: "profileImage");
                       }, () {
                         context.pop();
-                      });
+                      }, false);
                     },
                     icon: Icon(Icons.delete),
                   ),

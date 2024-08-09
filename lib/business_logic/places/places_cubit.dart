@@ -48,18 +48,23 @@ class PlacesCubit extends Cubit<PlacesState> {
     final response = await http.get(url, headers: header);
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
-      final placesData = jsonData['data']['area_places'];
-      for (var areaPlace in placesData) {
-        final areaPlaces = areaPlace['places'];
-        for (var place in areaPlaces) {
-          placesCountry.add({
-            'id': place['id'],
-            'name': place['name'],
-          });
+      if (jsonData['data'] == null) {
+        emit(NoCountryPlacesSuccess());
+        return [{}];
+      } else {
+        final placesData = jsonData['data']['area_places'];
+        for (var areaPlace in placesData) {
+          final areaPlaces = areaPlace['places'];
+          for (var place in areaPlaces) {
+            placesCountry.add({
+              'id': place['id'],
+              'name': place['name'],
+            });
+          }
         }
-      }
-      emit(CountryPlacesSuccess(placesCountry));
-      return placesCountry; // Emit the fetched places
+        emit(CountryPlacesSuccess(placesCountry));
+        return placesCountry;
+      } // Emit the fetched places
     } else {
       print('Request failed with status: ${response.statusCode}');
       return [];
@@ -87,9 +92,13 @@ class PlacesCubit extends Cubit<PlacesState> {
 
     if (response.statusCode == 200) {
       print(response.body);
-      var myresponse =
-          PlaceResponse.fromJson(jsonDecode(response.body)['data']);
-      return myresponse;
+      try {
+        var myresponse =
+            PlaceResponse.fromJson(jsonDecode(response.body)['data']);
+        return myresponse;
+      } catch (e) {
+        return PlaceResponse.fromJson(jsonDecode(response.body));
+      }
     } else {
       //emit(PlacesFailure(errMessage: e.toString()))
       throw Exception('Failed to load data');

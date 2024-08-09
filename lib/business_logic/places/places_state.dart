@@ -28,3 +28,7 @@ final class CountryPlacesSuccess extends PlacesState {
   List<Map<String, dynamic>> places_country = [];
   CountryPlacesSuccess(this.places_country);
 }
+
+final class NoCountryPlacesSuccess extends PlacesState {
+  NoCountryPlacesSuccess();
+}

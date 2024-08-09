@@ -31,20 +31,22 @@ class PlaneListWidget extends StatelessWidget {
               )),
         ),
         Expanded(
-          child: Container(
-            child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: singlTrip!.length,
-                itemBuilder: (context, index) {
-                  var planeList = singlTrip![index];
-                  return WidgetSearchFlight(
-                      onePlane: planeList.planeId.toString(),
-                      isTrip: true,
-                      goingPlaneTrip: planeList,
-                      departflight: true,
-                      round: false);
-                }),
-          ),
+          child: singlTrip!.isEmpty
+              ? Center(child: Text("NO Planes Avaliable"))
+              : Container(
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: singlTrip!.length,
+                      itemBuilder: (context, index) {
+                        var planeList = singlTrip![index];
+                        return WidgetSearchFlight(
+                            onePlane: planeList.planeId.toString(),
+                            isTrip: true,
+                            goingPlaneTrip: planeList,
+                            departflight: true,
+                            round: false);
+                      }),
+                ),
         ),
       ],
     );

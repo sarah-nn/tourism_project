@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
@@ -19,6 +20,13 @@ class _DynamicBookPageState extends State<DynamicBookPage> {
   String type = "Previous";
   bool isPre = false;
 
+  void _handleDelete(int id) {
+    setState(() {
+      myList.removeWhere(
+          (book) => book.id == id && book.endDate != DateTime.now().toString());
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -34,11 +42,14 @@ class _DynamicBookPageState extends State<DynamicBookPage> {
         }
         if (state is BookingDynamicFail) {
           showAlertDialog(context, state.errMessage);
+        } else if (state is DeleteBookinDone) {
+          context.read<DynamicTripCubit>().getAllDynamicBook(pre_Up);
+          context.pop();
         }
       },
       builder: (context, state) {
         return Scaffold(
-            body: state is DynamicBookingList
+            body: state is DynamicBookingList || state is DeleteBookinDone
                 ? Column(
                     children: [
                       Expanded(
@@ -85,18 +96,23 @@ class _DynamicBookPageState extends State<DynamicBookPage> {
                         flex: 20,
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 22),
-                          child: ListView.builder(
-                              itemCount: myList.length,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 35, bottom: 15),
-                                  child: DynamicCardBook(
-                                      model: myList[index],
-                                      index: index,
-                                      isPre: isPre),
-                                );
-                              }),
+                          child: myList.isEmpty
+                              ? const Center(child: Text("No Booking Yet"))
+                              : ListView.builder(
+                                  itemCount: myList.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 35, bottom: 15),
+                                      child: DynamicCardBook(
+                                          onDelete: () {},
+                                          // onDelete: () =>
+                                          //     _handleDelete(myList[index].id),
+                                          model: myList[index],
+                                          index: index,
+                                          isPre: isPre),
+                                    );
+                                  }),
                         ),
                       ),
                     ],

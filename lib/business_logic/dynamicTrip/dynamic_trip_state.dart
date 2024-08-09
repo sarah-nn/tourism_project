@@ -36,3 +36,9 @@ final class BookingDynamicFail extends DynamicTripState {
 
   BookingDynamicFail({required this.errMessage});
 }
+
+final class DeleteBookinDone extends DynamicTripState {
+  final String message;
+
+  DeleteBookinDone({required this.message});
+}

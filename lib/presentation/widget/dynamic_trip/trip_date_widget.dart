@@ -61,7 +61,7 @@ class _TripDateState extends State<TripDate> {
     //!there is null issues here
     if (selectedDateRange != null) {
       if (_selectedDateRange != null) {
-        numberOfDays =
+        context.read<DynamicTripCubit>().tripDays =
             selectedDateRange!.end.difference(selectedDateRange!.start).inDays;
       }
     }
@@ -89,7 +89,8 @@ class _TripDateState extends State<TripDate> {
                     borderRadius: BorderRadius.circular(15)),
                 child: MaterialButton(
                     onPressed: _selectDateRange,
-                    child: startDate == ''
+                    child: context.read<DynamicTripCubit>().startDate == '' &&
+                            context.read<DynamicTripCubit>().endDate == ''
                         ? const Row(
                             children: [
                               Icon(
@@ -104,11 +105,15 @@ class _TripDateState extends State<TripDate> {
                               ),
                             ],
                           )
-                        : Text("Totel Number Day $numberOfDays",
+                        : Text(
+                            "Totel Number Day ${context.read<DynamicTripCubit>().tripDays}",
                             style: const TextStyle(fontSize: 17.5))),
               ),
             ),
-            startDate == '' ? Container() : dateContaner(),
+            context.read<DynamicTripCubit>().startDate == ''
+                ? Container()
+                : dateContaner()
+            // startDate == '' ? Container() : dateContaner(),
           ],
         );
       },
@@ -143,7 +148,7 @@ class _TripDateState extends State<TripDate> {
               ],
             ),
             Text(
-              "  $startDate",
+              "  ${context.read<DynamicTripCubit>().startDate}",
               style: MyTextStyle.Pacifico.copyWith(fontSize: 25),
             ),
             const Divider(
@@ -167,7 +172,7 @@ class _TripDateState extends State<TripDate> {
               ],
             ),
             Text(
-              "  $endDate",
+              "  ${context.read<DynamicTripCubit>().endDate}",
               style: MyTextStyle.Pacifico.copyWith(fontSize: 25),
             ),
           ],

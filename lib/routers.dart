@@ -11,6 +11,7 @@ import 'package:tourism_project/business_logic/flight/searchFlight_cubit.dart';
 import 'package:tourism_project/business_logic/forgetpassword/forgetpassword_cubit.dart';
 import 'package:tourism_project/business_logic/hotel/roomAndBook_cubit.dart';
 import 'package:tourism_project/business_logic/hotel/searchHotel_cubit.dart';
+import 'package:tourism_project/business_logic/notes/notes_cubit.dart';
 import 'package:tourism_project/business_logic/places/place_desc_cubit.dart';
 import 'package:tourism_project/business_logic/places/places_cubit.dart';
 import 'package:tourism_project/business_logic/profile/profile_cubit.dart';
@@ -21,6 +22,7 @@ import 'package:tourism_project/business_logic/user/user_cubit.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/data/models/place_desc_model.dart';
 import 'package:tourism_project/presentation/screens/Booking_details/public_booking.dart';
+import 'package:tourism_project/presentation/screens/all_notes_page.dart';
 import 'package:tourism_project/presentation/screens/auth/forget_password_page.dart';
 import 'package:tourism_project/presentation/screens/flight/flight_details.dart';
 import 'package:tourism_project/presentation/screens/flight/flight_page.dart';
@@ -386,6 +388,15 @@ final GoRouter router = GoRouter(
         path: AppRoutes.payment,
         builder: (context, state) {
           return const PaymentPage();
+        }),
+
+    GoRoute(
+        path: AppRoutes.notesPage,
+        builder: (context, state) {
+          return BlocProvider(
+            create: (context) => NotesCubit(),
+            child: const AllNotesPage(),
+          );
         }),
   ],
 );

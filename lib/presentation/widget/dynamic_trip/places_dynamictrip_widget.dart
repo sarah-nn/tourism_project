@@ -39,33 +39,46 @@ class _PlacesDynamicWidgetState extends State<PlacesDynamicWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    child: Row(
-                      children: [
-                        Container(
-                          child: Text(
-                            "Navigate To Place Page ",
-                            style: TextStyle(
-                                color: AppColor.primaryColor, fontSize: 22),
+                    child: InkWell(
+                      onTap: () async {
+                        print("🌹$tripDestination");
+                        setState(() {
+                          tripDestination == ''
+                              ? isChooseDestination = false
+                              : isChooseDestination = true;
+                        });
+                        await isChooseDestination
+                            ? _navigateToPlacePage()
+                            : null;
+                      },
+                      child: Row(
+                        children: [
+                          Container(
+                            child: Text(
+                              "Navigate To Place Page ",
+                              style: TextStyle(
+                                  color: AppColor.primaryColor, fontSize: 22),
+                            ),
                           ),
-                        ),
-                        GestureDetector(
-                          onTap: () async {
-                            print("🌹$tripDestination");
-                            setState(() {
-                              tripDestination == ''
-                                  ? isChooseDestination = false
-                                  : isChooseDestination = true;
-                            });
-                            await isChooseDestination
-                                ? _navigateToPlacePage()
-                                : null;
-                          },
-                          child: Container(
-                              height: 25,
-                              width: 25,
-                              child: Image.asset(AppImage.arrowForword)),
-                        )
-                      ],
+                          GestureDetector(
+                            onTap: () async {
+                              print("🌹$tripDestination");
+                              setState(() {
+                                tripDestination == ''
+                                    ? isChooseDestination = false
+                                    : isChooseDestination = true;
+                              });
+                              await isChooseDestination
+                                  ? _navigateToPlacePage()
+                                  : null;
+                            },
+                            child: Container(
+                                height: 25,
+                                width: 25,
+                                child: Image.asset(AppImage.arrowForword)),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   tripDestination != ''

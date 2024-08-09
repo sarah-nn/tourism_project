@@ -72,16 +72,25 @@ class PlaceItemCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                isSelected
-                    ? Container(
-                        padding: const EdgeInsets.all(2.5),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppColor.primaryColor),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(Icons.check,
-                            color: AppColor.primaryColor, size: 26))
-                    : Container()
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(
+                      '\$ ${place['place_price']}',
+                      style: TextStyle(color: Colors.green),
+                    ),
+                    isSelected
+                        ? Container(
+                            padding: const EdgeInsets.all(2.5),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: AppColor.primaryColor),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(Icons.check,
+                                color: AppColor.primaryColor, size: 26))
+                        : Container()
+                  ],
+                )
               ],
             ),
           ),

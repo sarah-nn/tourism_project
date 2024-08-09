@@ -31,6 +31,7 @@ class _HotelDynamicTripState extends State<HotelDynamicTrip> {
 
   void openButtomSheet(BuildContext context, List<HotelModel> hotelModel) {
     showModalBottomSheet(
+      showDragHandle: true,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20), topRight: Radius.circular(20))),

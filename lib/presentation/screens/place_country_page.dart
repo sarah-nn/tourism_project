@@ -30,6 +30,9 @@ class _PlacesCountryState extends State<PlacesCountry> {
       listener: (context, state) {
         if (state is CountryPlacesSuccess) {
           print("country place view success");
+        } else if (state is NoCountryPlacesSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("No Places Avaliable")));
         } else if (state is PlacesFailure) {
           print(state.errMessage);
         }
@@ -84,7 +87,9 @@ class _PlacesCountryState extends State<PlacesCountry> {
                       },
                     ),
                   )
-                : Center(child: CircularProgressIndicator()));
+                : state is NoCountryPlacesSuccess
+                    ? Center(child: Text("No Places Avaliable"))
+                    : Center(child: CircularProgressIndicator()));
       },
     );
   }

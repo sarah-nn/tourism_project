@@ -28,6 +28,7 @@ class AppRoutes {
   static const String updateDynamic = '/updatedynamicpage';
   static const String testupdate = '/testupdate';
   static const String payment = '/payment';
+  static const String notesPage = '/notesPage';
 
   static const String imagesview = '/imagesviewpage';
   static const String searchCountryPage = '/searchCountryPage';

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
 import 'package:tourism_project/business_logic/dynamicTrip/update_trip/update_trip_cubit.dart';
 import 'package:tourism_project/business_logic/flight/searchFlight_cubit.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
@@ -83,6 +82,7 @@ class _CustomFlightState extends State<CustomFlight> {
                           onTap: () {
                             showModalBottomSheet(
                                 isScrollControlled: true,
+                                showDragHandle: true,
                                 enableDrag: true,
                                 useSafeArea: true,
                                 context: context,
@@ -91,14 +91,42 @@ class _CustomFlightState extends State<CustomFlight> {
                                       ? Container(
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 15),
-                                          child: ListView.builder(
-                                              itemCount: flightList!.length,
-                                              itemBuilder: (context, index) {
-                                                return returnRoundCard(
-                                                    flightList![index], index);
-                                              }),
+                                          child: Column(
+                                            children: [
+                                              // Expanded(
+                                              //     flex: 1,
+                                              //     child: Container(
+                                              //       alignment:
+                                              //           Alignment.centerLeft,
+                                              //       padding:const EdgeInsets.only(
+                                              //           left: 10),
+                                              //       child: const Text(
+                                              //         "Avaliable plane",
+                                              //         style: TextStyle(
+                                              //             fontSize: 19,
+                                              //             fontWeight:
+                                              //                 FontWeight.bold),
+                                              //       ),
+                                              //     )),
+                                              Expanded(
+                                                flex: 30,
+                                                child: Container(
+                                                  child: ListView.builder(
+                                                      itemCount:
+                                                          flightList!.length,
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        return returnRoundCard(
+                                                            flightList![index],
+                                                            index);
+                                                      }),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         )
-                                      : const CircularProgressIndicator();
+                                      : const Center(
+                                          child: CircularProgressIndicator());
                                 });
                           },
                           child: Row(

@@ -22,6 +22,8 @@ abstract class AppImage {
   static const countryType = 'assets/images/Country1.jfif';
   static const noResult = 'assets/images/noResult.png';
   static const checkMark = 'assets/images/check-mark.png';
+  static const strip = 'assets/images/strip.png';
+  static const wallet = 'assets/images/wallet.png';
 
   //Animation
   static const startDynamicPage = 'assets/lottie/starting_dynamic_page.json';

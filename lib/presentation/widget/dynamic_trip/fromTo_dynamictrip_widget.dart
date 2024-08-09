@@ -17,6 +17,8 @@ class _FromToDynamicTripState extends State<FromToDynamicTrip> {
   List<CountryModel> mylist = [];
   CountryModel? countryModel1;
   CountryModel? countryModel2;
+  String source = '';
+  String destination = '';
 
   @override
   void initState() {
@@ -56,6 +58,7 @@ class _FromToDynamicTripState extends State<FromToDynamicTrip> {
                         countryModel1 = newVal;
                         BlocProvider.of<DynamicTripCubit>(context)
                             .sourceTripId = newVal!.id.toString();
+                        source = newVal.name;
                         // gsource = "${newVal!.id.toString()} and ${newVal.name}";
                       });
                     },
@@ -92,6 +95,7 @@ class _FromToDynamicTripState extends State<FromToDynamicTrip> {
                         BlocProvider.of<DynamicTripCubit>(context)
                             .destinationTripId = newVal!.id.toString();
                         tripDestination = newVal.id.toString();
+                        destination = newVal.name;
                         // gSourceId = newVal!.id.toString();
                         // gdistinationId = newVal.id.toString();
                         // print(gSourceId);
@@ -107,6 +111,22 @@ class _FromToDynamicTripState extends State<FromToDynamicTrip> {
                     }).toList()),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.only(top: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "From $source To $destination  ",
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  Icon(
+                    Icons.check,
+                    color: AppColor.primaryColor,
+                  )
+                ],
+              ),
+            )
           ],
         );
       },

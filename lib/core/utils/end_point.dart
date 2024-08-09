@@ -68,4 +68,7 @@ class EndPoint {
 
 //======================== Activity =====================
   static const String getAllActivity = '$baseUrl/user/get-all-activity/';
+
+//======================== Notes =============
+  static const String getAllNotes = '$baseUrl/user/get-notes';
 }

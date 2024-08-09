@@ -88,13 +88,13 @@ class _NumberOfTouristState extends State<NumberOfTourist> {
                 : const SizedBox(
                     height: 1,
                   ),
-            isChoose
+            isChoose || context.read<DynamicTripCubit>().numOfPeople != 0
                 ? Container(
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                     width: double.maxFinite,
                     color: const Color.fromARGB(255, 233, 233, 233),
                     child: Text(
-                      "-> Book for $choosenNum",
+                      "-> Book for ${context.read<DynamicTripCubit>().numOfPeople}",
                       style: TextStyle(fontSize: 18),
                     ),
                   )

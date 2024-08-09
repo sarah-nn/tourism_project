@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
 import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/going_and_return_plane_trip.dart';
-import 'package:tourism_project/presentation/widget/flight/card_searach_flight_widget.dart';
 
 class RoundPlaneList extends StatefulWidget {
   final GoingAndReturnPlaneTrip roundList;
@@ -182,12 +178,18 @@ class _RoundPlaneListState extends State<RoundPlaneList> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
-                  child: Text(
-                    " ${goingList.plane.name}",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                        color: AppColor.primaryColor),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        " ${goingList.plane.name}",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: AppColor.primaryColor),
+                      ),
+                      Text(goingList.flightDate)
+                    ],
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -325,12 +327,18 @@ class _RoundPlaneListState extends State<RoundPlaneList> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
-                  child: Text(
-                    returnList.plane.name,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                        color: AppColor.primaryColor),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        returnList.plane.name,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: AppColor.primaryColor),
+                      ),
+                      Text(returnList.flightDate)
+                    ],
                   ),
                 ),
                 const SizedBox(height: 10),

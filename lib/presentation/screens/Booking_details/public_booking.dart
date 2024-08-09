@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_project/business_logic/details_book.dart/details_book_hotel_cubit.dart';
 import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
+import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
+import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/presentation/screens/Booking_details/dynamic_hotel_book_page.dart';
 import 'package:tourism_project/presentation/screens/Booking_details/dynamic_trip_book_page.dart';
 import 'package:tourism_project/presentation/screens/Booking_details/static_trip_book_page.dart';
@@ -37,6 +39,15 @@ class _BookUserState extends State<BookUser> {
               fontFamily: 'Philosopher',
               fontSize: 22),
         ),
+        actions: [
+          //  Text("note"),
+          IconButton(
+              onPressed: () {
+                goRoute(context, AppRoutes.notesPage);
+                print(DateTime.now());
+              },
+              icon: const Icon(Icons.note_outlined))
+        ],
       ),
       body: Column(
         children: <Widget>[

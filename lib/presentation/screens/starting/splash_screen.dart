@@ -43,12 +43,13 @@ class _SplashScreenState extends State<SplashScreen> {
             child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: DefaultTextStyle(
-            style: MyTextStyle.splashLogoText.copyWith(fontSize: 52),
+            style: MyTextStyle.splashLogoText
+                .copyWith(fontSize: 52, letterSpacing: 1.2),
             child: AnimatedTextKit(
               displayFullTextOnTap: false,
               totalRepeatCount: 1,
               animatedTexts: [
-                TyperAnimatedText("Tourism", speed: Duration(milliseconds: 80)),
+                TyperAnimatedText("UniGo", speed: Duration(milliseconds: 80)),
               ],
               onTap: () {
                 print("something");

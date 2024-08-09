@@ -115,7 +115,7 @@ class PlaceItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 4),
       child: Card(
-        color: place != null ? Colors.blue[50] : Colors.pink[80],
+        //  color: place != null ? Colors.blue[50] : Colors.pink[80],
         elevation: 1.5,
         child: InkWell(
           onTap: () {},

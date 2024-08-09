@@ -24,6 +24,7 @@ class DynamicTripCubit extends Cubit<DynamicTripState> {
   String hotelId = '';
   int numOfPeople = 0;
   int tripDynamicId = 0;
+  int tripDays = 0;
 
   // for Room Capacity
   TextEditingController controller2 = TextEditingController();
@@ -48,11 +49,11 @@ class DynamicTripCubit extends Cubit<DynamicTripState> {
     activities.add(value);
   }
 
-  // void printList() {
-  //   Map<String, String> tripRequestBody = updateRequestBody();
+  void printList() {
+    Map<String, String> tripRequestBody = buildRequestBody();
 
-  //   print("\n\n\n✅==$tripRequestBody==");
-  // }
+    print("✅dynamic book data ==$tripRequestBody==");
+  }
 
   Map<String, String> buildRequestBody() {
     Map<String, String> body = {
@@ -217,10 +218,13 @@ class DynamicTripCubit extends Cubit<DynamicTripState> {
     var header = {'Authorization': 'Bearer $myToken'};
     var response = await http.delete(uri, headers: header);
     if (response.statusCode == 200) {
-      getAllDynamicBook('future_trip');
+      emit(DeleteBookinDone(message: jsonDecode(response.body)));
+      print(response.body);
     } else {
+      print(response.body);
       // String mssg = jsonDecode(response.body)['message'];
       print(response.body);
+      emit(BookingDynamicFail(errMessage: "mssg"));
     }
   }
 }

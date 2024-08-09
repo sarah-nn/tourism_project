@@ -111,7 +111,7 @@ showAlertDialogQuestion(BuildContext context, void Function()? onTapOk,
   );
 }
 
-showBookingDoneDialog(BuildContext context, path, id) {
+showBookingDoneDialog(BuildContext context, path, id, Function()? onPressed) {
   Dialog alert = Dialog(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
     child: Container(
@@ -179,9 +179,7 @@ showBookingDoneDialog(BuildContext context, path, id) {
                         color: Theme.of(context).primaryColor, fontSize: 15),
                   )),
               TextButton(
-                  onPressed: () {
-                    context.pop();
-                  },
+                  onPressed: onPressed,
                   child: Text(
                     "Ok",
                     style: TextStyle(
@@ -363,17 +361,36 @@ showAlertSuccess(
 }
 
 CustomAlertDialog(
-  BuildContext context,
-  final String title,
-  final String message,
-  final String positiveBtnText,
-  final String negativeBtnText,
-  final Function onPostivePressed,
-  final Function onNegativePressed,
-) {
+    BuildContext context,
+    final String title,
+    final String message,
+    final String positiveBtnText,
+    final String negativeBtnText,
+    final Function onPostivePressed,
+    final Function onNegativePressed,
+    final bool isDelete) {
   AlertDialog alert = AlertDialog(
     title: title != null ? Text(title) : null,
-    content: message != null ? Text(message) : null,
+    content: message != null
+        ? isDelete
+            ? Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Row(
+                    children: [
+                      Icon(
+                        Icons.warning_amber_outlined,
+                        color: Colors.red,
+                      ),
+                      Text("Warning", style: const TextStyle(color: Colors.red))
+                    ],
+                  ),
+                  SizedBox(height: 5),
+                  Text(message, style: const TextStyle(color: Colors.red)),
+                ],
+              )
+            : Text(message)
+        : null,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     actions: <Widget>[
       MaterialButton(

@@ -124,7 +124,8 @@ class TestPage extends StatefulWidget {
 class _TestPageState extends State<TestPage> {
   final searchcontroller = TextEditingController();
 
-  List<Place> searchedItem = [];
+  List<Place> searchedAllItem = [];
+  List<PlaceDependOnCategoryModel> searchedItem = [];
   bool isSearching = false;
 
   List<Place> places = [];
@@ -134,10 +135,13 @@ class _TestPageState extends State<TestPage> {
   String _selectedCategory = 'All';
   int categoryId = -1;
 
+  late Future<List<Place>> _getAllPlaces;
+
   @override
   void initState() {
     super.initState();
     _categories = BlocProvider.of<PlacesCubit>(context).getAllCategory();
+    _getAllPlaces = BlocProvider.of<PlacesCubit>(context).getAllPlace();
   }
 
   @override
@@ -197,7 +201,7 @@ class _TestPageState extends State<TestPage> {
                                     }
                                   });
                             }
-                            return Text('Error: ${snapshot.error}');
+                            return const Text('loading ..');
                           },
                         ),
                       ],
@@ -206,16 +210,82 @@ class _TestPageState extends State<TestPage> {
               Expanded(
                   child: state is PlacesSuccess && _selectedCategory != 'All'
                       ? placesDependOnCategory.isNotEmpty
-                          ? ListView.builder(
-                              itemCount: placesDependOnCategory.length,
-                              itemBuilder: (context, index) {
-                                return PlaceItem(
-                                    placeCat: placesDependOnCategory[index]);
-                              })
+                          ? isSearching
+                              ? searchedItem.isEmpty &&
+                                      searchcontroller.text.isNotEmpty
+                                  ? const Center(
+                                      child: Text(
+                                      "No Result",
+                                      style: TextStyle(fontSize: 25),
+                                    ))
+                                  : ListView.builder(
+                                      //itemCount: placesDependOnCategory.length,
+                                      itemCount: searchedItem.isNotEmpty
+                                          ? searchedItem.length
+                                          : placesDependOnCategory.length,
+                                      itemBuilder: (context, index) {
+                                        return PlaceItem(
+                                            placeCat: searchedItem.isNotEmpty
+                                                ? searchedItem[index]
+                                                : placesDependOnCategory[index]
+                                            //    placeCat: placesDependOnCategory[index]
+                                            );
+                                      })
+                              : ListView.builder(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 15),
+                                  itemCount: searchedItem.isNotEmpty
+                                      ? searchedItem.length
+                                      : placesDependOnCategory.length,
+                                  itemBuilder: (context, index) {
+                                    return PlaceItem(
+                                        placeCat: searchedItem.isNotEmpty
+                                            ? searchedItem[index]
+                                            : placesDependOnCategory[index]);
+                                  })
                           : const Center(
                               child: Text("No Places Here"),
                             )
-                      : const GetAllPlacesWidget())
+                      : FutureBuilder(
+                          future: _getAllPlaces,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              places = snapshot.data!;
+                              return isSearching
+                                  ? searchedAllItem.isEmpty &&
+                                          searchcontroller.text.isNotEmpty
+                                      ? const Center(
+                                          child: Text(
+                                          "No Result",
+                                          style: TextStyle(fontSize: 25),
+                                        ))
+                                      : ListView.builder(
+                                          itemCount: searchedAllItem.isNotEmpty
+                                              ? searchedAllItem.length
+                                              : places.length,
+                                          itemBuilder: (context, index) {
+                                            return PlaceItem(
+                                                place:
+                                                    searchedAllItem.isNotEmpty
+                                                        ? searchedAllItem[index]
+                                                        : places[index]);
+                                          })
+                                  : ListView.builder(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 15),
+                                      itemCount: searchedItem.isNotEmpty
+                                          ? searchedItem.length
+                                          : places.length,
+                                      itemBuilder: (context, index) {
+                                        return PlaceItem(
+                                            place: searchedAllItem.isNotEmpty
+                                                ? searchedAllItem[index]
+                                                : places[index]);
+                                      });
+                            }
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }))
             ],
           ));
     });
@@ -226,17 +296,23 @@ class _TestPageState extends State<TestPage> {
       backgroundColor: AppColor.primaryColor,
       title: const Text("Places"),
       actions: [
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              isSearching = true;
-            });
-          },
-          child: const Padding(
-            padding: EdgeInsets.only(right: 20),
-            child: Icon(Icons.search),
-          ),
-        )
+        IconButton(
+            onPressed: () {
+              setState(() {
+                isSearching = true;
+                print(_selectedCategory);
+              });
+            },
+            icon: Icon(Icons.search))
+        // GestureDetector(
+        //   onTap: () {
+
+        //   },
+        //   child: const Padding(
+        //     padding: EdgeInsets.only(right: 20),
+        //     child:,
+        //   ),
+        // )
       ],
     );
   }
@@ -274,9 +350,13 @@ class _TestPageState extends State<TestPage> {
 
   void addDataToFilteredList({required String input}) {
     setState(() {
-      searchedItem = places
-          .where((element) => element.name!.toLowerCase().startsWith(input))
-          .toList();
+      _selectedCategory == 'All'
+          ? searchedAllItem = places
+              .where((element) => element.name!.toLowerCase().startsWith(input))
+              .toList()
+          : searchedItem = placesDependOnCategory
+              .where((element) => element.name!.toLowerCase().startsWith(input))
+              .toList();
     });
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tourism_project/business_logic/activity/activity_cubit.dart';
 import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
+import 'package:tourism_project/business_logic/flight/searchFlight_cubit.dart';
 import 'package:tourism_project/business_logic/hotel/searchHotel_cubit.dart';
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
@@ -43,9 +44,14 @@ class _DynamicTripPageState extends State<DynamicTripPage> {
         if (state is BookingSuccess) {
           tripId = (state).tripId;
           print("===trip is from page==$tripId");
-          showBookingDoneDialog(context, AppRoutes.dynamicTripDetails, tripId);
+          showBookingDoneDialog(context, AppRoutes.dynamicTripDetails, tripId,
+              () {
+            replace(context, AppRoutes.startDynamicPage);
+          });
+          // context.pop();
           placeIds.clear();
           activities.clear();
+          placeNames.clear();
         }
         //print("❗${bookingModel}");
         //print("❗❤${bookingModel?}");
@@ -110,6 +116,32 @@ class _DynamicTripPageState extends State<DynamicTripPage> {
                               setState(() {
                                 tripDestination;
                               });
+                            }
+                            if (currentStep == 4) {
+                              // var params = context.read<DynamicTripCubit>();
+                              // BlocListener<SearchFlightCubit,
+                              //     SearchFlightState>(
+                              //   listener: (context, state) {
+                              //     if (state is SearchFlightSuccess) {
+                              //       print("done");
+                              //     }
+                              //   },
+                              // );
+
+                              // context
+                              //     .read<SearchFlightCubit>()
+                              //     .getallPlaneTripGoingAndReturn(
+                              //         country_source_id: params.sourceTripId,
+                              //         country_destination_id:
+                              //             params.destinationTripId,
+                              //         flight_date: params.startDate);
+                              // context
+                              //     .read<SearchFlightCubit>()
+                              //     .getallPlaneTripGoing(
+                              //         country_source_id: params.sourceTripId,
+                              //         country_destination_id:
+                              //             params.destinationTripId,
+                              //         flight_date: params.startDate);
                             }
                           });
                         },

@@ -8,6 +8,7 @@ import 'package:tourism_project/business_logic/dynamicTrip/update_trip/update_tr
 import 'package:tourism_project/business_logic/hotel/searchHotel_cubit.dart';
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
+import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
 import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/dynamic_booking_details_model.dart';
@@ -214,8 +215,17 @@ class _DynamicTripBookingEditPageState
                           BlocConsumer<UpdateTripCubit, UpdateTripState>(
                             listener: (context, state) {
                               if (state is UpdateTripSuccess) {
-                                CustomAlertDialog(context, "Are you Sure",
-                                    state.message, "OK", "", () {}, () {});
+                                CustomAlertDialog(
+                                    context,
+                                    "Update Done ",
+                                    "Your Added Price is ${state.message}",
+                                    "OK",
+                                    "", () {
+                                  replace(context, AppRoutes.detailsBookHotel);
+                                }, () {}, false);
+                                // context
+                                //     .read<DynamicTripCubit>()
+                                //     .getAllDynamicBook('future_trip');
                               }
                               if (state is UpdateTripFail) {
                                 showAlertDialog(context, state.message);
@@ -296,13 +306,13 @@ class _DynamicTripBookingEditPageState
                                             incrementC2();
                                             context
                                                 .read<UpdateTripCubit>()
-                                                .addc2 = c2Num.toString();
+                                                .addc2 = cnt2.toString();
                                           },
                                           onPressed4: () {
                                             incrementC4();
                                             context
                                                 .read<UpdateTripCubit>()
-                                                .addc4 = c4Num.toString();
+                                                .addc4 = cnt4.toString();
                                           },
                                           onPressed6: () {
                                             incrementC6();

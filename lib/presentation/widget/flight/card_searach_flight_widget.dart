@@ -58,15 +58,28 @@ class _WidgetSearchFlightState extends State<WidgetSearchFlight> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(
-                  child: Text(
-                    " ${widget.round ? widget.departflight ? widget.goingTrip?.plane.name : widget.returnTrip?.plane.name : widget.goingPlaneTrip?.plane.name}",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                        color: AppColor.primaryColor),
-                  ),
-                ),
+                widget.isTrip
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                            Text(
+                              " ${widget.round ? widget.departflight ? widget.goingTrip?.plane.name : widget.returnTrip?.plane.name : widget.goingPlaneTrip?.plane.name}",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                  color: AppColor.primaryColor),
+                            ),
+                            Text(widget.goingPlaneTrip!.flightDate)
+                          ])
+                    : Center(
+                        child: Text(
+                          " ${widget.round ? widget.departflight ? widget.goingTrip?.plane.name : widget.returnTrip?.plane.name : widget.goingPlaneTrip?.plane.name}",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: AppColor.primaryColor),
+                        ),
+                      ),
                 const SizedBox(height: 10),
                 //  const Text("name airpot : dimashq"),
                 Row(

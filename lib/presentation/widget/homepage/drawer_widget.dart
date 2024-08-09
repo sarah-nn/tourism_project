@@ -101,7 +101,7 @@ class WidgetDrawer extends StatelessWidget {
                       replace(context, AppRoutes.login);
                     }, () {
                       Navigator.of(context).pop();
-                    });
+                    }, false);
                   },
                 ),
                 const Divider(

@@ -98,6 +98,7 @@ class _TestPage2State extends State<TestPage2> {
                                   'placeId': place.id,
                                   // 'placeImage': place.images[0] ?? null,
                                   'areaName': areaPlace.name,
+                                  'place_price': place.placePrice
                                 });
                           }).toList();
 
@@ -117,8 +118,8 @@ class _TestPage2State extends State<TestPage2> {
                               },
                             ),
                           );
-                        } else if (snapshot.hasError) {
-                          return Center(child: Text('${snapshot.error}'));
+                        } else if (snapshot.data == null) {
+                          return Center(child: Text('No Places Here'));
                         }
                         return const Center(
                             child: Padding(

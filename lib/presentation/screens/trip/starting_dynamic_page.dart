@@ -71,7 +71,7 @@ class StartingDaynamicPage extends StatelessWidget {
                 elevation: 20,
                 minWidth: double.maxFinite,
                 onPressed: () {
-                  goRoute(context, AppRoutes.dynamicTrip);
+                  replace(context, AppRoutes.dynamicTrip);
                 },
                 color: AppColor.primaryColor,
                 shape: const RoundedRectangleBorder(
