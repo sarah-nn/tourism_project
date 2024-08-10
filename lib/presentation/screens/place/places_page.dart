@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tourism_project/business_logic/favorite/favorite_cubit.dart';
 import 'package:tourism_project/business_logic/places/places_cubit.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/data/models/places_model.dart';
@@ -97,10 +98,15 @@ class _PlacesPageState extends State<PlacesPage> {
                                       ? searchedItem.length
                                       : places.length,
                                   itemBuilder: (context, index) {
-                                    return PlaceItem(
+                                    return BlocProvider(
+                                      create: (context) => FavoriteCubit(),
+                                      child: PlaceItem(
                                         place: searchedItem.isNotEmpty
                                             ? searchedItem[index]
-                                            : places[index]);
+                                            : places[index],
+                                        placeCat: null,
+                                      ),
+                                    );
                                   })
                           : ListView.builder(
                               padding: const EdgeInsets.symmetric(vertical: 15),
@@ -108,10 +114,15 @@ class _PlacesPageState extends State<PlacesPage> {
                                   ? searchedItem.length
                                   : places.length,
                               itemBuilder: (context, index) {
-                                return PlaceItem(
+                                return BlocProvider(
+                                  create: (context) => FavoriteCubit(),
+                                  child: PlaceItem(
                                     place: searchedItem.isNotEmpty
                                         ? searchedItem[index]
-                                        : places[index]);
+                                        : places[index],
+                                    placeCat: null,
+                                  ),
+                                );
                               })
                       : const Center(
                           child: CircularProgressIndicator(),

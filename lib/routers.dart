@@ -6,6 +6,7 @@ import 'package:tourism_project/business_logic/activity/activity_cubit.dart';
 import 'package:tourism_project/business_logic/country/country_cubit.dart';
 import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
 import 'package:tourism_project/business_logic/dynamicTrip/update_trip/update_trip_cubit.dart';
+import 'package:tourism_project/business_logic/favorite/favorite_cubit.dart';
 import 'package:tourism_project/business_logic/flight/detailsTrip_cubit.dart';
 import 'package:tourism_project/business_logic/flight/searchFlight_cubit.dart';
 import 'package:tourism_project/business_logic/forgetpassword/forgetpassword_cubit.dart';
@@ -24,6 +25,7 @@ import 'package:tourism_project/data/models/place_desc_model.dart';
 import 'package:tourism_project/presentation/screens/Booking_details/public_booking.dart';
 import 'package:tourism_project/presentation/screens/all_notes_page.dart';
 import 'package:tourism_project/presentation/screens/auth/forget_password_page.dart';
+import 'package:tourism_project/presentation/screens/favorite/favorite.dart';
 import 'package:tourism_project/presentation/screens/flight/flight_details.dart';
 import 'package:tourism_project/presentation/screens/flight/flight_page.dart';
 import 'package:tourism_project/presentation/screens/flight/search_flight_page.dart';
@@ -398,6 +400,13 @@ final GoRouter router = GoRouter(
             child: const AllNotesPage(),
           );
         }),
+    GoRoute(
+      path: AppRoutes.favoritePage,
+      builder: (context, state) => BlocProvider(
+        create: (context) => FavoriteCubit(),
+        child: const FavoritePage(),
+      ),
+    ),
   ],
 );
 

@@ -106,6 +106,7 @@
 //
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tourism_project/business_logic/favorite/favorite_cubit.dart';
 import 'package:tourism_project/business_logic/places/places_cubit.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/data/models/places_depend_on_category_model.dart';
@@ -224,12 +225,16 @@ class _TestPageState extends State<TestPage> {
                                           ? searchedItem.length
                                           : placesDependOnCategory.length,
                                       itemBuilder: (context, index) {
-                                        return PlaceItem(
-                                            placeCat: searchedItem.isNotEmpty
-                                                ? searchedItem[index]
-                                                : placesDependOnCategory[index]
-                                            //    placeCat: placesDependOnCategory[index]
-                                            );
+                                        return BlocProvider(
+                                          create: (context) => FavoriteCubit(),
+                                          child: PlaceItem(
+                                              placeCat: searchedItem.isNotEmpty
+                                                  ? searchedItem[index]
+                                                  : placesDependOnCategory[
+                                                      index]
+                                              //    placeCat: placesDependOnCategory[index]
+                                              ),
+                                        );
                                       })
                               : ListView.builder(
                                   padding:
@@ -238,10 +243,13 @@ class _TestPageState extends State<TestPage> {
                                       ? searchedItem.length
                                       : placesDependOnCategory.length,
                                   itemBuilder: (context, index) {
-                                    return PlaceItem(
-                                        placeCat: searchedItem.isNotEmpty
-                                            ? searchedItem[index]
-                                            : placesDependOnCategory[index]);
+                                    return BlocProvider(
+                                      create: (context) => FavoriteCubit(),
+                                      child: PlaceItem(
+                                          placeCat: searchedItem.isNotEmpty
+                                              ? searchedItem[index]
+                                              : placesDependOnCategory[index]),
+                                    );
                                   })
                           : const Center(
                               child: Text("No Places Here"),
@@ -264,11 +272,15 @@ class _TestPageState extends State<TestPage> {
                                               ? searchedAllItem.length
                                               : places.length,
                                           itemBuilder: (context, index) {
-                                            return PlaceItem(
-                                                place:
-                                                    searchedAllItem.isNotEmpty
-                                                        ? searchedAllItem[index]
-                                                        : places[index]);
+                                            return BlocProvider(
+                                              create: (context) =>
+                                                  FavoriteCubit(),
+                                              child: PlaceItem(
+                                                  place: searchedAllItem
+                                                          .isNotEmpty
+                                                      ? searchedAllItem[index]
+                                                      : places[index]),
+                                            );
                                           })
                                   : ListView.builder(
                                       padding: const EdgeInsets.symmetric(
@@ -277,10 +289,13 @@ class _TestPageState extends State<TestPage> {
                                           ? searchedItem.length
                                           : places.length,
                                       itemBuilder: (context, index) {
-                                        return PlaceItem(
-                                            place: searchedAllItem.isNotEmpty
-                                                ? searchedAllItem[index]
-                                                : places[index]);
+                                        return BlocProvider(
+                                          create: (context) => FavoriteCubit(),
+                                          child: PlaceItem(
+                                              place: searchedAllItem.isNotEmpty
+                                                  ? searchedAllItem[index]
+                                                  : places[index]),
+                                        );
                                       });
                             }
                             return const Center(

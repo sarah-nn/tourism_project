@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_project/business_logic/details_book.dart/details_book_hotel_cubit.dart';
+import 'package:tourism_project/business_logic/details_book.dart/details_book_plane_cubit.dart';
+import 'package:tourism_project/business_logic/details_book.dart/details_book_static_trip_cubit.dart';
 import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/presentation/screens/Booking_details/dynamic_hotel_book_page.dart';
+import 'package:tourism_project/presentation/screens/Booking_details/dynamic_plane_book_page.dart';
 import 'package:tourism_project/presentation/screens/Booking_details/dynamic_trip_book_page.dart';
 import 'package:tourism_project/presentation/screens/Booking_details/static_trip_book_page.dart';
 
@@ -104,12 +107,12 @@ class _BookUserState extends State<BookUser> {
               });
             },
             children: <Widget>[
-              const TripBookPage(),
-              Container(
-                color: Colors.green,
-                child: const Center(
-                  child: Text('page 2'),
-                ),
+              BlocProvider(
+                  create: (context) => DetailsBookStaticTripCubit(),
+                  child: const TripBookPage()),
+              BlocProvider(
+                create: (context) => DetailsBookPlaneCubit(),
+                child: const PlaneBookPage(),
               ),
               BlocProvider(
                 create: (context) => DetailsBookHotelCubit(),

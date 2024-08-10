@@ -15,3 +15,10 @@ final class DetailsPlaneTripFailure extends DetailsPlaneTripState {
   final String errMessage;
   DetailsPlaneTripFailure({required this.errMessage});
 }
+
+final class BookPlaneSuccess extends DetailsPlaneTripState {}
+
+final class BookPlaneFailure extends DetailsPlaneTripState {
+  final String errMessage;
+  BookPlaneFailure({required this.errMessage});
+}

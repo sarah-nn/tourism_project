@@ -52,6 +52,7 @@ class RoomCubit extends Cubit<RoomState> {
 
   Future<void> bookHotel(
       {required String tripName,
+      required String tripNote,
       required String destinationTripId,
       required String hotelId,
       required String startDate,

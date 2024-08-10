@@ -207,7 +207,7 @@ class DynamicTripCubit extends Cubit<DynamicTripState> {
       }
     } catch (e) {
       print("exception in ");
-      emit(BookingDynamicFail(errMessage: e.toString()));
+      //emit(BookingDynamicFail(errMessage: e.toString()));
     }
     print(bookingList);
     return bookingList;

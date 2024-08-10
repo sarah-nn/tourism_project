@@ -2,34 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
-import 'package:tourism_project/business_logic/details_book.dart/details_book_hotel_cubit.dart';
-import 'package:tourism_project/business_logic/details_book.dart/show_details_book_hotel_cubit.dart';
+import 'package:tourism_project/business_logic/details_book.dart/details_book_plane_cubit.dart';
+import 'package:tourism_project/business_logic/details_book.dart/show_details_book_plane_cubit.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_images.dart';
-import 'package:tourism_project/data/models/details_book_hotel_model.dart';
-import 'package:tourism_project/presentation/widget/Booking/card_hotel_book.dart';
+import 'package:tourism_project/core/utils/app_routes.dart';
+import 'package:tourism_project/data/models/details_book_plane_model.dart';
+import 'package:tourism_project/presentation/widget/Booking/card_plane_book.dart';
 import 'package:tourism_project/presentation/widget/Booking/text_address_edit_page.dart';
 import 'package:tourism_project/presentation/widget/animation_text/hero_text.dart';
 
-import '../../../core/utils/app_routes.dart';
-
-class HotelBookPage extends StatefulWidget {
-  const HotelBookPage({super.key});
+class PlaneBookPage extends StatefulWidget {
+  const PlaneBookPage({super.key});
 
   @override
-  State<HotelBookPage> createState() => _HotelBookPageState();
+  State<PlaneBookPage> createState() => _PlaneBookPageState();
 }
 
-class _HotelBookPageState extends State<HotelBookPage> {
-  List<DetailsBookHotelModel> detailsBookHotel = [];
+class _PlaneBookPageState extends State<PlaneBookPage> {
+  List<DetailsBookPlaneModel> detailsBookPlane = [];
 
   bool isExpanded = false;
-  @override
-  void initState() {
-    super.initState();
-    context.read<DetailsBookHotelCubit>().getAllDetailsBookHotel();
-  }
-
   void toggleExpande() {
     setState(() {
       isExpanded = !isExpanded;
@@ -38,20 +31,26 @@ class _HotelBookPageState extends State<HotelBookPage> {
 
   void _handleDelete(int id) {
     setState(() {
-      detailsBookHotel.removeWhere((hotel) => hotel.id == id);
+      detailsBookPlane.removeWhere((plane) => plane.id == id);
     });
   }
 
   @override
+  void initState() {
+    super.initState();
+    context.read<DetailsBookPlaneCubit>().getAllDetailsBookPlane();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocConsumer<DetailsBookHotelCubit, DetailsBookHotelState>(
+    return BlocConsumer<DetailsBookPlaneCubit, DetailsBookPlaneState>(
         listener: (context, state) {
-      if (state is DetailsBookHotelSuccess) {
-        detailsBookHotel = (state).detailsBookHotel;
+      if (state is DetailsBookPlaneSuccess) {
+        detailsBookPlane = (state).detailsBookPlane;
         // ScaffoldMessenger.of(context)
         //     .showSnackBar(const SnackBar(content: Text("state.success")));
       }
-      if (state is DetailsBookHotelFailure) {
+      if (state is DetailsBookPlaneFailure) {
         ScaffoldMessenger.of(context)
             .showSnackBar(const SnackBar(content: Text("state.fauil")));
       }
@@ -62,18 +61,18 @@ class _HotelBookPageState extends State<HotelBookPage> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             const SizedBox(height: 5),
-            detailsBookHotel.isNotEmpty
+            detailsBookPlane.isNotEmpty
                 ? AddressEditAnPage(
-                    text: 'Your Hotel',
+                    text: 'Your Plane',
                     color: Colors.black,
                     fontSize: 35,
                   )
                 : const Text(''),
             const SizedBox(height: 5),
             Expanded(
-                child: state is DetailsBookHotelSuccess
+                child: state is DetailsBookPlaneSuccess?
                     ? Center(
-                        child: detailsBookHotel.isEmpty
+                        child: detailsBookPlane.isEmpty
                             ? Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -90,7 +89,7 @@ class _HotelBookPageState extends State<HotelBookPage> {
                                   TextButton(
                                       onPressed: () {
                                         GoRouter.of(context)
-                                            .push(AppRoutes.hotelPage);
+                                            .push(AppRoutes.flightPage);
                                       },
                                       child: ScaleTextOrIcon(
                                         icon: false,
@@ -106,19 +105,18 @@ class _HotelBookPageState extends State<HotelBookPage> {
                                 ],
                               )
                             : ListView.builder(
-                                itemCount: detailsBookHotel.length,
+                                itemCount: detailsBookPlane.length,
                                 itemBuilder: (BuildContext context, int index) {
-                                  return Padding(
-                                      padding: const EdgeInsets.only(top: 35),
-                                      child: BlocProvider(
-                                          create: (context) =>
-                                              ShowDetailsBookHotelCubit(),
-                                          child: CardHotelBook(
-                                            detailsBookHotelModel:
-                                                detailsBookHotel[index],
-                                            onDelete: () => _handleDelete(
-                                                detailsBookHotel[index].id),
-                                          )));
+                                  return BlocProvider(
+                                    create: (context) =>
+                                        ShowDetailsBookPlaneCubit(),
+                                    child: CardPlaeBook(
+                                      detailsBookPlaneModel:
+                                          detailsBookPlane[index],
+                                      onDelete: () => _handleDelete(
+                                          detailsBookPlane[index].id),
+                                    ),
+                                  );
                                 },
                               ),
                       )
@@ -126,7 +124,7 @@ class _HotelBookPageState extends State<HotelBookPage> {
                         child: Container(
                             height: 200,
                             width: 200,
-                            child: Lottie.asset(AppImage.loading)))),
+                            child: Lottie.asset(AppImage.loading))))
           ]),
         ),
       );

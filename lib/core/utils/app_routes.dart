@@ -34,4 +34,5 @@ class AppRoutes {
   static const String searchCountryPage = '/searchCountryPage';
   static const String searchAreaPage = '/searchAreaPage';
   static const String placeCountry = '/placescountryPage';
+  static const String favoritePage = '/FavoritePage';
 }

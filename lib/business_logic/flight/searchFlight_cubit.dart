@@ -38,8 +38,7 @@ class SearchFlightCubit extends Cubit<SearchFlightState> {
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
         goingAndReturnPlaneTrip = GoingAndReturnPlaneTrip.fromJson(data);
-        print(
-            "✅ this response body for going and return trip plane\n ${response.body}");
+        print(response.body);
         emit(SearchFlightSuccess(
             goingAndReturnPlaneTrip: goingAndReturnPlaneTrip));
       } else {
@@ -48,12 +47,7 @@ class SearchFlightCubit extends Cubit<SearchFlightState> {
         print("api error ${response.statusCode} , with body ${response.body}");
       }
     } catch (e) {
-      print("$e");
-      try {
-        emit(SearchFlightFailure(errMessage: e.toString()));
-      } catch (e) {
-        print(e);
-      }
+      emit(SearchFlightFailure(errMessage: e.toString()));
     }
     //! comment print here becuase it make null check operator
     // print(
@@ -86,7 +80,8 @@ class SearchFlightCubit extends Cubit<SearchFlightState> {
         goingPlaneTrip =
             data.map((e) => GoingPlaneTrip.fromJson(e)).toList(growable: true);
         print(response.body);
-        emit(SearchFlightSuccess(goingPlaneTrip: goingPlaneTrip));
+        emit(SearchFlightSuccess(
+            goingPlaneTrip: goingPlaneTrip, goingAndReturnPlaneTrip: null));
       } else {
         var message = json.decode(response.body);
         emit(SearchFlightFailure(errMessage: message['message'].toString()));

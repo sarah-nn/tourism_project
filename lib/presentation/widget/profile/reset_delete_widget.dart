@@ -33,7 +33,11 @@ class ResetAndDelete extends StatelessWidget {
         ),
         InkWell(
           onTap: () {
-            showAlertDialog(context,
+            showAlertDialogQuestion(context, () {
+              Navigator.pop(context);
+            }, () {
+              Navigator.pop(context);
+            }, false,
                 "Are you sure that you want to\ndelete your accont ?\n\n❗ You will loose all your data .\n");
           },
           child: Text(

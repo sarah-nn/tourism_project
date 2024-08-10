@@ -4,6 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_images.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
+import 'package:tourism_project/presentation/widget/Booking/details_price_booking_static/card_prce_room.dart';
+import 'package:tourism_project/presentation/widget/Booking/details_price_booking_static/card_price_places.dart';
+import 'package:tourism_project/presentation/widget/Booking/details_price_booking_static/card_price_ticket_plane.dart';
+import 'package:tourism_project/presentation/widget/Booking/text_address_edit_page.dart';
+import 'package:tourism_project/presentation/widget/animation_text/hero_text.dart';
 import 'package:tourism_project/presentation/widget/hotel/custom_elevated_buttom.dart';
 
 showAlertDialog(BuildContext context, String message) {
@@ -54,51 +59,170 @@ showAlertDialog(BuildContext context, String message) {
   );
 }
 
+showDetailsPriceBookStatic(BuildContext context,
+    {required int numDays,
+    required int numFreiends,
+    required int roomNedd,
+    required double priceRoom,
+    required String ticketgoing,
+    required String ticketReturn,
+    required double ticketPlaces,
+    required double totalPrice}) {
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+      contentPadding: const EdgeInsets.all(9),
+      title: AddressEditAnPage(
+        color: AppColor.fifeColor,
+        fontSize: 25,
+        text: 'Show details price :',
+      ),
+      content: StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) =>
+              SingleChildScrollView(
+                  child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '$numDays-Days trip with $numFreiends Person',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  CardRoomPrice(
+                    numRoom: roomNedd,
+                    priceRooms: priceRoom,
+                    totalPriceRoom: numDays * priceRoom,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  CardTicketPrice(
+                      priceTicketGoing: ticketgoing,
+                      priceTicketReturn: ticketReturn,
+                      totalpriceTicket:
+                          // ignore: unnecessary_string_interpolations
+                          '${(double.parse(ticketgoing) + double.parse(ticketReturn)) * numFreiends}'),
+                  const SizedBox(height: 16),
+                  CardPricePlaces(
+                    pricePlaces: ticketPlaces,
+                    totalPrice: ticketPlaces * numFreiends,
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Row(
+                        children: [
+                          const Text(
+                            'Total price book : ',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Poppins'),
+                          ),
+                          Text(
+                            '$totalPrice\$',
+                            style: const TextStyle(
+                                color: Colors.red, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ))));
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
 showAlertDialogQuestion(BuildContext context, void Function()? onTapOk,
-    void Function()? onTapCancel) {
+    void Function()? onTapCancel, bool textWarning, String text) {
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-    content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset(
-            "assets/images/question.png",
-            scale: 5,
-          ),
-          const SizedBox(height: 20),
-          const Text(
-            'You want cancel book ?',
-            style:
-                TextStyle(fontWeight: FontWeight.bold, color: Colors.black54),
-          ),
-          const SizedBox(height: 30),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              GestureDetector(
-                onTap: onTapCancel,
-                child: Text(
-                  'cancel',
-                  style: TextStyle(
-                      color: AppColor.primaryColor,
-                      fontWeight: FontWeight.bold),
+    content: Stack(clipBehavior: Clip.none, children: [
+      Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 40),
+            Text(
+              text,
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.black54),
+            ),
+            textWarning
+                ? const SizedBox(
+                    height: 15,
+                  )
+                : SizedBox(),
+            textWarning
+                ? Column(children: [
+                    ScaleTextOrIcon(
+                      icon: true,
+                      icons: Icons.warning_amber_outlined,
+                      text: "",
+                      style: null,
+                    ),
+                    ScaleTextOrIcon(
+                      icon: false,
+                      text:
+                          'will be discount 50% because you are\n canceling the booking befor 48 hours',
+                      style: const TextStyle(
+                          fontSize: 15,
+                          fontFamily: 'normal',
+                          color: Color.fromARGB(255, 242, 105, 95)),
+                      icons: null,
+                    )
+                  ])
+                : Container(),
+            const SizedBox(height: 25),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                GestureDetector(
+                  onTap: onTapCancel,
+                  child: Text(
+                    'cancel',
+                    style: TextStyle(
+                        color: AppColor.primaryColor,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-              const SizedBox(width: 30),
-              GestureDetector(
-                onTap: onTapOk,
-                child: Text(
-                  'ok',
-                  style: TextStyle(
-                      color: AppColor.primaryColor,
-                      fontWeight: FontWeight.bold),
+                const SizedBox(width: 30),
+                GestureDetector(
+                  onTap: onTapOk,
+                  child: Text(
+                    'delete',
+                    style: TextStyle(
+                        color: AppColor.primaryColor,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-            ],
-          )
-        ]),
+              ],
+            )
+          ]),
+      Positioned(
+        top: -75,
+        left: 60,
+        child: CircleAvatar(
+          radius: 50,
+          backgroundColor: AppColor.secondColor,
+          child: CircleAvatar(
+              radius: 40,
+              backgroundImage: AssetImage(
+                'assets/images/question.png',
+              )),
+        ),
+      )
+    ]),
   );
 
   // show the dialog

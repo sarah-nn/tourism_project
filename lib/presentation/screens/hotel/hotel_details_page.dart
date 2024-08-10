@@ -5,6 +5,7 @@ import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/data/models/room_model.dart';
+import 'package:tourism_project/presentation/widget/flight/addName_addNote.dart';
 import 'package:tourism_project/presentation/widget/hotel/custom_elevated_buttom.dart';
 import 'package:tourism_project/presentation/widget/hotel/info_book_room_widget.dart';
 
@@ -14,6 +15,7 @@ class InfoBookingHotelPage extends StatefulWidget {
   String countryId;
   String startDate;
   String endDate;
+  bool close = false;
   InfoBookingHotelPage({
     super.key,
     required this.HotelId,
@@ -30,7 +32,9 @@ class _InfoBookingHotelPageState extends State<InfoBookingHotelPage> {
   int numTowCapacity = 0;
   int numFourCapacity = 0;
   int numSixCapacity = 0;
-  String tripName = 'booking';
+  String tripName = 'without';
+  String tripNote = 'without';
+
   late RoomModel roomModel;
   late RoomCubit myBloc;
 
@@ -217,33 +221,19 @@ class _InfoBookingHotelPageState extends State<InfoBookingHotelPage> {
                               const SizedBox(
                                 height: 15,
                               ),
-                              Text(
-                                'Select name booking :',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'normal',
-                                    fontSize: 21,
-                                    color: AppColor.fifeColor),
-                              ),
-                              const SizedBox(height: 10),
-                              Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: AppColor.secondColor,
-                                ),
-                                child: TextFormField(
-                                  cursorColor: AppColor.primaryColor,
-                                  onChanged: (val) {
-                                    tripName = val;
-                                  },
-                                  decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: "  name booking",
-                                      hintStyle:
-                                          TextStyle(color: Colors.black54)),
-                                ),
+                              AddNameAndNote(
+                                onSubmittedName: (value) {
+                                  value.isNotEmpty
+                                      ? tripName = value
+                                      : tripName = 'without name';
+                                  Navigator.pop(context);
+                                },
+                                onSubmittedNote: (value) {
+                                  value.isNotEmpty
+                                      ? tripNote = value
+                                      : tripNote = 'not found !';
+                                  Navigator.pop(context);
+                                },
                               ),
                               const SizedBox(height: 20),
                               WidgetElevatedButton(
@@ -260,6 +250,7 @@ class _InfoBookingHotelPageState extends State<InfoBookingHotelPage> {
                                         'Sorry , there are no vacant rooms in this date');
                                   } else {
                                     myBloc.bookHotel(
+                                        tripNote: tripNote,
                                         tripName: tripName,
                                         destinationTripId: widget.countryId,
                                         hotelId: widget.HotelId,

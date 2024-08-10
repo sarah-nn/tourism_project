@@ -1,7 +1,8 @@
 class EndPoint {
-  static const String baseUrl = 'http://192.168.43.119:8000/api'; //for me
-  //static const String baseUrl = 'http://192.168.43.176:8000/api'; //for Oula
-  static const String imageBaseUrl = 'http://192.168.43.119:8000/';
+  // static const String baseUrl = 'http://192.168.43.119:8000/api'; //for me
+  static const String baseUrl = 'http://192.168.43.176:8000/api'; //for Oula
+  //static const String imageBaseUrl = 'http://192.168.43.119:8000/';
+  static const String imageBaseUrl = 'http://192.168.43.176:8000/';
 
 //======================== Auth ========================
   static const String register = '$baseUrl/register';
@@ -54,6 +55,7 @@ class EndPoint {
 //==================== Flight ==========================
   static const String searchFlight = '$baseUrl/user/search-for-plane-trip';
   static const String flightDetails = '$baseUrl/user/show-plane-trip-details/';
+  static const String bookPlane = '$baseUrl/user/plane_book';
 
 //======================== Hotel=====================
   static const String searchHotel = '$baseUrl/user/get_Hotel_By_Country/';
@@ -65,10 +67,24 @@ class EndPoint {
   static const String showDetailsBookHotel = '$baseUrl/user/show_hotel_trip/';
   static const String deleteBookinHotel = '$baseUrl/user/delete_dynamic_trip/';
   static const String editBookHotel = '$baseUrl/user/update_hotel_book/';
+  static const String detailsBookPlane = '$baseUrl/user/all_my_plane_trip';
+  static const String showDetailsBookPlane = '$baseUrl/user/show_plane_trip/';
+  static const String editBookPlane = '$baseUrl/user/update_plane_book/';
+  static const String detailsBookStaticTrip =
+      '$baseUrl/user/show-all-my-staic-trip-books';
+  static const String deleteBookStaticTrip =
+      '$baseUrl/user/delete-static-trip-book/';
+  static const String showDetailPriceTrippStatic =
+      '$baseUrl/user/show-price-details/';
 
 //======================== Activity =====================
   static const String getAllActivity = '$baseUrl/user/get-all-activity/';
 
 //======================== Notes =============
   static const String getAllNotes = '$baseUrl/user/get-notes';
+  //================favourite===============
+  //====================favorite=========================
+  static const String getFavorite = '$baseUrl/get-all-favorite';
+  static const String addFavorite = '$baseUrl/set-favorite';
+  static const String deleteFavorite = '$baseUrl/delete-favorite';
 }

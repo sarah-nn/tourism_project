@@ -35,8 +35,53 @@ class DetailsPlaneTripCubit extends Cubit<DetailsPlaneTripState> {
       }
     } catch (e) {
       print("$e");
-      emit(DetailsPlaneTripFailure(errMessage: e.toString()));
+      // emit(DetailsPlaneTripFailure(errMessage: e.toString()));
     }
     return goingPlaneTrip;
+  }
+
+  Future<void> bookPlane({
+    required String sourceTripId,
+    required String destinationTripId,
+    required String tripName,
+    required String numberOfPeople,
+    // required String startDate,
+    // required String endDate,
+    required String tripNote,
+    required String planeTripId,
+    //   required String planeTripAwayId
+  }) async {
+    var uri = Uri.parse(EndPoint.bookPlane);
+    var header = {
+      'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $myToken'
+    };
+    var response = await http.post(uri, headers: header, body: {
+      'source_trip_id': sourceTripId,
+      'destination_trip_id': destinationTripId,
+      'trip_name': tripName,
+      'number_of_people': numberOfPeople,
+      // 'start_date': startDate,
+      //'end_date': endDate,
+      'trip_note': tripNote,
+      'plane_trip_id': planeTripId,
+      // 'plane_trip_away_id': planeTripAwayId
+    });
+    try {
+      // emit(RoomLoading());
+      if (response.statusCode == 200) {
+        emit(BookPlaneSuccess());
+        print(response.body);
+      } else {
+        var message = json.decode(response.body);
+        print(message);
+        emit(BookPlaneFailure(errMessage: message['message'].toString()));
+        print("api error${response.statusCode}");
+      }
+    } catch (e) {
+      print("$e");
+      emit(BookPlaneFailure(errMessage: e.toString()));
+    }
   }
 }

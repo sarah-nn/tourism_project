@@ -4,9 +4,10 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:tourism_project/business_logic/details_book.dart/show_details_book_hotel_cubit.dart';
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
-import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/details_book_hotel_model.dart';
 import 'package:tourism_project/data/models/show_details_book_hotel_model.dart';
+import 'package:tourism_project/presentation/widget/Booking/text_info.dart';
+import 'package:tourism_project/presentation/widget/Booking/text_name.dart';
 
 class CardHotelBook extends StatefulWidget {
   const CardHotelBook(
@@ -24,7 +25,7 @@ class _CardHotelBookState extends State<CardHotelBook> {
   bool isExpanded = false;
   bool isEditingName = false;
   final TextEditingController _controllerNameBook = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
+  //final FocusNode _focusNode = FocusNode();
   List<DetailsBookHotelModel> hotels = [];
   int addRoomC2 = 0;
   int addRoomC4 = 0;
@@ -34,6 +35,12 @@ class _CardHotelBookState extends State<CardHotelBook> {
   String? nameBooking;
   String? warningEdit;
   bool successEdit = true;
+  bool comparte = false;
+  late DateTime date1;
+  late DateTime date2;
+  int difference = 0;
+  bool enableCancel = false;
+  bool enableEdit = false;
   void toggleExpande() {
     setState(() {
       isExpanded = !isExpanded;
@@ -47,13 +54,6 @@ class _CardHotelBookState extends State<CardHotelBook> {
     nameBooking = widget.detailsBookHotelModel.tripName;
     startDate = widget.detailsBookHotelModel.startDate;
     myBloc = BlocProvider.of<ShowDetailsBookHotelCubit>(context);
-  }
-
-  @override
-  void dispose() {
-    _controllerNameBook.dispose();
-    _focusNode.dispose();
-    super.dispose();
   }
 
   @override
@@ -85,8 +85,7 @@ class _CardHotelBookState extends State<CardHotelBook> {
         ));
         widget.onDelete();
       } else if (state is DeleteBookHotelFailure) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(state.errMessage)));
+        showAlertDialog(context, state.errMessage);
       }
       if (state is ShowDetailsBookHotelSuccess) {
         showDetailsBookHotelModel = (state).showDetailsBookHotelModel;
@@ -126,25 +125,15 @@ class _CardHotelBookState extends State<CardHotelBook> {
                   children: [
                     // const Text(' France '),
                     const SizedBox(height: 20),
-                    Row(
-                      children: [
-                        const Text(
-                          'start date : ',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(widget.detailsBookHotelModel.startDate),
-                      ],
-                    ),
+
+                    TextInfoBook(
+                        baseText: 'start date',
+                        secoundText: widget.detailsBookHotelModel.startDate),
                     const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        const Text(
-                          'end date : ',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(widget.detailsBookHotelModel.endDate),
-                      ],
-                    ),
+
+                    TextInfoBook(
+                        baseText: 'end date',
+                        secoundText: widget.detailsBookHotelModel.endDate),
                     !isExpanded
                         ? const SizedBox(height: 20)
                         : const SizedBox(height: 10),
@@ -165,53 +154,30 @@ class _CardHotelBookState extends State<CardHotelBook> {
                     if (isExpanded)
                       state is ShowDetailsBookHotelSuccess ||
                               state is DeleteBookHotelSuccess ||
+                              state is DeleteBookHotelFailure ||
                               state is EditBookHotelSuccess ||
                               state is EditBookHotelFailure
                           ? Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // MoreDetailsHotel(
-                                //   showDetailsBookHotelModel:
-                                //       showDetailsBookHotelModel!,
-                                // ),
-                                Row(
-                                  children: [
-                                    const Text(
-                                      'hote name : ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
+                                TextInfoBook(
+                                    baseText: 'hote name',
+                                    secoundText:
                                         '${showDetailsBookHotelModel?.hotel?.name}'),
-                                  ],
-                                ),
                                 const SizedBox(height: 10),
-                                Row(
-                                  children: [
-                                    const Text(
-                                      'location : ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
+                                TextInfoBook(
+                                    baseText: 'location',
+                                    secoundText:
                                         '${showDetailsBookHotelModel?.destinationTrip?.name}'),
-                                  ],
-                                ),
                                 const SizedBox(height: 10),
-                                Row(
-                                  children: [
-                                    const Text(
-                                      'num Room : ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
+                                TextInfoBook(
+                                    baseText: 'num Room',
+                                    secoundText:
                                         '${showDetailsBookHotelModel?.dynamicTrip?.roomsCount}'),
-                                  ],
-                                ),
+                                const SizedBox(height: 10),
                                 const SizedBox(height: 10),
                                 Card(
-                                  elevation: 7,
+                                  elevation: 3,
                                   child: DataTable(
                                       headingRowColor:
                                           MaterialStateProperty.all(
@@ -256,21 +222,13 @@ class _CardHotelBookState extends State<CardHotelBook> {
                                               ]))),
                                 ),
                                 const SizedBox(height: 10),
-                                Row(
-                                  children: [
-                                    const Text(
-                                      'Total price : ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      '${showDetailsBookHotelModel?.dynamicTrip?.price} ',
-                                      style: const TextStyle(
-                                          fontSize: 17,
-                                          backgroundColor: Color.fromARGB(
-                                              255, 243, 218, 222)),
-                                    ),
-                                  ],
+                                TextInfoBookPriceAndNote(
+                                  baseText: 'Total price',
+                                  secoundText:
+                                      '${showDetailsBookHotelModel?.dynamicTrip?.price}\$',
+                                  sizeSecound: 20,
+                                  backgroundColorSecound:
+                                      const Color.fromARGB(255, 243, 218, 222),
                                 ),
                                 const SizedBox(height: 20),
                                 isExpanded
@@ -308,401 +266,220 @@ class _CardHotelBookState extends State<CardHotelBook> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            showDialog(
-                                barrierDismissible: false,
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                      actionsPadding: EdgeInsets.all(5),
-                                      contentPadding: EdgeInsets.only(
-                                          top: 15,
-                                          bottom: 7,
-                                          left: 20,
-                                          right: 20),
-                                      backgroundColor: const Color.fromARGB(
-                                          255, 242, 249, 253),
-                                      // actionsPadding: EdgeInsets.all(10),
-                                      actions: [
-                                        TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                              isEditingName = false;
-                                              addRoomC2 = 0;
-                                              addRoomC4 = 0;
-                                              addRoomC6 = 0;
-                                            },
-                                            child: const Text('cancel')),
-                                        TextButton(
-                                            onPressed: () {
-                                              myBloc.editBookHotel(
-                                                  widget
-                                                      .detailsBookHotelModel.id
-                                                      .toString(),
-                                                  nameBooking!,
-                                                  endDate!,
-                                                  addRoomC2.toString(),
-                                                  addRoomC4.toString(),
-                                                  addRoomC6.toString());
-
-                                              successEdit
-                                                  ? setState(() {
+                            date1 = DateTime.now();
+                            date2 = DateTime.parse(
+                                widget.detailsBookHotelModel.startDate);
+                            if (date2.isBefore(date1) ||
+                                date2.isAtSameMomentAs(date1)) {
+                              enableEdit = true;
+                            } else {
+                              enableEdit = false;
+                            }
+                            enableEdit
+                                ? showAlertDialog(context,
+                                    'sorry you cant edit book because the trip is started ')
+                                : showDialog(
+                                    barrierDismissible: false,
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                          actionsPadding:
+                                              const EdgeInsets.all(5),
+                                          contentPadding: const EdgeInsets.only(
+                                              top: 15,
+                                              bottom: 7,
+                                              left: 20,
+                                              right: 20),
+                                          backgroundColor: const Color.fromARGB(
+                                              255, 242, 249, 253),
+                                          // actionsPadding: EdgeInsets.all(10),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                  isEditingName = false;
+                                                  addRoomC2 = 0;
+                                                  addRoomC4 = 0;
+                                                  addRoomC6 = 0;
+                                                },
+                                                child: const Text('cancel')),
+                                            TextButton(
+                                                onPressed: () {
+                                                  myBloc.editBookHotel(
                                                       widget
                                                           .detailsBookHotelModel
-                                                          .endDate = endDate!;
-                                                      widget.detailsBookHotelModel
-                                                              .tripName =
-                                                          nameBooking!;
-                                                    })
-                                                  : null;
-                                              //  }
+                                                          .id
+                                                          .toString(),
+                                                      nameBooking!,
+                                                      endDate!,
+                                                      addRoomC2.toString(),
+                                                      addRoomC4.toString(),
+                                                      addRoomC6.toString());
 
-                                              isEditingName = false;
-                                              addRoomC2 = 0;
-                                              addRoomC4 = 0;
-                                              addRoomC6 = 0;
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: const Text('Edit'))
-                                      ],
-                                      title: Text(
-                                        'Edit Booking :',
-                                        style: TextStyle(
-                                            color: AppColor.primaryColor,
-                                            fontSize: 28,
-                                            fontFamily:
-                                                'BrightDiamondPersonalUseOnl-OV2Ze',
-                                            shadows: const [
-                                              Shadow(
-                                                  offset: Offset(2.0, 2.0),
-                                                  blurRadius: 3.0,
-                                                  color: Color.fromARGB(
-                                                      255, 171, 230, 248))
-                                            ],
-                                            decoration:
-                                                TextDecoration.underline,
-                                            decorationThickness: 1,
-                                            decorationColor:
-                                                AppColor.primaryColor),
-                                      ),
-                                      content: StatefulBuilder(builder:
-                                          (BuildContext context,
-                                              StateSetter setState) {
-                                        _controllerNameBook.text = widget
-                                            .detailsBookHotelModel.tripName;
+                                                  successEdit
+                                                      ? setState(() {
+                                                          widget
+                                                              .detailsBookHotelModel
+                                                              .endDate = endDate!;
+                                                          widget.detailsBookHotelModel
+                                                                  .tripName =
+                                                              nameBooking!;
+                                                        })
+                                                      : null;
+                                                  //  }
 
-                                        if (isEditingName) {
-                                          WidgetsBinding.instance
-                                              .addPostFrameCallback((_) {
-                                            FocusScope.of(context)
-                                                .requestFocus(_focusNode);
-                                          });
-                                        }
-                                        return SingleChildScrollView(
-                                          child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                //===================== NAME BOOKING =======================
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
+                                                  isEditingName = false;
+                                                  addRoomC2 = 0;
+                                                  addRoomC4 = 0;
+                                                  addRoomC6 = 0;
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text('Edit'))
+                                          ],
+                                          title: Text(
+                                            'Edit Booking :',
+                                            style: TextStyle(
+                                                color: AppColor.primaryColor,
+                                                fontSize: 28,
+                                                fontFamily:
+                                                    'BrightDiamondPersonalUseOnl-OV2Ze',
+                                                shadows: const [
+                                                  Shadow(
+                                                      offset: Offset(2.0, 2.0),
+                                                      blurRadius: 3.0,
+                                                      color: Color.fromARGB(
+                                                          255, 171, 230, 248))
+                                                ],
+                                                decoration:
+                                                    TextDecoration.underline,
+                                                decorationThickness: 1,
+                                                decorationColor:
+                                                    AppColor.primaryColor),
+                                          ),
+                                          content: StatefulBuilder(builder:
+                                              (BuildContext context,
+                                                  StateSetter setState) {
+                                            _controllerNameBook.text = widget
+                                                .detailsBookHotelModel.tripName;
+                                            return SingleChildScrollView(
+                                              child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
                                                   children: [
-                                                    Icon(
-                                                      Icons.arrow_right,
-                                                      color:
-                                                          AppColor.primaryColor,
+                                                    //===================== NAME BOOKING =======================
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Icon(
+                                                          Icons.arrow_right,
+                                                          color: AppColor
+                                                              .primaryColor,
+                                                        ),
+                                                        const Text(
+                                                          'Name booking :',
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                      ],
                                                     ),
-                                                    const Text(
-                                                      'Name booking :',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ],
-                                                ),
-                                                isEditingName
-                                                    ? TextField(
-                                                        controller:
-                                                            _controllerNameBook,
-                                                        focusNode: _focusNode,
-                                                        onSubmitted: (value) {
-                                                          setState(() {
-                                                            isEditingName =
-                                                                false;
-                                                            nameBooking = value;
-                                                          });
-                                                        },
-                                                      )
-                                                    : Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Text(
-                                                            '   $nameBooking',
-                                                          ),
-                                                          IconButton(
-                                                            onPressed: () {
+                                                    isEditingName
+                                                        ? TextField(
+                                                            autofocus: true,
+                                                            controller:
+                                                                _controllerNameBook,
+                                                            //  focusNode: _focusNode,
+                                                            onSubmitted:
+                                                                (value) {
                                                               setState(() {
                                                                 isEditingName =
-                                                                    true;
+                                                                    false;
+                                                                nameBooking =
+                                                                    value;
                                                               });
                                                             },
-                                                            icon: Icon(
-                                                              Icons.edit,
-                                                              color: AppColor
-                                                                  .primaryColor,
-                                                            ),
                                                           )
-                                                        ],
-                                                      ),
-                                                !isEditingName
-                                                    ? const Divider(
-                                                        thickness: 0.6,
-                                                        color: Color.fromARGB(
-                                                            255, 168, 166, 166),
-                                                      )
-                                                    : Container(),
-                                                isEditingName
-                                                    ? const SizedBox(
-                                                        height: 15,
-                                                      )
-                                                    : const SizedBox(
-                                                        height: 0,
-                                                      ),
-                                                //========================= END DATE ===========================
+                                                        : Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                '   $nameBooking',
+                                                              ),
+                                                              IconButton(
+                                                                onPressed: () {
+                                                                  setState(() {
+                                                                    isEditingName =
+                                                                        true;
+                                                                  });
+                                                                },
+                                                                icon: Icon(
+                                                                  Icons.edit,
+                                                                  color: AppColor
+                                                                      .primaryColor,
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                    !isEditingName
+                                                        ? const Divider(
+                                                            thickness: 0.6,
+                                                            color:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    168,
+                                                                    166,
+                                                                    166),
+                                                          )
+                                                        : Container(),
+                                                    isEditingName
+                                                        ? const SizedBox(
+                                                            height: 15,
+                                                          )
+                                                        : const SizedBox(
+                                                            height: 0,
+                                                          ),
+                                                    //========================= END DATE ===========================
 
-                                                Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons.arrow_right,
-                                                      color:
-                                                          AppColor.primaryColor,
-                                                    ),
-                                                    const Text(
-                                                      'End date :',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ],
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text('  $endDate'),
-                                                    IconButton(
-                                                      onPressed: () async {
-                                                        await selectData(
-                                                            context);
-                                                        setState(() {});
-                                                      },
-                                                      icon: Icon(
-                                                        Icons.edit,
-                                                        color: AppColor
-                                                            .primaryColor,
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                                const Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons
-                                                          .warning_amber_outlined,
-                                                      size: 15,
-                                                      color: Colors.red,
-                                                    ),
-                                                    Text(
-                                                      ' booking extension only',
-                                                      style: TextStyle(
-                                                          color: Colors.black45,
-                                                          fontSize: 12),
-                                                    ),
-                                                  ],
-                                                ),
-                                                const Divider(
-                                                  thickness: 0.6,
-                                                  color: Color.fromARGB(
-                                                      255, 168, 166, 166),
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                //==================================== count room =====================================
-                                                Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons.arrow_right,
-                                                      color:
-                                                          AppColor.primaryColor,
-                                                    ),
-                                                    const Text(
-                                                      'Count room :',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ],
-                                                ),
-                                                Column(
-                                                  children: [
                                                     Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceEvenly,
                                                       children: [
-                                                        const Text(
-                                                          'Room Capaity_2 : ',
-                                                          style: TextStyle(
-                                                              fontSize: 15),
+                                                        Icon(
+                                                          Icons.arrow_right,
+                                                          color: AppColor
+                                                              .primaryColor,
                                                         ),
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .end,
-                                                          children: [
-                                                            IconButton(
-                                                              onPressed:
-                                                                  addRoomC2 != 0
-                                                                      ? () {
-                                                                          setState(
-                                                                              () {
-                                                                            addRoomC2--;
-                                                                          });
-                                                                        }
-                                                                      : null,
-                                                              icon: Icon(
-                                                                Iconsax.minus,
-                                                                color: addRoomC2 !=
-                                                                        0
-                                                                    ? AppColor
-                                                                        .IconAdd
-                                                                    : AppColor
-                                                                        .IconMinus,
-                                                              ),
-                                                            ),
-                                                            const SizedBox(
-                                                                width: 5),
-                                                            Text('$addRoomC2'),
-                                                            IconButton(
-                                                              onPressed: () {
-                                                                setState(() {
-                                                                  addRoomC2++;
-                                                                });
-                                                              },
-                                                              icon: Icon(
-                                                                Iconsax.add,
-                                                                color: AppColor
-                                                                    .IconAdd,
-                                                              ),
-                                                            )
-                                                          ],
-                                                        )
+                                                        const Text(
+                                                          'End date :',
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
                                                       ],
                                                     ),
                                                     Row(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
-                                                              .spaceEvenly,
+                                                              .spaceBetween,
                                                       children: [
-                                                        const Text(
-                                                          'Room Capaity_4 : ',
-                                                          style: TextStyle(
-                                                              fontSize: 15),
-                                                        ),
-                                                        Row(
-                                                          children: [
-                                                            IconButton(
-                                                              onPressed:
-                                                                  addRoomC4 != 0
-                                                                      ? () {
-                                                                          setState(
-                                                                              () {
-                                                                            addRoomC4--;
-                                                                          });
-                                                                        }
-                                                                      : null,
-                                                              icon: Icon(
-                                                                Iconsax.minus,
-                                                                color: addRoomC4 !=
-                                                                        0
-                                                                    ? AppColor
-                                                                        .IconAdd
-                                                                    : AppColor
-                                                                        .IconMinus,
-                                                              ),
-                                                            ),
-                                                            const SizedBox(
-                                                                width: 5),
-                                                            Text('$addRoomC4'),
-                                                            IconButton(
-                                                              onPressed: () {
-                                                                setState(() {
-                                                                  addRoomC4++;
-                                                                });
-                                                              },
-                                                              icon: Icon(
-                                                                Iconsax.add,
-                                                                color: AppColor
-                                                                    .IconAdd,
-                                                              ),
-                                                            )
-                                                          ],
-                                                        )
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceEvenly,
-                                                      children: [
-                                                        const Text(
-                                                          'Room Capaity_6 : ',
-                                                          style: TextStyle(
-                                                              fontSize: 15),
-                                                        ),
-                                                        Row(
-                                                          children: [
-                                                            IconButton(
-                                                              onPressed:
-                                                                  addRoomC6 != 0
-                                                                      ? () {
-                                                                          setState(
-                                                                              () {
-                                                                            addRoomC6--;
-                                                                          });
-                                                                        }
-                                                                      : null,
-                                                              icon: Icon(
-                                                                Iconsax.minus,
-                                                                color: addRoomC6 !=
-                                                                        0
-                                                                    ? AppColor
-                                                                        .IconAdd
-                                                                    : AppColor
-                                                                        .IconMinus,
-                                                              ),
-                                                            ),
-                                                            const SizedBox(
-                                                                width: 5),
-                                                            Text('$addRoomC6'),
-                                                            IconButton(
-                                                              onPressed: () {
-                                                                setState(() {
-                                                                  addRoomC6++;
-                                                                });
-                                                              },
-                                                              icon: Icon(
-                                                                Iconsax.add,
-                                                                color: AppColor
-                                                                    .IconAdd,
-                                                              ),
-                                                            )
-                                                          ],
+                                                        Text('  $endDate'),
+                                                        IconButton(
+                                                          onPressed: () async {
+                                                            await selectData(
+                                                                context);
+                                                            setState(() {});
+                                                          },
+                                                          icon: Icon(
+                                                            Icons.edit,
+                                                            color: AppColor
+                                                                .primaryColor,
+                                                          ),
                                                         )
                                                       ],
                                                     ),
@@ -715,7 +492,7 @@ class _CardHotelBookState extends State<CardHotelBook> {
                                                           color: Colors.red,
                                                         ),
                                                         Text(
-                                                          ' new booking room only',
+                                                          ' booking extension only',
                                                           style: TextStyle(
                                                               color: Colors
                                                                   .black45,
@@ -731,26 +508,227 @@ class _CardHotelBookState extends State<CardHotelBook> {
                                                     const SizedBox(
                                                       height: 10,
                                                     ),
-                                                    // !successEdit
-                                                    //     ? Row(children: [
-                                                    //         const Icon(Icons
-                                                    //             .warning_sharp),
-                                                    //         Text(
-                                                    //           warningEdit!,
-                                                    //           style: const TextStyle(
-                                                    //               // fontWeight:
-                                                    //               //     FontWeight
-                                                    //               //         .bold,
-                                                    //               color: Colors.red),
-                                                    //         )
-                                                    //       ])
-                                                    //     : Container()
-                                                  ],
-                                                ),
-                                              ]),
-                                        );
-                                      }));
-                                });
+                                                    //==================================== count room =====================================
+                                                    Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.arrow_right,
+                                                          color: AppColor
+                                                              .primaryColor,
+                                                        ),
+                                                        const Text(
+                                                          'Count room :',
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Column(
+                                                      children: [
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
+                                                          children: [
+                                                            const Text(
+                                                              'Room Capaity_2 : ',
+                                                              style: TextStyle(
+                                                                  fontSize: 15),
+                                                            ),
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .end,
+                                                              children: [
+                                                                IconButton(
+                                                                  onPressed:
+                                                                      addRoomC2 !=
+                                                                              0
+                                                                          ? () {
+                                                                              setState(() {
+                                                                                addRoomC2--;
+                                                                              });
+                                                                            }
+                                                                          : null,
+                                                                  icon: Icon(
+                                                                    Iconsax
+                                                                        .minus,
+                                                                    color: addRoomC2 !=
+                                                                            0
+                                                                        ? AppColor
+                                                                            .IconAdd
+                                                                        : AppColor
+                                                                            .IconMinus,
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(
+                                                                    width: 5),
+                                                                Text(
+                                                                    '$addRoomC2'),
+                                                                IconButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    setState(
+                                                                        () {
+                                                                      addRoomC2++;
+                                                                    });
+                                                                  },
+                                                                  icon: Icon(
+                                                                    Iconsax.add,
+                                                                    color: AppColor
+                                                                        .IconAdd,
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            )
+                                                          ],
+                                                        ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
+                                                          children: [
+                                                            const Text(
+                                                              'Room Capaity_4 : ',
+                                                              style: TextStyle(
+                                                                  fontSize: 15),
+                                                            ),
+                                                            Row(
+                                                              children: [
+                                                                IconButton(
+                                                                  onPressed:
+                                                                      addRoomC4 !=
+                                                                              0
+                                                                          ? () {
+                                                                              setState(() {
+                                                                                addRoomC4--;
+                                                                              });
+                                                                            }
+                                                                          : null,
+                                                                  icon: Icon(
+                                                                    Iconsax
+                                                                        .minus,
+                                                                    color: addRoomC4 !=
+                                                                            0
+                                                                        ? AppColor
+                                                                            .IconAdd
+                                                                        : AppColor
+                                                                            .IconMinus,
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(
+                                                                    width: 5),
+                                                                Text(
+                                                                    '$addRoomC4'),
+                                                                IconButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    setState(
+                                                                        () {
+                                                                      addRoomC4++;
+                                                                    });
+                                                                  },
+                                                                  icon: Icon(
+                                                                    Iconsax.add,
+                                                                    color: AppColor
+                                                                        .IconAdd,
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            )
+                                                          ],
+                                                        ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
+                                                          children: [
+                                                            const Text(
+                                                              'Room Capaity_6 : ',
+                                                              style: TextStyle(
+                                                                  fontSize: 15),
+                                                            ),
+                                                            Row(
+                                                              children: [
+                                                                IconButton(
+                                                                  onPressed:
+                                                                      addRoomC6 !=
+                                                                              0
+                                                                          ? () {
+                                                                              setState(() {
+                                                                                addRoomC6--;
+                                                                              });
+                                                                            }
+                                                                          : null,
+                                                                  icon: Icon(
+                                                                    Iconsax
+                                                                        .minus,
+                                                                    color: addRoomC6 !=
+                                                                            0
+                                                                        ? AppColor
+                                                                            .IconAdd
+                                                                        : AppColor
+                                                                            .IconMinus,
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(
+                                                                    width: 5),
+                                                                Text(
+                                                                    '$addRoomC6'),
+                                                                IconButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    setState(
+                                                                        () {
+                                                                      addRoomC6++;
+                                                                    });
+                                                                  },
+                                                                  icon: Icon(
+                                                                    Iconsax.add,
+                                                                    color: AppColor
+                                                                        .IconAdd,
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            )
+                                                          ],
+                                                        ),
+                                                        const Row(
+                                                          children: [
+                                                            Icon(
+                                                              Icons
+                                                                  .warning_amber_outlined,
+                                                              size: 15,
+                                                              color: Colors.red,
+                                                            ),
+                                                            Text(
+                                                              ' new booking room only',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .black45,
+                                                                  fontSize: 12),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        const Divider(
+                                                          thickness: 0.6,
+                                                          color: Color.fromARGB(
+                                                              255,
+                                                              168,
+                                                              166,
+                                                              166),
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ]),
+                                            );
+                                          }));
+                                    });
                           },
                           child: Row(
                             children: [
@@ -767,20 +745,42 @@ class _CardHotelBookState extends State<CardHotelBook> {
                             ],
                           ),
                         ),
-                        //==========================================================================
+                        //==============================  cancel book  ===================================
                         const VerticalDivider(
                           thickness: 3.2,
                           width: 2,
                         ),
                         GestureDetector(
                           onTap: () {
-                            showAlertDialogQuestion(context, () {
-                              myBloc.deleteHotel(
-                                  widget.detailsBookHotelModel.id.toString());
-                              Navigator.pop(context);
-                            }, () {
-                              Navigator.pop(context);
-                            });
+                            date1 = DateTime.now();
+                            date2 = DateTime.parse(
+                                widget.detailsBookHotelModel.startDate);
+                            difference = date2.difference(date1).inHours;
+                            // print(difference * 1000 * 3600 * 24);
+                            if (difference >= 0 && difference <= 48) {
+                              comparte = true;
+                            } else {
+                              comparte = false;
+                            }
+                            if (date2.isBefore(date1) ||
+                                date2.isAtSameMomentAs(date1)) {
+                              enableCancel = true;
+                            } else {
+                              enableCancel = false;
+                            }
+
+                            print(difference);
+                            enableCancel
+                                ? showAlertDialog(context,
+                                    'sorry you cant cancel book because the trip is started ')
+                                : showAlertDialogQuestion(context, () {
+                                    myBloc.deleteHotel(widget
+                                        .detailsBookHotelModel.id
+                                        .toString());
+                                    Navigator.pop(context);
+                                  }, () {
+                                    Navigator.pop(context);
+                                  }, comparte, 'you want cancel book ?');
                           },
                           child: const Row(
                             children: [
@@ -801,29 +801,9 @@ class _CardHotelBookState extends State<CardHotelBook> {
             ),
           ),
         ),
-        Positioned(
-            top: -15,
-            left: 20,
-            child: Container(
-              decoration: BoxDecoration(
-                  border: Border.all(width: 0.7, color: AppColor.primaryColor),
-                  gradient: const LinearGradient(colors: [
-                    Color.fromARGB(255, 191, 223, 251),
-                    Color.fromARGB(255, 216, 246, 250),
-                    Color.fromARGB(255, 232, 233, 249),
-                  ]),
-                  borderRadius: BorderRadius.circular(15)),
-              child: Padding(
-                padding: const EdgeInsets.all(13.0),
-                child: Text(
-                  widget.detailsBookHotelModel.tripName,
-                  style: TextStyle(
-                      color: AppColor.fifeColor,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Poppins'),
-                ),
-              ),
-            ))
+        TextNameBook(
+          name: widget.detailsBookHotelModel.tripName,
+        )
       ]);
     });
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tourism_project/business_logic/favorite/favorite_cubit.dart';
 import 'package:tourism_project/business_logic/places/places_cubit.dart';
 import 'package:tourism_project/data/models/places_model.dart';
 import 'package:tourism_project/presentation/widget/places/places_item.dart';
@@ -30,7 +31,9 @@ class _GetAllPlacesWidgetState extends State<GetAllPlacesWidget> {
             return ListView.builder(
                 itemCount: myPlaces.length,
                 itemBuilder: (context, index) {
-                  return PlaceItem(place: myPlaces[index]);
+                  return BlocProvider(
+                      create: (context) => FavoriteCubit(),
+                      child: PlaceItem(place: myPlaces[index]));
                 });
           }
           return const Center(child: CircularProgressIndicator());

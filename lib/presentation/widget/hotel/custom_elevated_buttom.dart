@@ -28,7 +28,10 @@ class WidgetElevatedButton extends StatelessWidget {
         ),
         child: Text(
           text,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+              fontFamily: 'Philosopher'),
         ),
       ),
     );

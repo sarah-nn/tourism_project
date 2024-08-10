@@ -30,12 +30,25 @@ class WidgetDrawer extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Tourism App',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                      const Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          CircleAvatar(
+                            radius: 44,
+                            backgroundImage:
+                                AssetImage('assets/images/one.jpg'),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'Tourism App',
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white70,
+                                fontFamily: 'Pacifico'),
+                          ),
+                        ],
                       ),
                       IconButton(
                         onPressed: () {},
@@ -74,8 +87,11 @@ class WidgetDrawer extends StatelessWidget {
                   endIndent: 100,
                 ),
                 widgetListTile(
-                  icon: Iconsax.setting,
-                  text: "Setting",
+                  icon: Icons.favorite_border_outlined,
+                  text: "Favorites",
+                  onTap: () {
+                    GoRouter.of(context).push(AppRoutes.favoritePage);
+                  },
                 ),
                 widgetListTile(
                   icon: Icons.help_outline,

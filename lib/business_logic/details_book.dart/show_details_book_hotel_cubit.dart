@@ -26,7 +26,7 @@ class ShowDetailsBookHotelCubit extends Cubit<ShowDetailsBookHotelState> {
       if (response.statusCode == 200) {
         print('=============${response.body}');
 
-        var data2 = json.decode(response.body);
+        var data2 = json.decode(response.body)['data'];
         showDetailsBookHotel = ShowDetailsBookHotelModel.fromJson(data2);
         print('=============${response.body}');
         emit(ShowDetailsBookHotelSuccess(showDetailsBookHotel!));
