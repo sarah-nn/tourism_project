@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:tourism_project/core/database/cach_helper.dart';
+import 'package:tourism_project/core/fcm_services.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_images.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
@@ -32,10 +33,15 @@ class _HomePageState extends State<HomePage> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 10),
-            child: Icon(
-              Icons.notifications_active,
-              color: AppColor.primaryColor,
-              size: 27,
+            child: InkWell(
+              onTap: () async {
+                await FCMServices.getFcmToken();
+              },
+              child: Icon(
+                Icons.notifications_active,
+                color: AppColor.primaryColor,
+                size: 27,
+              ),
             ),
           )
         ],

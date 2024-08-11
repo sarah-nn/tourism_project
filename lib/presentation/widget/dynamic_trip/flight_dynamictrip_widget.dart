@@ -95,14 +95,18 @@ class _FlightDynamicTripState extends State<FlightDynamicTrip> {
               return BlocConsumer<SearchFlightCubit, SearchFlightState>(
                 listener: (context, state) {
                   if (state is SearchFlightSuccess) {
-                    print("SearchFlightSuccess");
-                    errMessage = '';
-                    _selectedOption == 'Round Trip'
-                        ? goingAndReturnPlaneTrip =
-                            (state).goingAndReturnPlaneTrip
-                        : planesList = (state).goingPlaneTrip!;
+                    try {
+                      print("SearchFlightSuccess");
+                      errMessage = '';
+                      _selectedOption == 'Round Trip'
+                          ? goingAndReturnPlaneTrip =
+                              (state).goingAndReturnPlaneTrip
+                          : planesList = (state).goingPlaneTrip!;
 
-                    print(planesList);
+                      print(planesList);
+                    } catch (e) {
+                      print(e);
+                    }
                   }
                   if (state is SearchFlightFailure) {
                     errMessage = state.errMessage;

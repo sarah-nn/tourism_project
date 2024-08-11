@@ -14,7 +14,7 @@ class Gallery extends StatelessWidget {
     List<String> images = [
       imageList[0].image!,
       imageList[1].image!,
-      imageList[2].image!,
+      //  imageList[2].image!,
     ];
 
     return SizedBox(

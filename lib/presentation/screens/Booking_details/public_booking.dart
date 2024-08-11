@@ -4,6 +4,7 @@ import 'package:tourism_project/business_logic/details_book.dart/details_book_ho
 import 'package:tourism_project/business_logic/details_book.dart/details_book_plane_cubit.dart';
 import 'package:tourism_project/business_logic/details_book.dart/details_book_static_trip_cubit.dart';
 import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
+import 'package:tourism_project/business_logic/static_trip/static_trip_cubit.dart';
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
@@ -107,9 +108,12 @@ class _BookUserState extends State<BookUser> {
               });
             },
             children: <Widget>[
-              BlocProvider(
+              MultiBlocProvider(providers: [
+                BlocProvider(create: (context) => StaticTripCubit()),
+                BlocProvider(
                   create: (context) => DetailsBookStaticTripCubit(),
-                  child: const TripBookPage()),
+                )
+              ], child: const TripBookPage()),
               BlocProvider(
                 create: (context) => DetailsBookPlaneCubit(),
                 child: const PlaneBookPage(),

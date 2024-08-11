@@ -121,6 +121,7 @@ class PlacesCubit extends Cubit<PlacesState> {
           }
         }
         print(response.body);
+        // ignore: missing_required_param
         emit(PlacesSuccess(placesCategory: place_category_list));
       } else {
         print("api error${response.statusCode}");

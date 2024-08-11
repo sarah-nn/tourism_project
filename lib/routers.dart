@@ -208,7 +208,7 @@ final GoRouter router = GoRouter(
     GoRoute(
         path: "/StaticTripDetailsPage/:id",
         builder: (context, state) {
-          final List<dynamic> imageList = state.extra as List<dynamic>;
+          List<dynamic>? imageList = state.extra as List<dynamic>?;
           return MultiBlocProvider(
             providers: [
               BlocProvider(create: (context) => StaticTripCubit()),

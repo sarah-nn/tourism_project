@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_images.dart';
@@ -11,13 +12,21 @@ class PaymentPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text(
-            "Payment",
-            style: MyTextStyle.headers,
-          ),
-          backgroundColor: Colors.white,
-          elevation: 0,
-        ),
+            title: Text(
+              "Payment",
+              style: MyTextStyle.headers.copyWith(fontSize: 35),
+            ),
+            backgroundColor: Colors.white,
+            elevation: 0,
+            leading: IconButton(
+              onPressed: () {
+                context.pop();
+              },
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.black,
+              ),
+            )),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: ListView(

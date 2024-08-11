@@ -176,6 +176,7 @@ class _EditBookStaticTripState extends State<EditBookStaticTrip> {
                     : customRow(
                         headlines[5], "\$ ${model?.priceAfterDiscount}"),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 5),

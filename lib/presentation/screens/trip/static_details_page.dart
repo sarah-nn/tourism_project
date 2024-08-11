@@ -19,9 +19,12 @@ import 'package:url_launcher/url_launcher.dart';
 
 class StaticTripDetailsPage extends StatefulWidget {
   final String tripId;
-  final List<dynamic> imageList;
-  const StaticTripDetailsPage(
-      {super.key, required this.tripId, required this.imageList});
+  final List<dynamic>? imageList;
+  const StaticTripDetailsPage({
+    super.key,
+    required this.tripId,
+    @required this.imageList,
+  });
 
   @override
   State<StaticTripDetailsPage> createState() => _StaticTripDetailsPageState();
@@ -43,6 +46,9 @@ class _StaticTripDetailsPageState extends State<StaticTripDetailsPage> {
   void initState() {
     super.initState();
     context.read<StaticTripCubit>().getStaticTripDetails(widget.tripId);
+    if (widget.imageList == null) {
+      print("🤣🤣🤣🤣🤣🤣");
+    }
   }
 
   @override
@@ -64,24 +70,26 @@ class _StaticTripDetailsPageState extends State<StaticTripDetailsPage> {
                         child: ListView(
                           children: [
                             const SizedBox(height: 25),
-                            CarouselSlider(
-                              disableGesture: true,
-                              items: [
-                                ...List.generate(
-                                    widget.imageList.length,
-                                    (index) => imageSlider(
-                                        widget.imageList[index]['image']))
-                              ],
-                              options: CarouselOptions(
-                                enableInfiniteScroll: false,
-                                reverse: true,
-                                height: 240,
-                                aspectRatio: 16 / 8,
-                                viewportFraction: 0.6,
-                                enlargeCenterPage: true,
-                                enlargeFactor: 0.3,
-                              ),
-                            ),
+                            widget.imageList != null
+                                ? CarouselSlider(
+                                    disableGesture: true,
+                                    items: [
+                                      ...List.generate(
+                                          widget.imageList!.length,
+                                          (index) => imageSlider(widget
+                                              .imageList![index]['image']))
+                                    ],
+                                    options: CarouselOptions(
+                                      enableInfiniteScroll: false,
+                                      reverse: true,
+                                      height: 240,
+                                      aspectRatio: 16 / 8,
+                                      viewportFraction: 0.6,
+                                      enlargeCenterPage: true,
+                                      enlargeFactor: 0.3,
+                                    ),
+                                  )
+                                : Container(),
                             const SizedBox(height: 10),
                             OneLineContainer(
                                 title: "Trip name",

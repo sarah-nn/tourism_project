@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
+import 'package:tourism_project/core/utils/app_images.dart';
+import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/data/models/dynamic_booklist_model.dart';
+import 'package:tourism_project/presentation/widget/animation_text/hero_text.dart';
 import 'package:tourism_project/presentation/widget/dynamic_trip/dynamic_booking_details/booking_card_widget.dart';
 
 class DynamicBookPage extends StatefulWidget {
@@ -97,7 +101,35 @@ class _DynamicBookPageState extends State<DynamicBookPage> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 22),
                           child: myList.isEmpty
-                              ? const Center(child: Text("No Booking Yet"))
+                              ? Center(
+                                  child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const SizedBox(height: 10),
+                                    const Text(
+                                      'Not found any Booking',
+                                      style: TextStyle(
+                                          fontFamily: 'normal',
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black54),
+                                    ),
+                                    const SizedBox(height: 15),
+                                    TextButton(
+                                        onPressed: () {},
+                                        child: ScaleTextOrIcon(
+                                          icon: false,
+                                          text: 'Booking now !',
+                                          style: TextStyle(
+                                            fontFamily: 'Pacifico',
+                                            fontSize: 24,
+                                            color: AppColor.primaryColor,
+                                          ),
+                                          icons: null,
+                                        )),
+                                    const SizedBox(height: 10)
+                                  ],
+                                ))
                               : ListView.builder(
                                   itemCount: myList.length,
                                   itemBuilder: (context, index) {
@@ -117,8 +149,11 @@ class _DynamicBookPageState extends State<DynamicBookPage> {
                       ),
                     ],
                   )
-                : const Center(
-                    child: CircularProgressIndicator(),
+                : Center(
+                    child: Container(
+                        height: 200,
+                        width: 200,
+                        child: Lottie.asset(AppImage.loading)),
                   ));
       },
     );

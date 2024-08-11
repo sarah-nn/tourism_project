@@ -173,7 +173,7 @@ class _CardPreviousTripState extends State<CardPreviousTrip> {
                         onPressed: () {
                           GoRouter.of(context).push(
                               '/StaticTripDetailsPage/${widget.finishedTrips.staticTripId}',
-                              extra: true);
+                              extra: null);
                         },
                         child: Text(
                           'view more details...',
