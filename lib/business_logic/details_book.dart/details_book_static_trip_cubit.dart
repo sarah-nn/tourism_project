@@ -41,7 +41,7 @@ class DetailsBookStaticTripCubit extends Cubit<DetailsBookStaticTripState> {
     } catch (e) {
       print("$e");
 
-      emit(DetailsBookStaticTripFailure(errMessage: e.toString()));
+      //  emit(DetailsBookStaticTripFailure(errMessage: e.toString()));
     }
     return upcomingAndPreviousStatikModel;
   }

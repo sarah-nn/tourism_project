@@ -220,10 +220,13 @@ class _CardUpcomingTripState extends State<CardUpcomingTrip> {
                                     return BlocProvider.value(
                                       value: staticTripCubit,
                                       child: EditBookStaticTrip(
+                                        futureTrips: widget.futureTrips,
                                         cubit: staticTripCubit,
                                         tripId: widget.futureTrips.staticTripId
                                             .toString(),
-                                        //  state: errMessage,
+                                        editTrip:
+                                            widget.futureTrips.id.toString(),
+                                        // state: errMessage,
                                       ),
                                     );
                                   });
