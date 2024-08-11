@@ -71,4 +71,26 @@ class BookStaticTripCubit extends Cubit<BookStaticTripState> {
       emit(BookFail(errMessage: message['message']));
     }
   }
+
+  Future<void> editStaticTrip(String tripId, String num) async {
+    emit(BookLoading());
+    var header = {'Authorization': 'Bearer $myToken'};
+    http.Response response =
+        await http.post(Uri.parse(EndPoint.editStaticTrip + tripId),
+            body: {
+              'new_number_of_friend': num,
+            },
+            headers: header);
+    if (response.statusCode == 200) {
+      var message = jsonDecode(response.body);
+      successMessage = message['message'];
+      print("book static : $successMessage");
+
+      emit(BookSuccess(successMessage: successMessage));
+    } else {
+      var message = jsonDecode(response.body);
+      print("book fail ${message['message']}");
+      emit(BookFail(errMessage: message['message']));
+    }
+  }
 }

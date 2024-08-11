@@ -93,8 +93,8 @@ showDetailsPriceBookStatic(BuildContext context,
                   ),
                   CardRoomPrice(
                     numRoom: roomNedd,
-                    priceRooms: priceRoom,
-                    totalPriceRoom: numDays * priceRoom,
+                    priceRooms: roomNedd * priceRoom,
+                    totalPriceRoom: numDays * priceRoom * roomNedd,
                   ),
                   const SizedBox(
                     height: 16,

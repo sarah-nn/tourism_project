@@ -1,8 +1,8 @@
 class EndPoint {
   static const String baseUrl = 'http://192.168.43.119:8000/api'; //for me
-  // static const String baseUrl = 'http://192.168.43.176:8000/api'; //for Oula
+  //static const String baseUrl = 'http://192.168.43.76:8000/api'; //for Oula
   static const String imageBaseUrl = 'http://192.168.43.119:8000/';
-  //static const String imageBaseUrl = 'http://192.168.43.176:8000/';
+  //static const String imageBaseUrl = 'http://192.168.43.76:8000/';
 
 //======================== Auth ========================
   static const String register = '$baseUrl/register';
@@ -76,15 +76,16 @@ class EndPoint {
       '$baseUrl/user/delete-static-trip-book/';
   static const String showDetailPriceTrippStatic =
       '$baseUrl/user/show-price-details/';
+  static const String editStaticTrip = '$baseUrl/user/edit-static-trip-book/';
 
 //======================== Activity =====================
   static const String getAllActivity = '$baseUrl/user/get-all-activity/';
 
 //======================== Notes =============
   static const String getAllNotes = '$baseUrl/user/get-notes';
-  //================favourite===============
   //====================favorite=========================
   static const String getFavorite = '$baseUrl/get-all-favorite';
   static const String addFavorite = '$baseUrl/set-favorite';
   static const String deleteFavorite = '$baseUrl/delete-favorite';
+  static const String dontMiss = '$baseUrl/get-trip-depending-on-favorite';
 }

@@ -9,6 +9,8 @@ String tripDestination = '';
 String goingPlaneId = '';
 String returnPlaneId = '';
 String onePlaneId = '';
+int numperson = 0;
+bool editStatic = false;
 //bool isselectePlace = true;
 // String? gstartDate;
 // String? gendDate;

@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_project/core/utils/end_point.dart';
 import 'package:tourism_project/core/utils/global.dart';
 import 'package:http/http.dart' as http;
-import 'package:tourism_project/data/models/check_trip_num_model.dart';
 import 'package:tourism_project/data/models/show_details_price_static_model.dart';
 
 part 'delete_edit_static_trip_state.dart';
@@ -49,9 +48,10 @@ class DeleteEditBookStaticCubit extends Cubit<DeleteEditBookStaticState> {
 
       emit(ShowPriceSuccess(showDetailsPriceStatic: showDetailsPriceStatic!));
     } else {
-      var message = jsonDecode(response.body);
-      print("book fail ${message['message']}");
-      emit(ShowPriceFail(errMessage: message['message']));
+      print(response.body);
+      //   var message = jsonDecode(response.body);
+      // print("book fail ${message['message']}");
+      // emit(ShowPriceFail(errMessage: message['message']));
     }
     return showDetailsPriceStatic;
   }

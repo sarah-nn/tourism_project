@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:tourism_project/business_logic/static_trip/book_static_trip/book_static_trip_cubit.dart';
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/check_trip_num_model.dart';
+import 'package:tourism_project/data/models/upcoming_previous_static_trip_model.dart';
 
 class EditBookStaticTrip extends StatefulWidget {
-  EditBookStaticTrip({
-    super.key,
-    required this.cubit,
-    required this.tripId,
-  });
+  EditBookStaticTrip(
+      {super.key,
+      required this.cubit,
+      required this.tripId,
+      required this.editTrip,
+      required this.futureTrips});
   final BookStaticTripCubit cubit;
   final String tripId;
+  final String editTrip;
+  FutureTrips futureTrips;
   @override
   State<EditBookStaticTrip> createState() => _EditBookStaticTripState();
 }
@@ -28,7 +34,7 @@ class _EditBookStaticTripState extends State<EditBookStaticTrip> {
     'room price :',
     'going_plane Ticket :',
     'return_plane Ticket :',
-    'price after Discount :'
+    'price places Ticket :'
   ];
   bool isCheck = false;
   bool imm = true;
@@ -57,8 +63,6 @@ class _EditBookStaticTripState extends State<EditBookStaticTrip> {
           model = (state).checkNum;
         }
         if (state is BookSuccess) {
-          showBookingDoneDialog(
-              context, AppRoutes.staticTripdetails, "id", () {});
           setState(() {
             finish = true;
           });
@@ -137,12 +141,12 @@ class _EditBookStaticTripState extends State<EditBookStaticTrip> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Divider(
-          color: Color.fromARGB(255, 114, 114, 114),
-          thickness: 1,
+          color: Color.fromARGB(255, 144, 143, 143),
+          thickness: 0.5,
         ),
         SizedBox(height: 10),
         Text(
-          "Details :",
+          "Details price:",
           style: MyTextStyle.bright.copyWith(
               color: AppColor.primaryColor,
               letterSpacing: 1.5,
@@ -150,6 +154,7 @@ class _EditBookStaticTripState extends State<EditBookStaticTrip> {
               decoration: TextDecoration.underline,
               fontSize: 25),
         ),
+        const SizedBox(height: 10),
         Card(
           elevation: 5,
           color: Color.fromARGB(255, 240, 240, 240),
@@ -171,10 +176,8 @@ class _EditBookStaticTripState extends State<EditBookStaticTrip> {
                 customRow(headlines[3], "\$ ${model?.ticketPriceForGoingTrip}"),
                 customRow(
                     headlines[4], "\$ ${model?.ticketPriceForReturnTrip}"),
-                model?.priceAfterDiscount == null
-                    ? Container()
-                    : customRow(
-                        headlines[5], "\$ ${model?.priceAfterDiscount}"),
+                customRow(headlines[5], "\$ ${model?.ticket_price_for_places}"),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -202,60 +205,57 @@ class _EditBookStaticTripState extends State<EditBookStaticTrip> {
                 // model?.priceAfterDiscount == null
                 //     ? Container()
                 //     :
-                Container(
-                  padding: EdgeInsets.all(8),
-                  child: MaterialButton(
-                    onPressed: () {
-                      print(discount);
-                      setState(() {
-                        model?.priceAfterDiscount != null ? discount = 1 : null;
-                      });
-                    },
-                    color: AppColor.secondColor,
-                    shape: Border.all(
-                        color: AppColor.primaryColor.withOpacity(0.4)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        model?.priceAfterDiscount != null
-                            ? Text("Use Points To Pay")
-                            : Text("Don't Have Enough Points"),
-                        Icon(
-                          Icons.payments_outlined,
-                          color: Colors.black54,
-                        )
-                      ],
-                    ),
-                  ),
-                )
+                // Container(
+                //   padding: EdgeInsets.all(8),
+                //   child: MaterialButton(
+                //     onPressed: () {
+                //       print(discount);
+                //       setState(() {
+                //         model?.priceAfterDiscount != null ? discount = 1 : null;
+                //       });
+                //     },
+                //     color: AppColor.secondColor,
+                //     shape: Border.all(
+                //         color: AppColor.primaryColor.withOpacity(0.4)),
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //       children: [
+                //         model?.priceAfterDiscount != null
+                //             ? Text("Use Points To Pay")
+                //             : Text("Don't Have Enough Points"),
+                //         Icon(
+                //           Icons.payments_outlined,
+                //           color: Colors.black54,
+                //         )
+                //       ],
+                //     ),
+                //   ),
+                // )
               ],
             ),
           ),
         ),
-        // Container(
-        //   alignment: Alignment.center,
-        //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
-        //   padding: const EdgeInsets.all(8),
-        //   child: MaterialButton(
-        //       onPressed: () {
-        //         widget.cubit.bookStaticTrip(
-        //             widget.tripId,
-        //             _counter.toString(),
-        //             model!.roomsNeeded.toString(),
-        //             model!.totalPrice.toString(),
-        //             model!.priceAfterDiscount.toString(),
-        //             discount.toString());
-        //         //!finish ? context.pop(context) : null;
-        //       },
-        //       color: AppColor.primaryColor,
-        //       child: const Text(
-        //         "Confirm Book",
-        //         style: TextStyle(
-        //             color: Colors.white,
-        //             fontSize: 18,
-        //             fontWeight: FontWeight.bold),
-        //       )),
-        // )
+        Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
+          padding: const EdgeInsets.all(8),
+          child: MaterialButton(
+              onPressed: () {
+                widget.cubit.editStaticTrip(
+                  widget.editTrip,
+                  _counter.toString(),
+                );
+                !finish ? context.pop(context) : null;
+              },
+              color: AppColor.primaryColor,
+              child: const Text(
+                "Confirm Edit",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
+              )),
+        )
       ],
     );
   }
@@ -310,6 +310,20 @@ class _EditBookStaticTripState extends State<EditBookStaticTrip> {
               ),
             ],
           ),
+        ),
+        const SizedBox(height: 10),
+        const Row(
+          children: [
+            Icon(
+              Icons.warning_amber_outlined,
+              size: 15,
+              color: Colors.red,
+            ),
+            Text(
+              ' increase number person only',
+              style: TextStyle(color: Colors.black45, fontSize: 12),
+            ),
+          ],
         ),
         SizedBox(
           height: 14,

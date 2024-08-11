@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tourism_project/business_logic/activity/activity_cubit.dart';
 import 'package:tourism_project/business_logic/country/country_cubit.dart';
+import 'package:tourism_project/business_logic/details_book.dart/details_book_hotel_cubit.dart';
+import 'package:tourism_project/business_logic/dont_miss/dont_miss_cubit.dart';
 import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
 import 'package:tourism_project/business_logic/dynamicTrip/update_trip/update_trip_cubit.dart';
 import 'package:tourism_project/business_logic/favorite/favorite_cubit.dart';
@@ -86,9 +88,16 @@ final GoRouter router = GoRouter(
                 destinationId: destination,
               ));
         }),
+    // GoRoute(
+    //     path: AppRoutes.homePage,
+    //     builder: (context, state) => BlocProvider(
+    //         create: (context) => DontMissCubit(), child: const HomePage())),
     GoRoute(
         path: AppRoutes.homePage,
-        builder: (context, state) => const HomePage()),
+        builder: (context, state) => MultiBlocProvider(providers: [
+              BlocProvider(create: (context) => DontMissCubit()),
+              BlocProvider(create: (context) => StaticTripCubit())
+            ], child: HomePage())),
 //======================== Auth ===============================
     GoRoute(
         path: AppRoutes.login,

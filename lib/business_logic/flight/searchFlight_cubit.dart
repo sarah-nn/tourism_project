@@ -47,7 +47,11 @@ class SearchFlightCubit extends Cubit<SearchFlightState> {
         print("api error ${response.statusCode} , with body ${response.body}");
       }
     } catch (e) {
-      emit(SearchFlightFailure(errMessage: e.toString()));
+      try {
+        emit(SearchFlightFailure(errMessage: e.toString()));
+      } catch (e) {
+        print(e);
+      }
     }
     //! comment print here becuase it make null check operator
     // print(

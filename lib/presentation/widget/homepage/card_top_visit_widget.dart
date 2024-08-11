@@ -12,7 +12,8 @@ class CardTopVisit extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Container(
         decoration: BoxDecoration(
-            color: AppColor.primaryColor.withOpacity(0.3),
+            border: Border.all(width: 0.5, color: AppColor.primaryColor),
+            color: AppColor.secondColor,
             borderRadius: BorderRadius.circular(10)),
         width: 170,
         child: Padding(
