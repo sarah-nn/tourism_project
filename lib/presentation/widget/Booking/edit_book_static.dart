@@ -8,7 +8,6 @@ import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
-import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/check_trip_num_model.dart';
 import 'package:tourism_project/data/models/upcoming_previous_static_trip_model.dart';
 
@@ -66,6 +65,8 @@ class _EditBookStaticTripState extends State<EditBookStaticTrip> {
           setState(() {
             finish = true;
           });
+          Navigator.pop(
+              context, {'count': _counter, 'price': model?.totalPrice});
         }
       },
       builder: (context, state) {
@@ -245,7 +246,12 @@ class _EditBookStaticTripState extends State<EditBookStaticTrip> {
                   widget.editTrip,
                   _counter.toString(),
                 );
-                !finish ? context.pop(context) : null;
+                if (finish) {
+                  Navigator.pop(context, {
+                    'count': widget.futureTrips.numberOfFriend + _counter,
+                    'price': widget.futureTrips.numberOfFriend
+                  }); // إرجاع البيانات المعدلة
+                }
               },
               color: AppColor.primaryColor,
               child: const Text(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/static_trip_details_model.dart';
 
 class StaticPlaceWidget extends StatelessWidget {
@@ -15,8 +16,9 @@ class StaticPlaceWidget extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         decoration: BoxDecoration(
-          color: AppColor.staticTripContainer,
-          border:const Border(
+          color:
+              light ? AppColor.staticTripContainer : AppColor.secoundColorDark,
+          border: const Border(
             left: BorderSide(width: 5, color: Color.fromARGB(255, 26, 73, 112)),
           ),
         ),
@@ -26,7 +28,9 @@ class StaticPlaceWidget extends StatelessWidget {
               "Enjoy this place in your Trip",
               style: MyTextStyle.poppins.copyWith(
                   fontSize: 19.5,
-                  color: const Color.fromARGB(255, 26, 73, 112)),
+                  color: light
+                      ? const Color.fromARGB(255, 26, 73, 112)
+                      : Colors.white),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -45,7 +49,7 @@ class StaticPlaceWidget extends StatelessWidget {
                                 "${index + 1}.",
                                 style: MyTextStyle.splashLogoText.copyWith(
                                     fontSize: 16,
-                                    color: Colors.black87,
+                                    color: light ? Colors.black87 : Colors.blue,
                                     fontWeight: FontWeight.normal),
                               ),
                               Text(

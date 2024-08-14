@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:tourism_project/business_logic/country/country_cubit.dart';
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_images.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/core/utils/info_user.dart';
 import 'package:tourism_project/data/models/country_model.dart';
 import 'package:tourism_project/presentation/screens/hotel/Card_Show_Country.dart';
@@ -99,10 +100,11 @@ class _HotelPageState extends State<HotelPage> {
                   ),
                   WidgetListTileComplete(
                       style: style
-                          ? const TextStyle(
-                              color: Colors.black,
+                          ? TextStyle(
+                              color: light ? Colors.black : Colors.white,
                             )
-                          : const TextStyle(color: Colors.black45),
+                          : TextStyle(
+                              color: light ? Colors.black45 : Colors.white54),
                       enableIcon: false,
                       enableIconButton: true,
                       enableCenterText: false,

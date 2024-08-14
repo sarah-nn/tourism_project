@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:tourism_project/business_logic/theme/app_theme_cubit.dart';
 import 'package:tourism_project/business_logic/user/user_cubit.dart';
 import 'package:tourism_project/core/database/cach_helper.dart';
 import 'package:tourism_project/core/localization/chang_language_buttom.dart';
@@ -9,21 +10,27 @@ import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/global.dart';
+import 'package:tourism_project/data/models/themestate.dart';
 import 'package:tourism_project/presentation/widget/homepage/list_tile_home_widget.dart';
 
-class WidgetDrawer extends StatelessWidget {
+class WidgetDrawer extends StatefulWidget {
   const WidgetDrawer({super.key});
 
   @override
+  State<WidgetDrawer> createState() => _WidgetDrawerState();
+}
+
+class _WidgetDrawerState extends State<WidgetDrawer> {
+  @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: AppColor.secondColor,
+      backgroundColor: light ? AppColor.secondColor : AppColor.secoundColorDark,
       child: Column(
         children: [
           Expanded(
             flex: 2,
             child: Container(
-              color: AppColor.primaryColor,
+              color: light ? AppColor.primaryColor : AppColor.primaryColorDark,
               child: Center(
                 child: Padding(
                   padding: const EdgeInsets.all(10),
@@ -50,13 +57,29 @@ class WidgetDrawer extends StatelessWidget {
                           ),
                         ],
                       ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Iconsax.moon,
-                          color: Colors.white,
-                        ),
-                      ),
+                      light
+                          ? IconButton(
+                              onPressed: () {
+                                setState(() {});
+                                BlocProvider.of<AppThemeCubit>(context)
+                                    .changeTheme(ThemeState.Dark);
+                              },
+                              icon: const Icon(
+                                Iconsax.moon,
+                                color: Colors.white,
+                              ),
+                            )
+                          : IconButton(
+                              onPressed: () {
+                                setState(() {});
+                                BlocProvider.of<AppThemeCubit>(context)
+                                    .changeTheme(ThemeState.Light);
+                              },
+                              icon: const Icon(
+                                Icons.light_mode,
+                                color: Colors.white,
+                              ),
+                            )
                     ],
                   ),
                 ),
@@ -125,7 +148,7 @@ class WidgetDrawer extends StatelessWidget {
                   thickness: 0.3,
                   endIndent: 100,
                 ),
-                const ChangLanguageButtom(),
+                //const ChangLanguageButtom(),
               ],
             ),
           ),

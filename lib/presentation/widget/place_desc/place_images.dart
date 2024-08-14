@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
 import 'package:tourism_project/core/utils/end_point.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/place_desc_model.dart';
 
 class Gallery extends StatelessWidget {
@@ -21,7 +22,11 @@ class Gallery extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Gallery", style: MyTextStyle.headers.copyWith(fontSize: 22)),
+          Text(
+            "Gallery",
+            style: MyTextStyle.headers.copyWith(
+                fontSize: 22, color: light ? Colors.black : Colors.white),
+          ),
           SizedBox(height: 15),
           SizedBox(
             height: 80,

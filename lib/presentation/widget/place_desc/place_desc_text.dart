@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tourism_project/core/utils/global.dart';
 
 class PlaceDescText extends StatefulWidget {
   final String text;
@@ -29,8 +30,10 @@ class _PlaceDescTextState extends State<PlaceDescText> {
       text: TextSpan(
         children: [
           TextSpan(
-            style: const TextStyle(
-                color: Color.fromARGB(255, 116, 116, 116),
+            style: TextStyle(
+                color: light
+                    ? const Color.fromARGB(255, 116, 116, 116)
+                    : Colors.white54,
                 height: 1.6,
                 fontSize: 17),
             text: isExpanded ? widget.text : truncatedText,

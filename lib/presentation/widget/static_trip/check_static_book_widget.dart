@@ -397,6 +397,7 @@ import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/check_trip_num_model.dart';
 
 class CheckStaticBookWidget extends StatefulWidget {
@@ -480,7 +481,9 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
                           ? Padding(
                               padding: const EdgeInsets.only(bottom: 12),
                               child: Card(
-                                color: Color.fromARGB(255, 243, 243, 243),
+                                color: light
+                                    ? Color.fromARGB(255, 243, 243, 243)
+                                    : AppColor.thirdColorDark,
                                 elevation: 3,
                                 child: Container(
                                   padding: const EdgeInsets.all(30),
@@ -556,7 +559,9 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
         ),
         Card(
           elevation: 5,
-          color: Color.fromARGB(255, 240, 240, 240),
+          color: light
+              ? Color.fromARGB(255, 240, 240, 240)
+              : AppColor.thirdColorDark,
           child: Padding(
             padding: const EdgeInsets.only(left: 7),
             child: Column(
@@ -625,11 +630,9 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
                             })
                           : null;
                     },
-                    color: model?.priceAfterDiscount != null
-                        ? isChoose
-                            ? AppColor.IconMinus
-                            : AppColor.secondColor
-                        : AppColor.secondColor,
+                    color: light
+                        ? AppColor.secondColor
+                        : AppColor.secoundColorDark,
                     shape: Border.all(
                         color: AppColor.primaryColor.withOpacity(0.4)),
                     child: Row(
@@ -640,7 +643,7 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
                             : Text("Don't Have Enough Points"),
                         Icon(
                           Icons.payments_outlined,
-                          color: Colors.black54,
+                          color: light ? Colors.black54 : Colors.white,
                         )
                       ],
                     ),
@@ -691,13 +694,15 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
         children: [
           Text(
             first,
-            style: TextStyle(fontSize: 18, color: Colors.black54),
+            style: TextStyle(
+                fontSize: 18, color: light ? Colors.black54 : Colors.white54),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 30),
             child: Text(
               second,
-              style: TextStyle(fontSize: 18, color: Colors.black),
+              style: TextStyle(
+                  fontSize: 18, color: light ? Colors.black : Colors.white),
             ),
           )
         ],
@@ -719,8 +724,8 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
         RichText(
           text: TextSpan(
             text: "How many ",
-            style: const TextStyle(
-                color: Colors.black54,
+            style: TextStyle(
+                color: light ? Colors.black54 : Colors.white60,
                 fontSize: 19.0,
                 fontWeight: FontWeight.w500,
                 height: 1.5),
@@ -774,7 +779,8 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: AppColor.secondColor,
+                    color:
+                        light ? AppColor.secondColor : AppColor.thirdColorDark,
                     border: Border.all(color: AppColor.primaryColor)),
                 child: IconButton(
                     onPressed: () {
@@ -786,7 +792,7 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
                     },
                     icon: Icon(
                       Icons.done_sharp,
-                      color: AppColor.primaryColor,
+                      color: light ? AppColor.primaryColor : Colors.white,
                       size: 40,
                     )),
               )

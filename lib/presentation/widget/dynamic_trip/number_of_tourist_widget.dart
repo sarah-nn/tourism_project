@@ -5,6 +5,7 @@ import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.da
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_images.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
+import 'package:tourism_project/core/utils/global.dart';
 
 class NumberOfTourist extends StatefulWidget {
   const NumberOfTourist({super.key});
@@ -43,7 +44,8 @@ class _NumberOfTouristState extends State<NumberOfTourist> {
               alignment: Alignment.topLeft,
               child: Text(
                 "who do you Want to Travel with ?",
-                style: MyTextStyle.normal.copyWith(fontSize: 25),
+                style: MyTextStyle.normal.copyWith(
+                    fontSize: 25, color: light ? null : Colors.white70),
               ),
             ),
             const SizedBox(height: 30),
@@ -170,7 +172,9 @@ class _NumberOfTouristState extends State<NumberOfTourist> {
           height: 100,
           width: 100,
           decoration: BoxDecoration(
-              color: AppColor.primaryColor.withOpacity(0.2),
+              color: light
+                  ? AppColor.primaryColor.withOpacity(0.2)
+                  : AppColor.thirdColorDark,
               borderRadius: BorderRadius.circular(18)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -179,14 +183,17 @@ class _NumberOfTouristState extends State<NumberOfTourist> {
                 height: 40,
                 width: 40,
                 //color: Colors.amber,
-                child: Image.asset(icon),
+                child: Image.asset(
+                  icon,
+                  color: light ? AppColor.primaryColor : Colors.white,
+                ),
               ),
               Text(
                 name,
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
-                    color: AppColor.primaryColor),
+                    color: light ? AppColor.primaryColor : Colors.white),
               )
             ],
           )),

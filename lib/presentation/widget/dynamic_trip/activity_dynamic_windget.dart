@@ -133,8 +133,8 @@ class _ActivityDynamicWidgetState extends State<ActivityDynamicWidget> {
                 ? RichText(
                     text: TextSpan(
                       // text: "And  ",
-                      style: const TextStyle(
-                          color: Colors.black87,
+                      style: TextStyle(
+                          color: light ? Colors.black87 : Colors.white70,
                           fontSize: 19.0,
                           fontWeight: FontWeight.w500,
                           height: 1.5),
@@ -162,9 +162,10 @@ class _ActivityDynamicWidgetState extends State<ActivityDynamicWidget> {
                                 showModelButtomSheetCustom(
                                     context, activitiesList);
                               }),
-                        const TextSpan(
+                        TextSpan(
                           text: ' Choose them',
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(
+                              color: light ? Colors.black : Colors.white),
                         ),
                       ],
                     ),

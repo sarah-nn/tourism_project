@@ -48,10 +48,9 @@ class DeleteEditBookStaticCubit extends Cubit<DeleteEditBookStaticState> {
 
       emit(ShowPriceSuccess(showDetailsPriceStatic: showDetailsPriceStatic!));
     } else {
-      print(response.body);
-      //   var message = jsonDecode(response.body);
-      // print("book fail ${message['message']}");
-      // emit(ShowPriceFail(errMessage: message['message']));
+      var message = jsonDecode(response.body);
+      print("book fail ${message['message']}");
+      emit(ShowPriceFail(errMessage: message['message']));
     }
     return showDetailsPriceStatic;
   }

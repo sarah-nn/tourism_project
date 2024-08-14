@@ -7,7 +7,7 @@ final class DetailsBookPlaneInitial extends DetailsBookPlaneState {}
 final class DetailsBookPlaneLoading extends DetailsBookPlaneState {}
 
 final class DetailsBookPlaneSuccess extends DetailsBookPlaneState {
-  List<DetailsBookPlaneModel> detailsBookPlane;
+  DetailsBookPlaneModel detailsBookPlane;
   DetailsBookPlaneSuccess(this.detailsBookPlane);
 }
 

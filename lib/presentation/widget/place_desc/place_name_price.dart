@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
+import 'package:tourism_project/core/utils/global.dart';
 
 class NameAndPrice extends StatelessWidget {
   final String placeName;
@@ -14,7 +16,8 @@ class NameAndPrice extends StatelessWidget {
       children: [
         Text(
           placeName,
-          style: MyTextStyle.poppins.copyWith(fontSize: 26),
+          style: MyTextStyle.poppins.copyWith(
+              fontSize: 26, color: light ? Colors.black : Colors.white),
         ),
         Text(
           "\$ $price",

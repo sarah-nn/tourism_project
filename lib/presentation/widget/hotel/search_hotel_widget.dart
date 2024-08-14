@@ -67,9 +67,14 @@ class _WidgetSearchHotelState extends State<WidgetSearchHotel> {
                       padding: const EdgeInsets.all(10.0),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: AppColor.secondColor,
+                          color: light
+                              ? AppColor.secondColor
+                              : AppColor.secoundColorDark.withAlpha(200),
                           border: Border.all(
-                              width: 2, color: AppColor.primaryColor),
+                              width: 2,
+                              color: light
+                                  ? AppColor.primaryColor
+                                  : Colors.white54),
                           borderRadius: BorderRadius.circular(30),
                         ),
                         height: 350,
@@ -85,7 +90,9 @@ class _WidgetSearchHotelState extends State<WidgetSearchHotel> {
                                     fontFamily: "normal",
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
-                                    color: AppColor.fifeColor),
+                                    color: light
+                                        ? AppColor.fifeColor
+                                        : Colors.white70),
                               ),
                               const SizedBox(height: 20),
                               Row(
@@ -108,10 +115,10 @@ class _WidgetSearchHotelState extends State<WidgetSearchHotel> {
                                       startDate.isEmpty
                                           ? 'Choose Date Start'
                                           : startDate,
-                                      style: const TextStyle(
-                                        fontSize: 17,
-                                        fontFamily: 'Philosopher',
-                                      ),
+                                      style: TextStyle(
+                                          fontSize: 17,
+                                          fontFamily: 'Philosopher',
+                                          color: light ? null : Colors.white54),
                                     ),
                                   ),
                                 ],
@@ -137,10 +144,10 @@ class _WidgetSearchHotelState extends State<WidgetSearchHotel> {
                                       endDate.isEmpty
                                           ? 'Choose Date End'
                                           : endDate,
-                                      style: const TextStyle(
-                                        fontSize: 17,
-                                        fontFamily: 'Philosopher',
-                                      ),
+                                      style: TextStyle(
+                                          fontSize: 17,
+                                          fontFamily: 'Philosopher',
+                                          color: light ? null : Colors.white54),
                                     ),
                                   ),
                                 ],
@@ -183,7 +190,7 @@ class _WidgetSearchHotelState extends State<WidgetSearchHotel> {
               width: double.infinity,
               decoration: BoxDecoration(
                 border: Border.all(width: 0.8, color: AppColor.primaryColor),
-                color: AppColor.secondColor,
+                color: light ? AppColor.secondColor : AppColor.secoundColorDark,
                 borderRadius: BorderRadius.circular(25),
               ),
               child: Row(

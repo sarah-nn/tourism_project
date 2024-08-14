@@ -16,7 +16,8 @@ class StartingDaynamicPage extends StatelessWidget {
       appBar: AppBar(
           toolbarHeight: 50,
           automaticallyImplyLeading: false,
-          backgroundColor: AppColor.primaryColor,
+          backgroundColor:
+              light ? AppColor.primaryColor : AppColor.thirdColorDark,
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(18),
@@ -62,7 +63,7 @@ class StartingDaynamicPage extends StatelessWidget {
                     fontSize: 23,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 0.3,
-                    color: Colors.black54),
+                    color: light ? Colors.black54 : Colors.white54),
               ),
             ),
             SizedBox(height: 100),

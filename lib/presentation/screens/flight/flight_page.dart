@@ -394,7 +394,8 @@ class _FlightPageState extends State<FlightPage> {
     if (picker != null && picker != selectedData) {
       setState(() {
         selectedData =
-            '${picker.day.toString()}-${picker.month.toString()}-${picker.year.toString()}';
+            '${picker.year.toString()}-${picker.month.toString().padLeft(2, '0')}-${picker.day.toString().padLeft(2, '0')}';
+
         depart_date = selectedData;
         User.departFlight = selectedData;
       });

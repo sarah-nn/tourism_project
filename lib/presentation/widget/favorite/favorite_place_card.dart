@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:tourism_project/business_logic/favorite/favorite_cubit.dart';
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
-import 'package:tourism_project/core/utils/app_images.dart';
 import 'package:tourism_project/core/utils/end_point.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/get_favorite_model.dart';
 
 // ignore: must_be_immutable
@@ -48,7 +48,7 @@ class _PlaceFavoriteState extends State<PlaceFavorite> {
         child: Card(
           elevation: 1.5,
           child: Container(
-            color: AppColor.secondColor,
+            color: light ? AppColor.secondColor : AppColor.secoundColorDark,
             //color: light ? AppColor.secondColor : AppColor.secoundColorDark,
             padding: const EdgeInsets.all(10),
             height: 100,
@@ -68,7 +68,7 @@ class _PlaceFavoriteState extends State<PlaceFavorite> {
                         child: Image(
                           image: NetworkImage(
                             EndPoint.imageBaseUrl +
-                                widget.favoriteModel!.place.images[0].image,
+                                widget.favoriteModel!.place.images[1].image,
                           ),
                           height: 95,
                           width: 95,

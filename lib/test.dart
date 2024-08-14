@@ -109,6 +109,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_project/business_logic/favorite/favorite_cubit.dart';
 import 'package:tourism_project/business_logic/places/places_cubit.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/places_depend_on_category_model.dart';
 import 'package:tourism_project/data/models/places_model.dart';
 import 'package:tourism_project/presentation/widget/places/get_all_places_widget.dart';
@@ -308,7 +309,8 @@ class _TestPageState extends State<TestPage> {
 
   PreferredSizeWidget appBarItem() {
     return AppBar(
-      backgroundColor: AppColor.primaryColor,
+      backgroundColor:
+          light ? AppColor.primaryColor : AppColor.primaryColorDark,
       title: const Text("Places"),
       actions: [
         IconButton(
@@ -334,7 +336,8 @@ class _TestPageState extends State<TestPage> {
 
   PreferredSizeWidget searchedBarItem() {
     return AppBar(
-      backgroundColor: AppColor.primaryColor,
+      backgroundColor:
+          light ? AppColor.primaryColor : AppColor.primaryColorDark,
       title: TextFormField(
         cursorColor: Colors.white,
         controller: searchcontroller,

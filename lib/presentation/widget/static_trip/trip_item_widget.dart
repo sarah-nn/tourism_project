@@ -6,7 +6,9 @@ import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_images.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
 import 'package:tourism_project/core/utils/end_point.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/all_static_trip_model.dart';
+import 'package:tourism_project/data/models/attribute_details_static.dart';
 
 class StaticTripItem extends StatefulWidget {
   const StaticTripItem(
@@ -47,10 +49,15 @@ class _StaticTripItemState extends State<StaticTripItem> {
         padding: const EdgeInsets.only(bottom: 15),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: widget.isSearch
-              ? const Color.fromARGB(255, 224, 236, 240)
-              : Colors.white,
-          border: Border.all(width: 0.5),
+          color: light
+              ? widget.isSearch
+                  ? const Color.fromARGB(255, 224, 236, 240)
+                  : Colors.white
+              : widget.isSearch
+                  ? AppColor.secoundColorDark
+                  : AppColor.secoundColorDark,
+          border: Border.all(
+              width: 0.5, color: light ? Colors.black : Colors.white),
           // const Color.fromARGB(255, 158, 209, 250),
         ),
         //  height: 250,
@@ -72,6 +79,7 @@ class _StaticTripItemState extends State<StaticTripItem> {
                                   image: NetworkImage(EndPoint.imageBaseUrl +
                                       images[0]['image']),
                                   fit: BoxFit.cover),
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(20)),
                         );
                       } else {
@@ -98,7 +106,8 @@ class _StaticTripItemState extends State<StaticTripItem> {
                     children: [
                       Text(" ${widget.tripmodel.tripName!}",
                           style: TextStyle(
-                              color: AppColor.primaryColor,
+                              color:
+                                  light ? AppColor.primaryColor : Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 21)),
                       Container(
@@ -140,7 +149,10 @@ class _StaticTripItemState extends State<StaticTripItem> {
         //goRoute(context, AppRoutes.staticTripdetails);
         GoRouter.of(context).push(
             '/StaticTripDetailsPage/${widget.tripmodel.id}',
-            extra: images);
+            extra: AttributeStaticDetails(
+                tripId: widget.tripmodel.id.toString(),
+                imageList: images,
+                enableBook: true));
       },
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 17),
@@ -157,7 +169,7 @@ class _StaticTripItemState extends State<StaticTripItem> {
               "details..",
               style: TextStyle(
                   letterSpacing: 1,
-                  color: AppColor.primaryColor,
+                  color: light ? AppColor.primaryColor : Colors.white,
                   fontSize: 15,
                   fontWeight: FontWeight.w600),
             ),
@@ -191,17 +203,20 @@ Widget priceRow(price) {
       children: [
         Text(
           "\$",
-          style: MyTextStyle.poppins
-              .copyWith(fontSize: 17, color: AppColor.primaryColor),
+          style: MyTextStyle.poppins.copyWith(
+              fontSize: 17,
+              color: light ? AppColor.primaryColor : Colors.white70),
         ),
         Text(
           " $price",
           style: MyTextStyle.Audiowide.copyWith(
-              fontSize: 14, color: AppColor.primaryColor),
+              fontSize: 14,
+              color: light ? AppColor.primaryColor : Colors.white70),
         ),
-        const Text(
+        Text(
           " per person",
-          style: TextStyle(fontSize: 17, color: Colors.black54),
+          style: TextStyle(
+              fontSize: 17, color: light ? Colors.black54 : Colors.white54),
         )
       ],
     ),

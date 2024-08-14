@@ -106,6 +106,7 @@ import 'package:tourism_project/business_logic/favorite/favorite_cubit.dart';
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/end_point.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/get_favorite_model.dart';
 import 'package:tourism_project/data/models/places_depend_on_category_model.dart';
 import 'package:tourism_project/data/models/places_model.dart';
@@ -147,7 +148,7 @@ class _PlaceItemState extends State<PlaceItem> {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 4),
         child: Card(
-          color: widget.place != null ? Colors.blue[50] : Colors.pink[80],
+          color: light ? Colors.white : AppColor.secoundColorDark,
           elevation: 1.5,
           child: InkWell(
             onTap: () {},
@@ -171,8 +172,8 @@ class _PlaceItemState extends State<PlaceItem> {
                               child: Image(
                                 image: NetworkImage(EndPoint.imageBaseUrl +
                                     (widget.place != null
-                                        ? widget.place!.images![0].image!
-                                        : widget.placeCat!.images![0].image!)),
+                                        ? widget.place!.images![1].image!
+                                        : widget.placeCat!.images![1].image!)),
                                 fit: BoxFit.cover,
                               )),
                         ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/static_trip_details_model.dart';
 
 class StaticHotelWidget extends StatelessWidget {
@@ -14,7 +15,8 @@ class StaticHotelWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: Container(
         decoration: BoxDecoration(
-          color: AppColor.staticTripContainer,
+          color:
+              light ? AppColor.staticTripContainer : AppColor.secoundColorDark,
           border: Border(
             left: BorderSide(width: 5, color: AppColor.primaryColor),
           ),
@@ -29,11 +31,14 @@ class StaticHotelWidget extends StatelessWidget {
                   "Hotel Booking Included ",
                   style: MyTextStyle.poppins.copyWith(
                       fontSize: 19,
-                      color: const Color.fromARGB(255, 26, 73, 112)),
+                      color: light
+                          ? const Color.fromARGB(255, 26, 73, 112)
+                          : Colors.white),
                 ),
-                const Icon(
+                Icon(
                   Icons.check,
-                  color: Color.fromARGB(255, 26, 73, 112),
+                  color:
+                      light ? Color.fromARGB(255, 26, 73, 112) : Colors.white,
                 )
               ],
             ),

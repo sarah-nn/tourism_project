@@ -20,12 +20,12 @@ class TextInfoBook extends StatelessWidget {
           '$baseText : ',
           style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 18,
+              fontSize: 17,
               color: AppColor.fifeColor),
         ),
         Text(
           secoundText,
-          style: const TextStyle(fontSize: 16),
+          style: const TextStyle(fontSize: 15),
         ),
       ],
     );
@@ -57,7 +57,7 @@ class TextInfoBookPriceAndNote extends StatelessWidget {
           '$baseText : ',
           style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 18,
+              fontSize: 17,
               color: AppColor.fifeColor),
         ),
         Text(

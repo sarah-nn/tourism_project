@@ -17,6 +17,7 @@ class RoomModel {
 }
 
 class Data {
+  Capacity2? capacity1;
   Capacity2? capacity2;
   Capacity2? capacity4;
   Capacity2? capacity6;
@@ -24,6 +25,9 @@ class Data {
   Data({this.capacity2, this.capacity4, this.capacity6});
 
   Data.fromJson(Map<String, dynamic> json) {
+    capacity1 = json['capacity_1'] != null
+        ? new Capacity2.fromJson(json['capacity_1'])
+        : null;
     capacity2 = json['capacity_2'] != null
         ? new Capacity2.fromJson(json['capacity_2'])
         : null;
@@ -37,6 +41,9 @@ class Data {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.capacity1 != null) {
+      data['capacity_2'] = this.capacity1!.toJson();
+    }
     if (this.capacity2 != null) {
       data['capacity_2'] = this.capacity2!.toJson();
     }

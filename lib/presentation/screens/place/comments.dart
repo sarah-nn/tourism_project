@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_project/business_logic/places/place_desc_cubit.dart';
-import 'package:tourism_project/core/functions/functions.dart';
+import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/comment_model.dart';
 import 'package:tourism_project/presentation/widget/place_desc/comment_card_widget.dart';
 import 'package:tourism_project/presentation/widget/place_desc/write_comment_field.dart';
@@ -43,15 +44,16 @@ class _CommentPageState extends State<CommentPage> {
         return Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
-              backgroundColor: Colors.white,
-              elevation: 0,
+              backgroundColor: light ? Colors.white : AppColor.primaryColorDark,
+              elevation: light ? 0 : null,
               title: Text(
                 "Comments (${myCommentsList.length})",
-                style: MyTextStyle.headers.copyWith(fontSize: 26),
+                style: MyTextStyle.headers.copyWith(
+                    fontSize: 26, color: light ? Colors.black : Colors.white),
               ),
-              leading: const Icon(
+              leading: Icon(
                 Icons.arrow_back_rounded,
-                color: Colors.black,
+                color: light ? Colors.black : Colors.white,
                 size: 30,
               ),
             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
+import 'package:tourism_project/core/utils/global.dart';
 
 class TwoLineContainer extends StatelessWidget {
   final String title1;
@@ -20,7 +21,8 @@ class TwoLineContainer extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           // color: const Color.fromRGBO(232, 243, 255, 1),
-          color: AppColor.staticTripContainer,
+          color:
+              light ? AppColor.staticTripContainer : AppColor.secoundColorDark,
           border: Border(
             left: BorderSide(
                 width: 5, color: AppColor.primaryColor.withOpacity(1.0)),
@@ -33,10 +35,12 @@ class TwoLineContainer extends StatelessWidget {
               children: [
                 Text(
                   "$title1 : ",
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 19,
-                      color: Color.fromARGB(255, 26, 73, 112)),
+                      color: light
+                          ? Color.fromARGB(255, 26, 73, 112)
+                          : Colors.white),
                 ),
                 Text(
                   content1,
@@ -49,14 +53,17 @@ class TwoLineContainer extends StatelessWidget {
               children: [
                 Text(
                   "$title2 : ",
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 19,
-                      color: Color.fromARGB(255, 26, 73, 112)),
+                      color: light
+                          ? Color.fromARGB(255, 26, 73, 112)
+                          : Colors.white),
                 ),
                 Text(
                   content2,
-                  style: const TextStyle(fontSize: 17),
+                  style: TextStyle(
+                      fontSize: 17, color: light ? null : Colors.white60),
                 )
               ],
             ),

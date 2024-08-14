@@ -12,6 +12,13 @@ abstract class AppColor {
   static Color IconAdd = Color(0xff60b0d2);
   static Color staticTripContainer = Color.fromRGBO(232, 243, 255, 1);
 
+//=====================dark=========================
+
+  static Color primaryColorDark = const Color(0xff303030);
+  static Color secoundColorDark = Color(0xff424242);
+  static Color thirdColorDark = Colors.white24;
+  static Color iconMinusDark = Colors.black12;
+  static Color iconsColorDark = Colors.white70;
   //===========second test
   // static Color primaryColor = Color.fromARGB(255, 26, 69, 82);
   // static Color secondColor = const Color(0xff77C8BF);

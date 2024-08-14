@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
+import 'package:tourism_project/core/utils/global.dart';
 
 // ignore: must_be_immutable
 class widgetListTile extends StatelessWidget {
@@ -13,7 +14,7 @@ class widgetListTile extends StatelessWidget {
     return ListTile(
       leading: Icon(
         icon,
-        color: AppColor.primaryColor,
+        color: light ? AppColor.primaryColor : AppColor.iconsColorDark,
       ),
       title: Text(text),
       onTap: onTap,

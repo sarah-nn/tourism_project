@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_images.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
@@ -57,7 +55,10 @@ class _PlacesDynamicWidgetState extends State<PlacesDynamicWidget> {
                             child: Text(
                               "Navigate To Place Page ",
                               style: TextStyle(
-                                  color: AppColor.primaryColor, fontSize: 22),
+                                  color: light
+                                      ? AppColor.primaryColor
+                                      : Colors.white70,
+                                  fontSize: 22),
                             ),
                           ),
                           GestureDetector(

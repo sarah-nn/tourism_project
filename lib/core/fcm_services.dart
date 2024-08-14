@@ -7,7 +7,7 @@ class FCMServices {
   static Future<void> getFcmToken() async {
     await _firebaseMessege.requestPermission();
     final fcmToken = await _firebaseMessege.getToken();
-    print("Token : $fcmToken");
+    print("Token f: $fcmToken");
   }
 
   static Future<void> firebaseMessaging(RemoteMessage message) async {

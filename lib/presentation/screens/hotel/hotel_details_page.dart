@@ -4,6 +4,7 @@ import 'package:tourism_project/business_logic/hotel/roomAndBook_cubit.dart';
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/room_model.dart';
 import 'package:tourism_project/presentation/widget/flight/addName_addNote.dart';
 import 'package:tourism_project/presentation/widget/hotel/custom_elevated_buttom.dart';
@@ -29,6 +30,7 @@ class InfoBookingHotelPage extends StatefulWidget {
 }
 
 class _InfoBookingHotelPageState extends State<InfoBookingHotelPage> {
+  int numOneCapacity = 0;
   int numTowCapacity = 0;
   int numFourCapacity = 0;
   int numSixCapacity = 0;
@@ -59,6 +61,8 @@ class _InfoBookingHotelPageState extends State<InfoBookingHotelPage> {
         //     ' bokking this hotel \n if you see details or edit click here',
         //     'view book',
         //     AppRoutes.detailsBookHotel);
+        numOneCapacity = 0;
+
         numTowCapacity = 0;
         numFourCapacity = 0;
         numSixCapacity = 0;
@@ -69,21 +73,25 @@ class _InfoBookingHotelPageState extends State<InfoBookingHotelPage> {
       if (state is BookHotelFailure) {
         if (numTowCapacity == 0 &&
             numFourCapacity == 0 &&
-            numSixCapacity == 0) {
+            numSixCapacity == 0 &&
+            numOneCapacity == 0) {
           showAlertDialog(context,
               'please enter the number of rooms you would like to book');
         } else {
           showAlertDialog(context, state.errMessage);
         }
+        numOneCapacity = 0;
         numTowCapacity = 0;
         numFourCapacity = 0;
         numSixCapacity = 0;
       }
     }, builder: (context, state) {
       return Scaffold(
-        backgroundColor: AppColor.primaryColor,
+        backgroundColor:
+            light ? AppColor.primaryColor : AppColor.primaryColorDark,
         appBar: AppBar(
-          backgroundColor: AppColor.primaryColor,
+          backgroundColor:
+              light ? AppColor.primaryColor : AppColor.primaryColorDark,
           elevation: 0,
         ),
         body: Column(children: [
@@ -103,9 +111,9 @@ class _InfoBookingHotelPageState extends State<InfoBookingHotelPage> {
             child: Container(
               clipBehavior: Clip.antiAlias,
               width: double.infinity,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                color: light ? Colors.white : AppColor.thirdColorDark,
+                borderRadius: const BorderRadius.only(
                   topRight: Radius.circular(45),
                   topLeft: Radius.circular(45),
                 ),
@@ -125,7 +133,40 @@ class _InfoBookingHotelPageState extends State<InfoBookingHotelPage> {
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'normal',
                                     fontSize: 21,
-                                    color: AppColor.fifeColor),
+                                    color: light
+                                        ? AppColor.fifeColor
+                                        : Colors.white70),
+                              ),
+                              WidgetInfoBookRoom(
+                                num: 'One',
+                                price: '${roomModel.data?.capacity1?.price}',
+                                numCapacity: numOneCapacity,
+                                onTapAdd: numOneCapacity !=
+                                        (roomModel.data?.capacity1!.count)!
+                                            .toInt()
+                                    ? () {
+                                        setState(() {
+                                          numOneCapacity++;
+                                        });
+
+                                        print(roomModel.data?.capacity1!.count);
+                                      }
+                                    : null,
+                                onTapMinus: numOneCapacity > 0
+                                    ? () {
+                                        setState(() {
+                                          numOneCapacity--;
+                                        });
+                                      }
+                                    : null,
+                                colorAdd: numOneCapacity <
+                                        (roomModel.data?.capacity1!.count)!
+                                            .toInt()
+                                    ? AppColor.IconAdd
+                                    : AppColor.IconMinus,
+                                colorMinus: numOneCapacity == 0
+                                    ? AppColor.IconMinus
+                                    : AppColor.IconAdd,
                               ),
                               WidgetInfoBookRoom(
                                 num: 'Tow',
@@ -256,6 +297,7 @@ class _InfoBookingHotelPageState extends State<InfoBookingHotelPage> {
                                         hotelId: widget.HotelId,
                                         startDate: widget.startDate,
                                         endDate: widget.endDate,
+                                        countRoomC1: numOneCapacity.toString(),
                                         countRoomC2: numTowCapacity.toString(),
                                         countRoomC4: numFourCapacity.toString(),
                                         countRoomC6: numSixCapacity.toString());

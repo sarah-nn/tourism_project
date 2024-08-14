@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:tourism_project/business_logic/activity/activity_cubit.dart';
 import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
 import 'package:tourism_project/business_logic/hotel/searchHotel_cubit.dart';
@@ -65,7 +64,8 @@ class _DynamicTripPageState extends State<DynamicTripPage> {
               ),
               shape: const LinearBorder(start: LinearBorderEdge(size: 0.5)),
               centerTitle: true,
-              backgroundColor: AppColor.primaryColor,
+              backgroundColor:
+                  light ? AppColor.primaryColor : AppColor.primaryColorDark,
             ),
             body: Column(
               children: [
@@ -224,7 +224,9 @@ class _DynamicTripPageState extends State<DynamicTripPage> {
 
 Widget stepTitle(String stepName, String data) {
   return Container(
-    color: AppColor.secondColor.withOpacity(0.6),
+    color: light
+        ? AppColor.secondColor.withOpacity(0.6)
+        : AppColor.secoundColorDark,
     child: Text(
       stepName,
       style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
