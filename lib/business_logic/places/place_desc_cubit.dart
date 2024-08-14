@@ -29,7 +29,7 @@ class PlaceDescCubit extends Cubit<PlaceDescState> {
         emit(PlaceDescSuccess(PlaceDescModel.fromJson(data)));
         print(response.body);
       } else {
-        print("api error${response.statusCode}");
+        print("api error${response.statusCode} with body ${response.body}");
       }
     } catch (e) {
       print("$e");
@@ -81,6 +81,7 @@ class PlaceDescCubit extends Cubit<PlaceDescState> {
       var message = jsonDecode(response.body);
       final newComment = Comment.fromJson(jsonDecode(response.body)['data']);
       commentsList.add(newComment);
+      print(message);
       emit(PLaceCommentsList(commentsList: commentsList));
       print(message);
       //  emit(CommentAddSuccess());

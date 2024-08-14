@@ -154,9 +154,11 @@ class _DynamicTripBookingDetailsPageState
                                             dropHotel = !dropHotel;
                                           });
                                         },
+                                        roomC1: roomC1(),
                                         roomC2: roomC2(),
                                         roomC4: roomC4(),
                                         roomC6: roomC6(),
+                                        priceC1: roomC1() != 0 ? priceC1() : "",
                                         priceC2: roomC2() != 0 ? priceC2() : "",
                                         priceC4: roomC4() != 0 ? priceC4() : "",
                                         priceC6: roomC6() != 0 ? priceC6() : "",
@@ -260,6 +262,9 @@ class _DynamicTripBookingDetailsPageState
                                       ? double.parse(returnPlane['return_plane']
                                           ['ticket_price'])
                                       : 0.0,
+                                  c1: roomC1() == 0
+                                      ? 0.0
+                                      : double.parse(priceC1()),
                                   c2: roomC2() == 0
                                       ? 0.0
                                       : double.parse(priceC2()),
@@ -284,6 +289,10 @@ class _DynamicTripBookingDetailsPageState
     );
   }
 
+  int roomC1() {
+    return mymodel!.rooms!.where((room) => room.capacity == 1).length;
+  }
+
   int roomC2() {
     return mymodel!.rooms!.where((room) => room.capacity == 2).length;
   }
@@ -294,6 +303,11 @@ class _DynamicTripBookingDetailsPageState
 
   int roomC6() {
     return mymodel!.rooms!.where((room) => room.capacity == 6).length;
+  }
+
+  String priceC1() {
+    final c1 = mymodel!.rooms!.firstWhere((room) => room.capacity == 1);
+    return c1.price.toString();
   }
 
   String priceC2() {

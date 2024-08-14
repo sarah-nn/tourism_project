@@ -7,13 +7,16 @@ class HotelDetails extends StatefulWidget {
       required this.hotelTrip,
       required this.dropHotel,
       required this.customOnTap,
+      required this.roomC1,
       required this.roomC2,
       required this.roomC4,
       required this.roomC6,
+      required this.priceC1,
       required this.priceC2,
       required this.priceC4,
       required this.priceC6,
       required this.isEdit,
+      @required this.onPressed1,
       @required this.onPressed2,
       @required this.onPressed4,
       @required this.onPressed6,
@@ -21,14 +24,17 @@ class HotelDetails extends StatefulWidget {
   final dynamic hotelTrip;
   final bool dropHotel;
   final Function()? customOnTap;
+  final int roomC1;
   final int roomC2;
   final int roomC4;
   final int roomC6;
+  final String priceC1;
   final String priceC2;
   final String priceC4;
   final String priceC6;
   final bool isEdit;
   final String newName;
+  final Function()? onPressed1;
   final Function()? onPressed2;
   final Function()? onPressed4;
   final Function()? onPressed6;
@@ -85,6 +91,42 @@ class _HotelDetailsState extends State<HotelDetails> {
                   padding: const EdgeInsets.only(top: 2, left: 10),
                   child: Column(
                     children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Capacity (1) :  ${widget.roomC1} room",
+                            style: const TextStyle(
+                              fontSize: 17,
+                              height: 2,
+                            ),
+                          ),
+                          widget.roomC1 != 0
+                              ? widget.isEdit
+                                  ? IconButton(
+                                      onPressed: widget.onPressed1,
+                                      icon: Icon(
+                                        Icons.add,
+                                        color: AppColor.primaryColor,
+                                      ))
+                                  : Text(
+                                      "\$ ${widget.priceC1}",
+                                      style: const TextStyle(
+                                          fontSize: 15,
+                                          height: 2,
+                                          color: Colors.green),
+                                    )
+                              : widget.isEdit
+                                  ? IconButton(
+                                      onPressed: widget.onPressed1,
+                                      icon: Icon(
+                                        Icons.add,
+                                        color: AppColor.primaryColor,
+                                      ))
+                                  : Container()
+                        ],
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [

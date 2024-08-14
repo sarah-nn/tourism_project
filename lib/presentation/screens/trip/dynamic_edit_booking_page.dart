@@ -45,12 +45,21 @@ class _DynamicTripBookingEditPageState
   bool isChooseHotel = false;
   int propleNumber = 0;
   int cntpeople = 0;
+  int c1Num = 0;
   int c2Num = 0;
   int c4Num = 0;
   int c6Num = 0;
+  int cnt1 = 0;
   int cnt2 = 0;
   int cnt4 = 0;
   int cnt6 = 0;
+  void incrementC1() {
+    setState(() {
+      c1Num++;
+      cnt1++;
+    });
+  }
+
   void incrementC2() {
     setState(() {
       c2Num++;
@@ -168,6 +177,8 @@ class _DynamicTripBookingEditPageState
               .activities!
               .map((activities) => activities.id as int)
               .toList();
+          //! to add places here ato all list
+          //   placeIds.addAll(mymodel!.places.ge)
           print("befor $activities");
           // print("is there going trip  $goingPlane");
           // print(mymodel);
@@ -182,6 +193,7 @@ class _DynamicTripBookingEditPageState
           if (hotelTrip is List) {
             isHotel = true;
           } else {
+            c1Num = roomC1();
             c2Num = roomC2();
             c4Num = roomC4();
             c6Num = roomC6();
@@ -218,7 +230,9 @@ class _DynamicTripBookingEditPageState
                                 CustomAlertDialog(
                                     context,
                                     "Update Done ",
-                                    "Your Added Price is ${state.message}",
+                                    int.parse(state.message) < 0
+                                        ? "Your Removed Price is ${state.message}"
+                                        : "Your Added Price is ${state.message}",
                                     "OK",
                                     "", () {
                                   replace(context, AppRoutes.detailsBookHotel);
@@ -235,8 +249,11 @@ class _DynamicTripBookingEditPageState
                               return TextButton(
                                   onPressed: () {
                                     // context.pop();
+                                    // placeIds.clear();
+                                    // activities.clear();
                                     context.read<UpdateTripCubit>().printList();
-                                    print(cntpeople);
+                                    print("✅$placeIds");
+                                    //   print(goingPlane['plane_id']);
                                     context
                                         .read<UpdateTripCubit>()
                                         .updateDynamicTrip(
@@ -292,9 +309,12 @@ class _DynamicTripBookingEditPageState
                                               dropHotel = !dropHotel;
                                             });
                                           },
+                                          roomC1: c1Num,
                                           roomC2: c2Num,
                                           roomC4: c4Num,
                                           roomC6: c6Num,
+                                          priceC1:
+                                              roomC1() != 0 ? priceC1() : "",
                                           priceC2:
                                               roomC2() != 0 ? priceC2() : "",
                                           priceC4:
@@ -302,6 +322,12 @@ class _DynamicTripBookingEditPageState
                                           priceC6:
                                               roomC6() != 0 ? priceC6() : "",
                                           isEdit: true,
+                                          onPressed1: () {
+                                            incrementC1();
+                                            context
+                                                .read<UpdateTripCubit>()
+                                                .addc1 = cnt1.toString();
+                                          },
                                           onPressed2: () {
                                             incrementC2();
                                             context
@@ -335,9 +361,13 @@ class _DynamicTripBookingEditPageState
                                                     dropHotel = !dropHotel;
                                                   });
                                                 },
+                                                roomC1: c1Num,
                                                 roomC2: c2Num,
                                                 roomC4: c4Num,
                                                 roomC6: c6Num,
+                                                priceC1: roomC1() != 0
+                                                    ? priceC1()
+                                                    : "",
                                                 priceC2: roomC2() != 0
                                                     ? priceC2()
                                                     : "",
@@ -348,6 +378,12 @@ class _DynamicTripBookingEditPageState
                                                     ? priceC6()
                                                     : "",
                                                 isEdit: true,
+                                                onPressed1: () {
+                                                  incrementC1();
+                                                  context
+                                                      .read<UpdateTripCubit>()
+                                                      .addc1 = cnt1.toString();
+                                                },
                                                 onPressed2: () {
                                                   incrementC2();
                                                   context
@@ -394,9 +430,13 @@ class _DynamicTripBookingEditPageState
                                                   dropHotel = !dropHotel;
                                                 });
                                               },
+                                              roomC1: c1Num,
                                               roomC2: c2Num,
                                               roomC4: c4Num,
                                               roomC6: c6Num,
+                                              priceC1: roomC1() != 0
+                                                  ? priceC1()
+                                                  : "",
                                               priceC2: roomC2() != 0
                                                   ? priceC2()
                                                   : "",
@@ -407,6 +447,12 @@ class _DynamicTripBookingEditPageState
                                                   ? priceC6()
                                                   : "",
                                               isEdit: true,
+                                              onPressed1: () {
+                                                incrementC1();
+                                                context
+                                                    .read<UpdateTripCubit>()
+                                                    .addc1 = c1Num.toString();
+                                              },
                                               onPressed2: () {
                                                 incrementC2();
                                                 context
@@ -444,7 +490,7 @@ class _DynamicTripBookingEditPageState
                                       : CustomFlight(
                                           model: mymodel,
                                           returnEdit: false,
-                                          isEdit: false,
+                                          isEdit: true,
                                           header: "Going Trip : ",
                                           planeName: "empty",
                                           price: "",
@@ -495,6 +541,9 @@ class _DynamicTripBookingEditPageState
                                             returnPlane['return_plane']
                                                 ['ticket_price'])
                                         : 0.0,
+                                    c1: roomC1() == 0
+                                        ? 0.0
+                                        : double.parse(priceC1()),
                                     c2: roomC2() == 0
                                         ? 0.0
                                         : double.parse(priceC2()),
@@ -520,6 +569,10 @@ class _DynamicTripBookingEditPageState
     );
   }
 
+  int roomC1() {
+    return mymodel!.rooms!.where((room) => room.capacity == 1).length;
+  }
+
   int roomC2() {
     return mymodel!.rooms!.where((room) => room.capacity == 2).length;
   }
@@ -530,6 +583,11 @@ class _DynamicTripBookingEditPageState
 
   int roomC6() {
     return mymodel!.rooms!.where((room) => room.capacity == 6).length;
+  }
+
+  String priceC1() {
+    final c1 = mymodel!.rooms!.firstWhere((room) => room.capacity == 1);
+    return c1.price.toString();
   }
 
   String priceC2() {

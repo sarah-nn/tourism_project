@@ -4,8 +4,8 @@ class StaticDetailsModel {
   SourceTrip? sourceTrip;
   DestinationTrip? destinationTrip;
   List<Places>? places;
-  GoingTrip? goingTrip;
-  ReturnTrip? returnTrip;
+  GoingTripStatic? goingTrip;
+  ReturnTripStatic? returnTrip;
   Hotel? hotel;
 
   StaticDetailsModel(
@@ -38,10 +38,10 @@ class StaticDetailsModel {
         : (json["places"] as List).map((e) => Places.fromJson(e)).toList();
     goingTrip = json["going_trip"] == null
         ? null
-        : GoingTrip.fromJson(json["going_trip"]);
+        : GoingTripStatic.fromJson(json["going_trip"]);
     returnTrip = json["return_trip"] == null
         ? null
-        : ReturnTrip.fromJson(json["return_trip"]);
+        : ReturnTripStatic.fromJson(json["return_trip"]);
     hotel = json["hotel"] == null ? null : Hotel.fromJson(json["hotel"]);
   }
 
@@ -94,14 +94,15 @@ class Hotel {
   }
 }
 
-class ReturnTrip {
+class ReturnTripStatic {
   ReturnPlane? returnPlane;
   AirportSource1? airportSource;
   AirportDestination1? airportDestination;
 
-  ReturnTrip({this.returnPlane, this.airportSource, this.airportDestination});
+  ReturnTripStatic(
+      {this.returnPlane, this.airportSource, this.airportDestination});
 
-  ReturnTrip.fromJson(Map<String, dynamic> json) {
+  ReturnTripStatic.fromJson(Map<String, dynamic> json) {
     returnPlane = json["return_plane"] == null
         ? null
         : ReturnPlane.fromJson(json["return_plane"]);
@@ -185,17 +186,18 @@ class ReturnPlane {
   }
 }
 
-class GoingTrip {
-  GoingPlane? goingPlane;
+class GoingTripStatic {
+  GoingPlaneStatic? goingPlane;
   AirportSource? airportSource;
   AirportDestination? airportDestination;
 
-  GoingTrip({this.goingPlane, this.airportSource, this.airportDestination});
+  GoingTripStatic(
+      {this.goingPlane, this.airportSource, this.airportDestination});
 
-  GoingTrip.fromJson(Map<String, dynamic> json) {
+  GoingTripStatic.fromJson(Map<String, dynamic> json) {
     goingPlane = json["going_plane"] == null
         ? null
-        : GoingPlane.fromJson(json["going_plane"]);
+        : GoingPlaneStatic.fromJson(json["going_plane"]);
     airportSource = json["airport_source"] == null
         ? null
         : AirportSource.fromJson(json["airport_source"]);
@@ -257,13 +259,13 @@ class AirportSource {
   }
 }
 
-class GoingPlane {
+class GoingPlaneStatic {
   int? id;
   String? name;
 
-  GoingPlane({this.id, this.name});
+  GoingPlaneStatic({this.id, this.name});
 
-  GoingPlane.fromJson(Map<String, dynamic> json) {
+  GoingPlaneStatic.fromJson(Map<String, dynamic> json) {
     id = json["id"];
     name = json["name"];
   }

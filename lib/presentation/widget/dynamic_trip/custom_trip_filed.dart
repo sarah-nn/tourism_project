@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
-import 'package:tourism_project/core/utils/global.dart';
 
 class CustomTripField extends StatefulWidget {
   const CustomTripField({super.key});
@@ -16,9 +15,7 @@ class _CustomTripFieldState extends State<CustomTripField> {
   Widget build(BuildContext context) {
     var nameController = context.read<DynamicTripCubit>();
     return BlocListener<DynamicTripCubit, DynamicTripState>(
-      listener: (context, state) {
-        // TODO: implement listener
-      },
+      listener: (context, state) {},
       child: TextField(
         controller: nameController.tripName,
         decoration: InputDecoration(

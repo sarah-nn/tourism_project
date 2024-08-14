@@ -224,6 +224,7 @@ class _WidgetSearchFlightState extends State<WidgetSearchFlight> {
                           // print("=============${flight.startDate}");
                           // flight.plane_trip_id = goingId ?? '1';
                           // flight.plane_trip_away_id = returnId ?? '1';
+                          context.pop();
                         },
                         child: Container(
                           alignment: Alignment.center,

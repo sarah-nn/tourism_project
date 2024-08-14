@@ -185,6 +185,8 @@
 class PlaceDescModel {
   int? id;
   String? name;
+  String? lat;
+  String? long;
   String? placePrice;
   String? text;
   int? areaId;
@@ -204,7 +206,9 @@ class PlaceDescModel {
       this.comments,
       this.images,
       this.categories,
-      this.area});
+      this.area,
+      this.lat,
+      this.long});
 
   PlaceDescModel.fromJson(Map<String, dynamic> json) {
     id = json["id"];
@@ -213,6 +217,8 @@ class PlaceDescModel {
     text = json["text"];
     areaId = json["area_id"];
     visible = json["visible"];
+    lat = json["lat"];
+    long = json["long"];
     comments = json["comments"] ?? [];
     images = json["images"] == null
         ? null
@@ -233,6 +239,8 @@ class PlaceDescModel {
     _data["text"] = text;
     _data["area_id"] = areaId;
     _data["visible"] = visible;
+    _data["lat"] = lat;
+    _data["long"] = long;
     if (comments != null) {
       _data["comments"] = comments;
     }

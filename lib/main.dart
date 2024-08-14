@@ -9,6 +9,7 @@ import 'package:tourism_project/routers.dart';
 
 Future<void> _firebaseMessaging(RemoteMessage message) async {
   FCMServices.firebaseMessaging(message);
+  print("notificatin com");
 }
 
 void main() async {

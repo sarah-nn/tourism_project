@@ -1,5 +1,6 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_images.dart';
@@ -523,7 +524,7 @@ CustomAlertDialog(
           if (onNegativePressed != null) {
             onNegativePressed();
           }
-          print("negattttttive ${negativeBtnText}");
+          print("negattttive ${negativeBtnText}");
         },
         child: Text(
           negativeBtnText,

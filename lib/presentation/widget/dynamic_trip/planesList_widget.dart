@@ -40,7 +40,7 @@ class PlaneListWidget extends StatelessWidget {
                       itemBuilder: (context, index) {
                         var planeList = singlTrip![index];
                         return WidgetSearchFlight(
-                            onePlane: planeList.planeId.toString(),
+                            onePlane: planeList.id.toString(),
                             isTrip: true,
                             goingPlaneTrip: planeList,
                             departflight: true,

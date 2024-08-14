@@ -20,12 +20,12 @@ class CustomSliderOnBoarding extends StatelessWidget {
         onPageChanged: onPageChanged,
         itemCount: onboardingList.length,
         itemBuilder: (context, index) {
-          return Column(
+          return ListView(
             children: [
               Stack(
                 children: [
                   Container(
-                    height: 440,
+                    height: 380,
                     width: 500,
                     //  Adjust the height as needed
                     decoration: BoxDecoration(
@@ -49,10 +49,15 @@ class CustomSliderOnBoarding extends StatelessWidget {
                               key: "isonboardingvisited?", value: true);
                           replace(context, AppRoutes.register);
                         },
-                        child: const Text(
-                          "Skip",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w500),
+                        child: Container(
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black)),
+                          child: const Text(
+                            "Skip",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w500),
+                          ),
                         ),
                       ),
                     ),
@@ -60,8 +65,11 @@ class CustomSliderOnBoarding extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 25),
-              DotOnBoarding(
-                controller: pageController,
+              Align(
+                alignment: Alignment.center,
+                child: DotOnBoarding(
+                  controller: pageController,
+                ),
               ),
               const SizedBox(height: 25),
               Padding(
@@ -72,16 +80,14 @@ class CustomSliderOnBoarding extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              Expanded(
-                child: Container(
-                    width: double.infinity,
-                    alignment: Alignment.center,
-                    child: Text(
-                      onboardingList[index].body!,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 17),
-                    )),
-              )
+              Container(
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  child: Text(
+                    onboardingList[index].body!,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 17),
+                  ))
             ],
           );
         });

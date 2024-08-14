@@ -220,14 +220,14 @@ class ReturnPlane {
   }
 }
 
-class GoingTrip {
+class GoingTrip1 {
   GoingPlane? goingPlane;
   AirportSource? airportSource;
   AirportDestination? airportDestination;
 
-  GoingTrip({this.goingPlane, this.airportSource, this.airportDestination});
+  GoingTrip1({this.goingPlane, this.airportSource, this.airportDestination});
 
-  GoingTrip.fromJson(Map<String, dynamic> json) {
+  GoingTrip1.fromJson(Map<String, dynamic> json) {
     goingPlane = json["going_plane"] == null
         ? null
         : GoingPlane.fromJson(json["going_plane"]);
@@ -337,7 +337,7 @@ class Places {
   Places.fromJson(Map<String, dynamic> json) {
     id = json["id"];
     name = json["name"];
-    placePrice = json["place_price"];
+    placePrice = json["current_price"];
     text = json["text"];
     areaId = json["area_id"];
     visible = json["visible"];
@@ -351,7 +351,7 @@ class Places {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["id"] = id;
     _data["name"] = name;
-    _data["place_price"] = placePrice;
+    _data["current_price"] = placePrice;
     _data["text"] = text;
     _data["area_id"] = areaId;
     _data["visible"] = visible;

@@ -122,7 +122,7 @@ class StaticTripCubit extends Cubit<StaticTripState> {
         print("place image=======================${data['images']}");
         return data['images'];
       } else {
-        print("api error${response.statusCode}");
+        print("api error${response.statusCode} with body ${response.body}");
       }
     } catch (e) {
       print("$e");

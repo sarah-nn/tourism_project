@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tourism_project/business_logic/activity/activity_cubit.dart';
 import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
-import 'package:tourism_project/business_logic/flight/searchFlight_cubit.dart';
 import 'package:tourism_project/business_logic/hotel/searchHotel_cubit.dart';
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
@@ -35,8 +34,6 @@ class _DynamicTripPageState extends State<DynamicTripPage> {
   String? tripId;
   bool isSuccess = false;
 
-  // DynamicTripModel? bookingModel;
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<DynamicTripCubit, DynamicTripState>(
@@ -46,15 +43,17 @@ class _DynamicTripPageState extends State<DynamicTripPage> {
           print("===trip is from page==$tripId");
           showBookingDoneDialog(context, AppRoutes.dynamicTripDetails, tripId,
               () {
+            context.pop();
             replace(context, AppRoutes.startDynamicPage);
           });
           // context.pop();
           placeIds.clear();
           activities.clear();
           placeNames.clear();
+          onePlaneId = '';
+          goingPlaneId = '';
+          returnPlaneId = '';
         }
-        //print("❗${bookingModel}");
-        //print("❗❤${bookingModel?}");
       },
       builder: (context, state) {
         return Scaffold(
@@ -117,32 +116,7 @@ class _DynamicTripPageState extends State<DynamicTripPage> {
                                 tripDestination;
                               });
                             }
-                            if (currentStep == 4) {
-                              // var params = context.read<DynamicTripCubit>();
-                              // BlocListener<SearchFlightCubit,
-                              //     SearchFlightState>(
-                              //   listener: (context, state) {
-                              //     if (state is SearchFlightSuccess) {
-                              //       print("done");
-                              //     }
-                              //   },
-                              // );
-
-                              // context
-                              //     .read<SearchFlightCubit>()
-                              //     .getallPlaneTripGoingAndReturn(
-                              //         country_source_id: params.sourceTripId,
-                              //         country_destination_id:
-                              //             params.destinationTripId,
-                              //         flight_date: params.startDate);
-                              // context
-                              //     .read<SearchFlightCubit>()
-                              //     .getallPlaneTripGoing(
-                              //         country_source_id: params.sourceTripId,
-                              //         country_destination_id:
-                              //             params.destinationTripId,
-                              //         flight_date: params.startDate);
-                            }
+                            if (currentStep == 4) {}
                           });
                         },
                         steps: [
@@ -168,9 +142,10 @@ class _DynamicTripPageState extends State<DynamicTripPage> {
                               content: NumberOfTourist(),
                               subtitle: stepSubTitle("'required'")),
                           Step(
-                              isActive: currentStep >= 4,
-                              title: stepTitle("Flight", ""),
-                              content: FlightDynamicTrip()),
+                            isActive: currentStep >= 4,
+                            title: stepTitle("Flight", ""),
+                            content: FlightDynamicTrip(),
+                          ),
                           Step(
                               isActive: currentStep >= 5,
                               title: stepTitle("Places", ""),
@@ -210,21 +185,21 @@ class _DynamicTripPageState extends State<DynamicTripPage> {
                             vertical: 10, horizontal: 21),
                         child: MaterialButton(
                           minWidth: double.maxFinite,
-                          //  minWidth: MediaQuery.of(context).size.width / 1.4,
                           onPressed: () {
-                            // GoRouter.of(context).push(
-                            //     '/bookingDynamicDetails/${39.toString()}');
-                            print(tripId);
-                            // BlocProvider.of<DynamicTripCubit>(context)
-                            //     .printList();
                             //!booking now
                             context
                                 .read<DynamicTripCubit>()
                                 .dynamicTripBooking();
-                            // placeIds.clear();
-                            // placeNames.clear();
-                            // activities.clear();
-                            //tripDestination = '';
+                            context.read<DynamicTripCubit>().printList();
+                            // print(
+                            //     "one $onePlaneId   going $goingPlaneId return $returnPlaneId");
+                            returnPlaneId != '' &&
+                                    (onePlaneId == '' && goingPlaneId == '')
+                                ? showAlertDialog(context,
+                                    "Choose Your Going Plane to Continue Booking")
+                                : context
+                                    .read<DynamicTripCubit>()
+                                    .buildRequestBody();
                           },
                           color: AppColor.primaryColor,
                           shape: const RoundedRectangleBorder(

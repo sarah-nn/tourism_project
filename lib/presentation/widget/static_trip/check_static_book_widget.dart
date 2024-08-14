@@ -428,6 +428,7 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
   bool imm = true;
   int _counter = 1;
   int discount = 0;
+  bool isChoose = false;
   CheckNum? model;
   bool finish = false;
   late Future<CheckNum> checkModel;
@@ -583,8 +584,8 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
                     "\$ ${model!.ticket_price_for_places * _counter}"),
                 model?.priceAfterDiscount == null
                     ? Container()
-                    : customRow(
-                        headlines[5], "\$ ${model?.priceAfterDiscount}"),
+                    : customRow("Price after discount :",
+                        "\$ ${model?.priceAfterDiscount}"),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -617,12 +618,18 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
                   padding: EdgeInsets.all(8),
                   child: MaterialButton(
                     onPressed: () {
-                      print(discount);
-                      setState(() {
-                        model?.priceAfterDiscount != null ? discount = 1 : null;
-                      });
+                      model?.priceAfterDiscount != null
+                          ? setState(() {
+                              discount == 0 ? discount = 1 : discount = 0;
+                              isChoose = !isChoose;
+                            })
+                          : null;
                     },
-                    color: AppColor.secondColor,
+                    color: model?.priceAfterDiscount != null
+                        ? isChoose
+                            ? AppColor.IconMinus
+                            : AppColor.secondColor
+                        : AppColor.secondColor,
                     shape: Border.all(
                         color: AppColor.primaryColor.withOpacity(0.4)),
                     child: Row(
@@ -649,6 +656,8 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
           padding: const EdgeInsets.all(8),
           child: MaterialButton(
               onPressed: () {
+                print(discount);
+
                 widget.cubit.bookStaticTrip(
                     widget.tripId,
                     _counter.toString(),
@@ -658,8 +667,9 @@ class _CheckStaticBookWidgetState extends State<CheckStaticBookWidget> {
                     discount.toString(),
                     model!.days.toString(),
                     model!.roomPrice.toString());
-                //!finish ? context.pop(context) : null;
               },
+              //   //!finish ? context.pop(context) : null;
+              // },
               color: AppColor.primaryColor,
               child: const Text(
                 "Confirm Book",

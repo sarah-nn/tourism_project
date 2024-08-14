@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tourism_project/core/database/cach_helper.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/static.dart';
@@ -46,6 +47,8 @@ class _OnBoardingScreensState extends State<OnBoardingScreens> {
                       ? CustomButtonOnBoarding(
                           text: "Get Started",
                           onPressed: () {
+                            CacheHelper().saveData(
+                                key: "isonboardingvisited?", value: true);
                             replace(context, AppRoutes.register);
                           })
                       : CustomButtonOnBoarding(

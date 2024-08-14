@@ -10,7 +10,6 @@ import 'package:tourism_project/presentation/widget/place_desc/place_desc_text.d
 import 'package:tourism_project/presentation/widget/place_desc/place_images.dart';
 import 'package:tourism_project/presentation/widget/place_desc/place_location_cat.dart';
 import 'package:tourism_project/presentation/widget/place_desc/place_name_price.dart';
-import 'package:tourism_project/presentation/widget/static_trip/trip_item_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PlaceDescPage extends StatefulWidget {
@@ -174,8 +173,8 @@ class _TestPageState extends State<PlaceDescPage> {
         const SizedBox(height: 30),
         GestureDetector(
           onTap: () {
-            final String latitude = 33.511900.toString();
-            final String longitude = 36.306700.toString();
+            final String latitude = model.lat.toString();
+            final String longitude = model.long.toString();
             _launchMap(latitude, longitude);
           },
           child: Container(

@@ -13,7 +13,7 @@ class Gallery extends StatelessWidget {
   Widget build(BuildContext context) {
     List<String> images = [
       imageList[0].image!,
-      imageList[1].image!,
+      // imageList[1].image!,
       //  imageList[2].image!,
     ];
 

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:tourism_project/business_logic/details_book.dart/delete_edit_static_trip_cubit.dart';
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
+import 'package:tourism_project/core/utils/app_text_style.dart';
 import 'package:tourism_project/data/models/show_details_price_static_model.dart';
 import 'package:tourism_project/data/models/upcoming_previous_static_trip_model.dart';
 import 'package:tourism_project/presentation/widget/Booking/text_info.dart';
@@ -20,6 +21,7 @@ class CardPreviousTrip extends StatefulWidget {
 class _CardPreviousTripState extends State<CardPreviousTrip> {
   late DeleteEditBookStaticCubit myBloc;
   late ShowDetailsPriceStatic showDetailsPriceStatic;
+  bool colored = false;
 
   @override
   void initState() {
@@ -157,18 +159,23 @@ class _CardPreviousTripState extends State<CardPreviousTrip> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ...List.generate(
-                            4,
-                            (index) => const Icon(
-                                  Icons.star,
-                                  color: Color.fromARGB(255, 247, 194, 5),
-                                  size: 23,
-                                )),
-                      ],
-                    ),
+                    TextButton(
+                        onPressed: () {
+                          ratingApp(context, () {}, colored);
+                        },
+                        child: Text("Rating Trip")),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     ...List.generate(
+                    //         4,
+                    //         (index) => const Icon(
+                    //               Icons.star,
+                    //               color: Color.fromARGB(255, 247, 194, 5),
+                    //               size: 23,
+                    //             )),
+                    //   ],
+                    // ),
                     TextButton(
                         onPressed: () {
                           GoRouter.of(context).push(
@@ -187,5 +194,64 @@ class _CardPreviousTripState extends State<CardPreviousTrip> {
         ),
       );
     });
+  }
+
+  ratingApp(BuildContext context, Function()? onTap, bool colored) {
+    AlertDialog alertDialog = AlertDialog(
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            color: Colors.red,
+            width: double.maxFinite,
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.amber, borderRadius: BorderRadius.circular(50)),
+              child: const Text(
+                "Rate Us !!",
+                style: MyTextStyle.poppins,
+              ),
+            ),
+          ),
+          Container(
+            child: Column(
+              children: [
+                Text(
+                  "Tell Us How Was Your Experience ?",
+                  style: MyTextStyle.normal
+                      .copyWith(fontSize: 25, fontWeight: FontWeight.bold),
+                ),
+                Row(
+                  children: [
+                    ...List.generate(
+                        5,
+                        (index) => InkWell(
+                              onTap: () {
+                                setState(() {
+                                  colored = !colored;
+                                });
+                                print(colored);
+                              },
+                              child: Icon(
+                                Icons.star,
+                                color: colored ? Colors.red : Colors.grey,
+                                size: 45,
+                              ),
+                            ))
+                  ],
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alertDialog;
+      },
+    );
   }
 }

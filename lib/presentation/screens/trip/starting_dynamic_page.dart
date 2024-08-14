@@ -5,6 +5,7 @@ import 'package:tourism_project/core/utils/app_images.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
+import 'package:tourism_project/core/utils/global.dart';
 
 class StartingDaynamicPage extends StatelessWidget {
   const StartingDaynamicPage({super.key});
@@ -72,6 +73,8 @@ class StartingDaynamicPage extends StatelessWidget {
                 minWidth: double.maxFinite,
                 onPressed: () {
                   replace(context, AppRoutes.dynamicTrip);
+                  placeIds.clear();
+                  activities.clear();
                 },
                 color: AppColor.primaryColor,
                 shape: const RoundedRectangleBorder(

@@ -172,6 +172,8 @@ class _HotelDynamicTripState extends State<HotelDynamicTrip> {
                   children: [
                     customHeaders(['Capacity', 'Num']),
                     customTableRow(
+                        "1", context.read<DynamicTripCubit>().controller1),
+                    customTableRow(
                         "2", context.read<DynamicTripCubit>().controller2),
                     customTableRow(
                         "4", context.read<DynamicTripCubit>().controller4),

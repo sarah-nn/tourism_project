@@ -9,6 +9,7 @@ class CheckPayCard extends StatelessWidget {
       required this.noRetutn,
       required this.goingPrice,
       required this.returnPrice,
+      required this.c1,
       required this.c2,
       required this.c4,
       required this.c6});
@@ -17,6 +18,7 @@ class CheckPayCard extends StatelessWidget {
   final bool noRetutn;
   final double goingPrice;
   final double returnPrice;
+  final double c1;
   final double c2;
   final double c4;
   final double c6;
@@ -55,7 +57,7 @@ class CheckPayCard extends StatelessWidget {
                 ? priceRow("return plane :",
                     "${(returnPrice * mymodel!.dynamicTrip!.numberOfPeople!)}")
                 : Container(),
-            priceRow("total rooms : ", "${roomPrice(c2, c4, c6)}"),
+            priceRow("total rooms : ", "${roomPrice(c1, c2, c4, c6)}"),
             const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -135,14 +137,15 @@ class CheckPayCard extends StatelessWidget {
     return totalPlacePrice;
   }
 
-  double roomPrice(c2, c4, c6) {
+  double roomPrice(c1, c2, c4, c6) {
     DateTime start = DateTime.parse(mymodel!.dynamicTrip!.startDate!);
     DateTime end = DateTime.parse(mymodel!.dynamicTrip!.endDate!);
     int days = start.difference(end).inDays;
+    double c1price = c1 * days;
     double c2price = c2 * days;
     double c4price = c4 * days;
     double c6price = c6 * days;
-    return (c2price + c4price + c6price).abs();
+    return (c1price + c2price + c4price + c6price).abs();
   }
 
   Widget priceRow(value, price) {

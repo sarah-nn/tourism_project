@@ -1,7 +1,7 @@
 class EndPoint {
-  static const String baseUrl = 'http://192.168.43.119:8000/api'; //for me
+  static const String baseUrl = 'http://192.168.137.60:8000/api'; //for me
   //static const String baseUrl = 'http://192.168.43.76:8000/api'; //for Oula
-  static const String imageBaseUrl = 'http://192.168.43.119:8000/';
+  static const String imageBaseUrl = 'http://192.168.137.60:8000/';
   //static const String imageBaseUrl = 'http://192.168.43.76:8000/';
 
 //======================== Auth ========================

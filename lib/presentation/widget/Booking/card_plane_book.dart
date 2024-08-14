@@ -440,8 +440,7 @@ class _CardPlaeBookState extends State<CardPlaeBook> {
                                                                     255,
                                                                     168,
                                                                     166,
-                                                                    166),
-                                                          )
+                                                                    166))
                                                         : Container(),
                                                     isEditingName
                                                         ? const SizedBox(

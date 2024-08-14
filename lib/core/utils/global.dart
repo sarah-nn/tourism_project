@@ -1,5 +1,4 @@
 import 'package:tourism_project/core/database/cach_helper.dart';
-import 'package:tourism_project/data/models/dynamic_booking_details_model.dart';
 
 String myToken = CacheHelper().getData(key: 'token');
 List<int> placeIds = [];

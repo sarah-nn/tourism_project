@@ -57,6 +57,8 @@ class _StaticTripDetailsPageState extends State<StaticTripDetailsPage> {
       listener: (context, state) {
         if (state is StaticTripDetails) {
           tripModel = (state).staticModel;
+          print(tripModel!.goingTrip);
+          print(tripModel!.returnTrip);
         }
       },
       builder: (context, state) {

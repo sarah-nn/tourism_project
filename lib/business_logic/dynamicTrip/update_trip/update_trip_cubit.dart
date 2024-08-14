@@ -15,23 +15,23 @@ class UpdateTripCubit extends Cubit<UpdateTripState> {
   String newDate = '';
   String addPeople = '';
   String newHotelId = '';
+  String addc1 = '';
   String addc2 = '';
   String addc4 = '';
   String addc6 = '';
-  String newPlane = '';
+  String newReturn = '';
+  String newGoing = '';
   String addednotes = '';
   TextEditingController newNotes = TextEditingController();
 
   Map<String, String> updateRequestBody(String endDate) {
     Map<String, String> body = {
       'end_date': newDate == '' ? endDate : newDate,
+      'count_room_C1': addc1 == '' ? "0" : addc1,
       'count_room_C2': addc2 == '' ? "0" : addc2,
       'count_room_C4': addc4 == '' ? "0" : addc4,
       'count_room_C6': addc6 == '' ? "0" : addc6,
     };
-    // if (newTripName != '') {
-    //   body['trip_name'] = hotelId;
-    // }
     if (addednotes != '') {
       body['trip_note'] = addednotes;
     }
@@ -48,8 +48,12 @@ class UpdateTripCubit extends Cubit<UpdateTripState> {
     for (int i = 0; i < activities.length; i++) {
       body['activities[$i]'] = activities[i].toString();
     }
-    if (newPlane != '') {
-      body['plane_trip_away_id'] = newPlane;
+    if (newGoing != '') {
+      body['plane_trip_id'] = newGoing;
+    }
+
+    if (newReturn != '') {
+      body['plane_trip_away_id'] = newReturn;
     }
     return body;
   }

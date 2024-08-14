@@ -27,6 +27,7 @@ class DynamicTripCubit extends Cubit<DynamicTripState> {
   int tripDays = 0;
 
   // for Room Capacity
+  TextEditingController controller1 = TextEditingController();
   TextEditingController controller2 = TextEditingController();
   TextEditingController controller4 = TextEditingController();
   TextEditingController controller6 = TextEditingController();
@@ -63,6 +64,7 @@ class DynamicTripCubit extends Cubit<DynamicTripState> {
       'number_of_people': numOfPeople.toString(),
       'start_date': startDate,
       'end_date': endDate,
+      'count_room_C1': controller1.text.isEmpty ? "0" : controller1.text,
       'count_room_C2': controller2.text.isEmpty ? "0" : controller2.text,
       'count_room_C4': controller4.text.isEmpty ? "0" : controller4.text,
       'count_room_C6': controller6.text.isEmpty ? "0" : controller6.text,
@@ -109,10 +111,11 @@ class DynamicTripCubit extends Cubit<DynamicTripState> {
         });
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body)['data'];
-      print("\n\n\n\n$data");
-      print("=========${data['dynamic_trip']['trip_name']}");
+      // print("\n\n\n\n$data");
+      //print("=========${data['dynamic_trip']['trip_name']}");
       tripDynamicId = data['dynamic_trip']['id'];
-      print(tripDynamicId);
+      //  print(tripDynamicId);
+      print("dynamic booking done");
 
       // bookingModel = DynamicTripModel.fromJson(data);
       emit(BookingSuccess(tripId: tripDynamicId.toString()));

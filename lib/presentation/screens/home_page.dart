@@ -41,6 +41,7 @@ class _HomePageState extends State<HomePage> {
         listener: (context, state) {
       if (state is DontMiisSuccess) {
         dontMissModel = state.dontMissModel;
+        print(dontMissModel);
       }
       if (state is DontMiisFailure) {
         ScaffoldMessenger.of(context)
@@ -54,13 +55,19 @@ class _HomePageState extends State<HomePage> {
           iconTheme: IconThemeData(color: Colors.black, size: 30),
           actions: [
             Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: Icon(
-                Icons.notifications_active,
-                color: AppColor.primaryColor,
-                size: 27,
-              ),
-            )
+                padding: const EdgeInsets.only(right: 10),
+                child: Badge(
+                  alignment: Alignment.center,
+                  label: Text("1"),
+                  backgroundColor: Colors.red,
+                  child: Center(
+                    child: Icon(
+                      Icons.notifications_active,
+                      color: AppColor.primaryColor,
+                      size: 27,
+                    ),
+                  ),
+                ))
           ],
         ),
         drawer: const WidgetDrawer(),
