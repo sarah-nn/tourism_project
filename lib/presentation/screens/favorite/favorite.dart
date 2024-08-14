@@ -46,7 +46,9 @@ class _FavoritePageState extends State<FavoritePage> {
     }, builder: (context, state) {
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: AppColor.primaryColor,
+          backgroundColor:
+              light ? AppColor.primaryColor : AppColor.primaryColorDark,
+
           // light ? AppColor.primaryColor : AppColor.primaryColorDark,
           centerTitle: true,
           title: const Text(
@@ -72,14 +74,14 @@ class _FavoritePageState extends State<FavoritePage> {
                           ),
                         );
                       })
-                  : const Center(
+                  : Center(
                       child: Text(
                         'Not found any favorite',
                         style: TextStyle(
                           fontFamily: 'normal',
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black54,
+                          color: light ? Colors.black54 : Colors.white60,
                           // light ? Colors.black54 : Colors.white60
                         ),
                       ),

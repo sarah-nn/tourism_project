@@ -4,6 +4,7 @@ import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.da
 import 'package:tourism_project/business_logic/flight/searchFlight_cubit.dart';
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/going_and_return_plane_trip.dart';
 import 'package:tourism_project/data/models/going_plane_trip.dart';
 import 'package:tourism_project/presentation/widget/dynamic_trip/planesList_widget.dart';
@@ -157,7 +158,7 @@ class _FlightDynamicTripState extends State<FlightDynamicTrip> {
         Container(
           width: double.maxFinite,
           decoration: BoxDecoration(
-              color: AppColor.secondColor,
+              color: light ? AppColor.secondColor : AppColor.thirdColorDark,
               border: Border.all(color: AppColor.primaryColor.withOpacity(0.3)),
               borderRadius: BorderRadius.circular(15)),
           child: MaterialButton(

@@ -5,6 +5,7 @@ import 'package:tourism_project/business_logic/details_book.dart/delete_edit_sta
 import 'package:tourism_project/business_logic/static_trip/book_static_trip/book_static_trip_cubit.dart';
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
+import 'package:tourism_project/data/models/attribute_details_static.dart';
 import 'package:tourism_project/data/models/check_trip_num_model.dart';
 import 'package:tourism_project/data/models/show_details_price_static_model.dart';
 import 'package:tourism_project/data/models/upcoming_previous_static_trip_model.dart';
@@ -35,6 +36,8 @@ class _CardUpcomingTripState extends State<CardUpcomingTrip> {
   late BookStaticTripCubit myCubit;
   bool isExpanded = false;
   bool isCheck = false;
+  int count = 0;
+  double price = 0;
   void toggleExpande() {
     setState(() {
       isExpanded = !isExpanded;
@@ -131,12 +134,13 @@ class _CardUpcomingTripState extends State<CardUpcomingTrip> {
                     const SizedBox(height: 6),
                     TextInfoBook(
                         baseText: 'numer of persone',
-                        secoundText:
-                            widget.futureTrips.numberOfFriend.toString()),
+                        secoundText: (widget.futureTrips.numberOfFriend + count)
+                            .toString()),
                     const SizedBox(height: 6),
                     TextInfoBookPriceAndNote(
                       baseText: 'book price',
-                      secoundText: '${widget.futureTrips.bookPrice}\$',
+                      secoundText:
+                          '${double.parse(widget.futureTrips.bookPrice) + price}\$',
                       sizeSecound: 20,
                       backgroundColorSecound:
                           const Color.fromARGB(255, 204, 226, 250),
@@ -176,7 +180,11 @@ class _CardUpcomingTripState extends State<CardUpcomingTrip> {
                         onPressed: () {
                           GoRouter.of(context).push(
                               '/StaticTripDetailsPage/${widget.futureTrips.staticTripId}',
-                              extra: null);
+                              extra: AttributeStaticDetails(
+                                  tripId: widget.futureTrips.staticTripId
+                                      .toString(),
+                                  imageList: null,
+                                  enableBook: false));
                         },
                         child: Text(
                           'view more details...',
@@ -229,7 +237,15 @@ class _CardUpcomingTripState extends State<CardUpcomingTrip> {
                                         // state: errMessage,
                                       ),
                                     );
+                                  }).then((result) {
+                                if (result != null) {
+                                  setState(() {
+                                    count = result['count'];
+                                    price = result[
+                                        'price']; // تحديث النموذج بالبيانات المعدلة
                                   });
+                                }
+                              });
                             },
                             child: Row(
                               children: [

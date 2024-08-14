@@ -1,90 +1,115 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
+import 'package:tourism_project/business_logic/payment/payment_cubit.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_images.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
+import 'package:tourism_project/data/models/payment_model.dart';
 
-class PaymentPage extends StatelessWidget {
-  const PaymentPage({super.key});
+class PaymentPage extends StatefulWidget {
+  PaymentPage({super.key});
+
+  @override
+  State<PaymentPage> createState() => _PaymentPageState();
+}
+
+class _PaymentPageState extends State<PaymentPage> {
+  late PaymentModel paymentModel;
+  @override
+  void initState() {
+    super.initState();
+    context.read<PaymentCubit>().getPaymentInfo();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-            title: Text(
-              "Payment",
-              style: MyTextStyle.headers.copyWith(fontSize: 35),
-            ),
-            backgroundColor: Colors.white,
-            elevation: 0,
-            leading: IconButton(
-              onPressed: () {
-                context.pop();
-              },
-              icon: Icon(
-                Icons.arrow_back,
-                color: Colors.black,
+    return BlocConsumer<PaymentCubit, PaymentState>(listener: (context, state) {
+      if (state is PaymentSuccess) {
+        paymentModel = (state).paymentModel;
+      }
+      if (state is PaymentFailure) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text("state.fauil")));
+      }
+    }, builder: (context, state) {
+      return Scaffold(
+          appBar: AppBar(
+              title: Text(
+                "Payment",
+                style: MyTextStyle.headers.copyWith(fontSize: 35),
               ),
-            )),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: ListView(
-            // mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                width: double.maxFinite,
-                child: Column(
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'my point : ',
-                        style: MyTextStyle.bright.copyWith(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 35,
-                            color: AppColor.primaryColor),
+              backgroundColor: Colors.white,
+              elevation: 0,
+              leading: IconButton(
+                onPressed: () {
+                  context.pop();
+                },
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.black,
+                ),
+              )),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: ListView(
+              // mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  width: double.maxFinite,
+                  child: Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'my point : ',
+                          style: MyTextStyle.bright.copyWith(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 35,
+                              color: AppColor.primaryColor),
+                        ),
                       ),
+                      SizedBox(height: 5),
+                      Circular()
+                    ],
+                  ),
+                ),
+                customPayCard(Color.fromARGB(255, 236, 243, 255), "Strip",
+                    Image.asset(AppImage.strip)),
+                Row(
+                  children: [
+                    Expanded(
+                      child: customPayCard(
+                          Color.fromARGB(255, 254, 249, 255),
+                          "Wallet",
+                          Container(
+                            width: 50,
+                            height: 50,
+                            child: Image.asset(
+                              AppImage.wallet,
+                              color: Colors.black45,
+                            ),
+                          )),
                     ),
-                    SizedBox(height: 5),
-                    Circular()
+                    Expanded(
+                      child: customPayCard(
+                          Color.fromARGB(255, 255, 255, 238),
+                          "Point",
+                          const Icon(
+                            Icons.payments_outlined,
+                            size: 47,
+                            color: Colors.black45,
+                          )),
+                    ),
                   ],
                 ),
-              ),
-              customPayCard(Color.fromARGB(255, 236, 243, 255), "Strip",
-                  Image.asset(AppImage.strip)),
-              Row(
-                children: [
-                  Expanded(
-                    child: customPayCard(
-                        Color.fromARGB(255, 254, 249, 255),
-                        "Wallet",
-                        Container(
-                          width: 50,
-                          height: 50,
-                          child: Image.asset(
-                            AppImage.wallet,
-                            color: Colors.black45,
-                          ),
-                        )),
-                  ),
-                  Expanded(
-                    child: customPayCard(
-                        Color.fromARGB(255, 255, 255, 238),
-                        "Point",
-                        const Icon(
-                          Icons.payments_outlined,
-                          size: 47,
-                          color: Colors.black45,
-                        )),
-                  ),
-                ],
-              ),
-              // customPayCard(Color.fromARGB(255, 236, 243, 255), "Strip",
-              //     Image.asset(AppImage.strip))
-            ],
-          ),
-        ));
+                // customPayCard(Color.fromARGB(255, 236, 243, 255), "Strip",
+                //     Image.asset(AppImage.strip))
+              ],
+            ),
+          ));
+    });
   }
 
   Widget customPayCard(Color color, String test, Widget end) {

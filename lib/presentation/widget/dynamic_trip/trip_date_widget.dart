@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
+import 'package:tourism_project/core/utils/global.dart';
 
 class TripDate extends StatefulWidget {
   @override
@@ -85,15 +86,16 @@ class _TripDateState extends State<TripDate> {
               child: Container(
                 width: double.maxFinite,
                 decoration: BoxDecoration(
-                    color: AppColor.secondColor,
+                    color:
+                        light ? AppColor.secondColor : AppColor.thirdColorDark,
                     borderRadius: BorderRadius.circular(15)),
                 child: MaterialButton(
                     onPressed: _selectDateRange,
                     child: context.read<DynamicTripCubit>().startDate == '' &&
                             context.read<DynamicTripCubit>().endDate == ''
-                        ? const Row(
+                        ? Row(
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.date_range_outlined,
                                 color: Color.fromARGB(255, 160, 165, 95),
                                 size: 28,
@@ -101,7 +103,10 @@ class _TripDateState extends State<TripDate> {
                               Text(
                                 '   Enter Date Range',
                                 style: TextStyle(
-                                    fontSize: 17, color: Colors.black54),
+                                    fontSize: 17,
+                                    color: light
+                                        ? Colors.black54
+                                        : Colors.white54),
                               ),
                             ],
                           )
@@ -131,7 +136,7 @@ class _TripDateState extends State<TripDate> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Row(
+            Row(
               children: [
                 Icon(
                   Icons.date_range,
@@ -143,21 +148,22 @@ class _TripDateState extends State<TripDate> {
                   style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black45),
+                      color: light ? Colors.black45 : Colors.white54),
                 )
               ],
             ),
             Text(
               "  ${context.read<DynamicTripCubit>().startDate}",
-              style: MyTextStyle.Pacifico.copyWith(fontSize: 25),
+              style: MyTextStyle.Pacifico.copyWith(
+                  fontSize: 25, color: light ? null : Colors.white),
             ),
             const Divider(
               color: Colors.black,
               thickness: 1,
             ),
-            const Row(
+            Row(
               children: [
-                Icon(
+                const Icon(
                   Icons.date_range,
                   size: 25,
                   color: Colors.grey,
@@ -167,13 +173,14 @@ class _TripDateState extends State<TripDate> {
                   style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black45),
+                      color: light ? Colors.black45 : Colors.white54),
                 )
               ],
             ),
             Text(
               "  ${context.read<DynamicTripCubit>().endDate}",
-              style: MyTextStyle.Pacifico.copyWith(fontSize: 25),
+              style: MyTextStyle.Pacifico.copyWith(
+                  fontSize: 25, color: light ? null : Colors.white),
             ),
           ],
         ),

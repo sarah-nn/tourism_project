@@ -7,6 +7,7 @@ import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_images.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
 import 'package:tourism_project/core/utils/end_point.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/static_trip_details_model.dart';
 import 'package:tourism_project/presentation/widget/static_trip/details/custom_onelineContainer.dart';
 import 'package:tourism_project/presentation/widget/static_trip/details/custom_twolineContainer.dart';
@@ -20,11 +21,12 @@ import 'package:url_launcher/url_launcher.dart';
 class StaticTripDetailsPage extends StatefulWidget {
   final String tripId;
   final List<dynamic>? imageList;
-  const StaticTripDetailsPage({
-    super.key,
-    required this.tripId,
-    @required this.imageList,
-  });
+  final bool enableBook;
+  const StaticTripDetailsPage(
+      {super.key,
+      required this.tripId,
+      @required this.imageList,
+      required this.enableBook});
 
   @override
   State<StaticTripDetailsPage> createState() => _StaticTripDetailsPageState();
@@ -127,18 +129,20 @@ class _StaticTripDetailsPageState extends State<StaticTripDetailsPage> {
                                       borderRadius: BorderRadius.circular(10),
                                       side: BorderSide(
                                           color: AppColor.primaryColor)),
-                                  backgroundColor:
-                                      Color.fromARGB(255, 197, 222, 241),
+                                  backgroundColor: light
+                                      ? Color.fromARGB(255, 197, 222, 241)
+                                      : AppColor.secoundColorDark,
                                 ),
                                 onPressed: _launchTelegram,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Text(
+                                    Text(
                                       'Join our trip Group',
                                       style: TextStyle(
-                                          color:
-                                              Color.fromARGB(255, 26, 73, 112),
+                                          color: light
+                                              ? Color.fromARGB(255, 26, 73, 112)
+                                              : Colors.white,
                                           fontSize: 17),
                                     ),
                                     Container(
@@ -153,13 +157,15 @@ class _StaticTripDetailsPageState extends State<StaticTripDetailsPage> {
                           ],
                         ),
                       ),
-                      Expanded(
-                          flex: 2,
-                          child: PriceAndBookButtom(
-                            price:
-                                "\$ ${tripModel!.staticTrip!.price.toString()}",
-                            tripId: tripModel!.staticTrip!.id.toString(),
-                          ))
+                      widget.enableBook
+                          ? Expanded(
+                              flex: 2,
+                              child: PriceAndBookButtom(
+                                price:
+                                    "\$ ${tripModel!.staticTrip!.price.toString()}",
+                                tripId: tripModel!.staticTrip!.id.toString(),
+                              ))
+                          : Container()
                     ],
                   )
                 : Center(
@@ -186,12 +192,12 @@ Widget imageSlider(String customImage) {
 
 PreferredSizeWidget appBar(BuildContext context) {
   return AppBar(
-    backgroundColor: Colors.white,
+    backgroundColor: light ? Colors.white : AppColor.primaryColorDark,
     title: Text(
       "Trip Details",
       style: MyTextStyle.bright.copyWith(
           fontSize: 38,
-          color: Colors.black,
+          color: light ? Colors.black : Colors.white,
           fontWeight: FontWeight.bold,
           letterSpacing: 1.5),
     ),
@@ -200,7 +206,8 @@ PreferredSizeWidget appBar(BuildContext context) {
       onPressed: () {
         Navigator.pop(context);
       },
-      icon: const Icon(Icons.arrow_back, size: 30, color: Colors.black),
+      icon: Icon(Icons.arrow_back,
+          size: 30, color: light ? Colors.black : Colors.white),
     ),
     elevation: 0,
   );

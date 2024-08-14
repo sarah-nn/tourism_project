@@ -24,7 +24,7 @@ class UpdateTripCubit extends Cubit<UpdateTripState> {
 
   Map<String, String> updateRequestBody(String endDate) {
     Map<String, String> body = {
-      'end_date': newDate == '' ? endDate : newDate,
+      'end_date': newDate == ' ' ? endDate : newDate,
       'count_room_C2': addc2 == '' ? "0" : addc2,
       'count_room_C4': addc4 == '' ? "0" : addc4,
       'count_room_C6': addc6 == '' ? "0" : addc6,

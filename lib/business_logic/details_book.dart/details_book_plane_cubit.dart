@@ -9,26 +9,28 @@ part 'details_book_plane_state.dart';
 class DetailsBookPlaneCubit extends Cubit<DetailsBookPlaneState> {
   DetailsBookPlaneCubit() : super(DetailsBookPlaneInitial());
   var data1 = [];
-  List<DetailsBookPlaneModel> detailsBookPlane = [];
+
+  DetailsBookPlaneModel? detailsBookPlane;
   String? message;
-  Future<List<DetailsBookPlaneModel>> getAllDetailsBookPlane() async {
+  Future<DetailsBookPlaneModel?> getAllDetailsBookPlane() async {
     var uri = Uri.parse(EndPoint.detailsBookPlane);
     var header = {'Authorization': 'Bearer $myToken'};
     var response = await http.get(uri, headers: header);
     try {
       emit(DetailsBookPlaneLoading());
       if (response.statusCode == 200) {
-        data1 = json.decode(response.body)['data'];
-        detailsBookPlane = data1
-            .map((e) => DetailsBookPlaneModel.fromJson(e))
-            .toList(growable: true);
-        print(response.body);
-        emit(DetailsBookPlaneSuccess(detailsBookPlane));
+        var data = json.decode(response.body);
+        detailsBookPlane = DetailsBookPlaneModel.fromJson(data);
+        emit(DetailsBookPlaneSuccess(detailsBookPlane!));
       } else {
+        var message = json.decode(response.body);
         print("api error${response.statusCode}");
+        emit(DetailsBookPlaneFailure(errMessage: message['message']));
       }
     } catch (e) {
-      //   emit(DetailsBookHotelFailure(errMessage: e.toString()));
+      try {
+        emit(DetailsBookPlaneFailure(errMessage: e.toString()));
+      } catch (e) {}
     }
     print(detailsBookPlane);
     return detailsBookPlane;

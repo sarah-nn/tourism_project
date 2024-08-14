@@ -1,23 +1,22 @@
-import 'dart:io';
-
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:tourism_project/business_logic/dont_miss/dont_miss_cubit.dart';
-import 'package:tourism_project/business_logic/places/places_cubit.dart';
 import 'package:tourism_project/core/database/cach_helper.dart';
-import 'package:tourism_project/core/fcm_services.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_images.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
 import 'package:tourism_project/core/functions/functions.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/dont_miss_model.dart';
+import 'package:tourism_project/data/models/top_visited_model.dart';
 import 'package:tourism_project/presentation/widget/homepage/card_category_widget.dart';
 import 'package:tourism_project/presentation/widget/homepage/card_dont_miss.dart';
 import 'package:tourism_project/presentation/widget/homepage/card_top_visit_widget.dart';
 import 'package:tourism_project/presentation/widget/homepage/drawer_widget.dart';
+import 'package:tourism_project/presentation/widget/homepage/top_visited_slider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -29,10 +28,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String saveImage = CacheHelper().getData(key: "profileImage") ?? '';
   List<DontMissModel> dontMissModel = [];
+  List<TopVisitedModel> topVisitedModel = [];
+
   @override
   void initState() {
     super.initState();
     context.read<DontMissCubit>().getDontMiss();
+    context.read<DontMissCubit>().getTopVisited();
   }
 
   @override
@@ -46,18 +48,27 @@ class _HomePageState extends State<HomePage> {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(state.errMessage)));
       }
+      if (state is TopVisitedSuccess) {
+        topVisitedModel = state.topVisitedModel;
+        print('11111111122222211111111$topVisitedModel');
+      }
+      if (state is TopVisitedFailure) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(state.errMessage)));
+      }
     }, builder: (context, state) {
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: light ? Colors.white : AppColor.primaryColorDark,
           elevation: 0,
-          iconTheme: IconThemeData(color: Colors.black, size: 30),
+          iconTheme: IconThemeData(
+              color: light ? Colors.black : Colors.white, size: 30),
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 10),
               child: Icon(
                 Icons.notifications_active,
-                color: AppColor.primaryColor,
+                color: light ? AppColor.primaryColor : AppColor.iconsColorDark,
                 size: 27,
               ),
             )
@@ -75,7 +86,7 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Text("Discover",
                         style: MyTextStyle.bright.copyWith(
-                            color: Colors.black,
+                            color: light ? Colors.black : Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 38,
                             letterSpacing: 1)
@@ -127,8 +138,10 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 Text("The world...",
-                    style: MyTextStyle.poppins
-                        .copyWith(fontWeight: FontWeight.w100, fontSize: 20)
+                    style: MyTextStyle.poppins.copyWith(
+                        fontWeight: FontWeight.w100,
+                        fontSize: 20,
+                        color: light ? Colors.black : Colors.white)
                     //TextStyle(fontSize: 18),
                     ),
                 const SizedBox(height: 10),
@@ -145,55 +158,51 @@ class _HomePageState extends State<HomePage> {
                     ),
                     child: ListTile(
                       leading: Icon(Iconsax.search_favorite,
-                          color: AppColor.primaryColor),
-                      title: const Text(
+                          color: light
+                              ? AppColor.primaryColor
+                              : AppColor.iconsColorDark),
+                      title: Text(
                         'Find Country or Area',
-                        style: TextStyle(color: Colors.black26),
+                        style: TextStyle(
+                            color: light ? Colors.black26 : Colors.white38),
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 20),
 
                 /***** SLIDER OFFERS *****/
-                Text(
-                  "1".tr,
+                const Text(
+                  'Top Visited',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
-                Stack(
-                  children: [
-                    Container(
-                      clipBehavior: Clip.antiAlias,
-                      height: 200,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: AppColor.thirdColor,
-                        borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(40),
-                          bottomLeft: Radius.circular(40),
-                          bottomRight: Radius.circular(40),
-                        ),
-                      ),
-                      child: Image.asset(
-                        AppImage.two,
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                    const Positioned(
-                      top: 150,
-                      left: 20,
-                      child: Text(
-                        "discount 50%",
-                        style: TextStyle(
-                            color: Color(0xFFB1B5C2),
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    )
+                //  topVisitSlider(),
+                CarouselSlider(
+                  items: [
+                    ...List.generate(
+                        topVisitedModel.length,
+                        (index) => TopVisitedSlider(
+                              topVisitedModel: topVisitedModel[index],
+                            )),
                   ],
+                  options: CarouselOptions(
+                    enableInfiniteScroll: true,
+                    reverse: false,
+                    height: 200,
+                    aspectRatio: 12 / 2,
+                    viewportFraction: 1.0,
+                    enlargeCenterPage: true,
+                    enlargeFactor: 0.3,
+                    autoPlay: true,
+                    autoPlayInterval:
+                        Duration(seconds: 3), // الفترة الزمنية بين كل تمريرة
+                    autoPlayAnimationDuration:
+                        Duration(seconds: 1), // مدة حركة التمرير
+                    autoPlayCurve: Curves.easeInOut,
+                  ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 20),
 
                 /***** CATEGORIES *****/
                 const Text(
@@ -229,31 +238,32 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 15),
 
                 /***** TOP VISIT *****/
-                dontMissModel.isEmpty
+                // dontMissModel.isEmpty
+                //     ? Column(
+                //         crossAxisAlignment: CrossAxisAlignment.start,
+                //         children: [
+                //           const Text(
+                //             "Top Visited ",
+                //             style: TextStyle(
+                //                 fontSize: 20, fontWeight: FontWeight.bold),
+                //           ),
+                //           const SizedBox(height: 10),
+                //           Container(
+                //             height: 220,
+                //             child: ListView.builder(
+                //               scrollDirection: Axis.horizontal,
+                //               itemBuilder: (BuildContext context, int index) {
+                //                 return CardTopVisit();
+                //               },
+                //             ),
+                //           ),
+                //         ],
+                //       )
+                dontMissModel.isNotEmpty
                     ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Top Visited ",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 10),
-                          Container(
-                            height: 220,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (BuildContext context, int index) {
-                                return CardTopVisit();
-                              },
-                            ),
-                          ),
-                        ],
-                      )
-                    : Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
@@ -262,7 +272,7 @@ class _HomePageState extends State<HomePage> {
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           Container(
-                            height: 220,
+                            height: 230,
                             child: ListView.builder(
                                 itemCount: dontMissModel.length,
                                 scrollDirection: Axis.horizontal,
@@ -274,11 +284,64 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ],
                       )
+                    : Container()
               ],
             ),
           ),
         ),
       );
     });
+  }
+
+  Widget topVisitSlider() {
+    return Stack(
+      children: [
+        Container(
+          clipBehavior: Clip.antiAlias,
+          height: 200,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: AppColor.thirdColor,
+            borderRadius: const BorderRadius.only(
+              topRight: Radius.circular(40),
+              bottomLeft: Radius.circular(40),
+              bottomRight: Radius.circular(40),
+            ),
+          ),
+          child: Image.asset(
+            AppImage.two,
+            fit: BoxFit.fill,
+          ),
+        ),
+        const Positioned(
+            top: 140,
+            left: 20,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Eiffel Tower",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 27,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Philosopher'),
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Iconsax.location,
+                      color: Color.fromARGB(255, 53, 159, 245),
+                    ),
+                    Text(
+                      'Syria , Damas',
+                      style: TextStyle(color: Colors.white),
+                    )
+                  ],
+                ),
+              ],
+            ))
+      ],
+    );
   }
 }

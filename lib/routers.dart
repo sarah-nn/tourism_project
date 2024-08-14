@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tourism_project/business_logic/activity/activity_cubit.dart';
 import 'package:tourism_project/business_logic/country/country_cubit.dart';
-import 'package:tourism_project/business_logic/details_book.dart/details_book_hotel_cubit.dart';
 import 'package:tourism_project/business_logic/dont_miss/dont_miss_cubit.dart';
 import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
 import 'package:tourism_project/business_logic/dynamicTrip/update_trip/update_trip_cubit.dart';
@@ -15,6 +14,7 @@ import 'package:tourism_project/business_logic/forgetpassword/forgetpassword_cub
 import 'package:tourism_project/business_logic/hotel/roomAndBook_cubit.dart';
 import 'package:tourism_project/business_logic/hotel/searchHotel_cubit.dart';
 import 'package:tourism_project/business_logic/notes/notes_cubit.dart';
+import 'package:tourism_project/business_logic/payment/payment_cubit.dart';
 import 'package:tourism_project/business_logic/places/place_desc_cubit.dart';
 import 'package:tourism_project/business_logic/places/places_cubit.dart';
 import 'package:tourism_project/business_logic/profile/profile_cubit.dart';
@@ -23,6 +23,7 @@ import 'package:tourism_project/business_logic/static_trip/static_trip_cubit.dar
 import 'package:tourism_project/business_logic/upload_image/upload_image_cubit.dart';
 import 'package:tourism_project/business_logic/user/user_cubit.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
+import 'package:tourism_project/data/models/attribute_details_static.dart';
 import 'package:tourism_project/data/models/place_desc_model.dart';
 import 'package:tourism_project/presentation/screens/Booking_details/public_booking.dart';
 import 'package:tourism_project/presentation/screens/all_notes_page.dart';
@@ -217,7 +218,7 @@ final GoRouter router = GoRouter(
     GoRoute(
         path: "/StaticTripDetailsPage/:id",
         builder: (context, state) {
-          List<dynamic>? imageList = state.extra as List<dynamic>?;
+          final args = state.extra as AttributeStaticDetails;
           return MultiBlocProvider(
             providers: [
               BlocProvider(create: (context) => StaticTripCubit()),
@@ -226,8 +227,9 @@ final GoRouter router = GoRouter(
               )
             ],
             child: StaticTripDetailsPage(
-              tripId: state.pathParameters['id']!,
-              imageList: imageList,
+              tripId: args.tripId,
+              imageList: args.imageList,
+              enableBook: args.enableBook,
             ),
           );
         }),
@@ -289,14 +291,28 @@ final GoRouter router = GoRouter(
               create: (context) => PlacesCubit(),
               child: const PlacesPage(),
             )),
+
+    // GoRoute(
+    //     path: "/PlaceDesPage/:id",
+    //     builder: (context, state) => BlocProvider(
+    //           create: (context) => PlaceDescCubit(),
+    // child: PlaceDescPage(
+    //   placeId: state.pathParameters['id']!,
+    // ),
+    //         )),
+
     GoRoute(
         path: "/PlaceDesPage/:id",
-        builder: (context, state) => BlocProvider(
-              create: (context) => PlaceDescCubit(),
+        builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(create: (context) => PlaceDescCubit()),
+                BlocProvider(create: (context) => FavoriteCubit())
+              ],
               child: PlaceDescPage(
                 placeId: state.pathParameters['id']!,
               ),
             )),
+
     GoRoute(
         path: AppRoutes.imagesview,
         builder: (context, state) {
@@ -395,12 +411,13 @@ final GoRouter router = GoRouter(
         }),
 
     //===========payment=======================
+
     GoRoute(
         path: AppRoutes.payment,
-        builder: (context, state) {
-          return const PaymentPage();
-        }),
+        builder: (context, state) => BlocProvider(
+            create: (context) => PaymentCubit(), child: PaymentPage())),
 
+//================note===================
     GoRoute(
         path: AppRoutes.notesPage,
         builder: (context, state) {
@@ -409,6 +426,7 @@ final GoRouter router = GoRouter(
             child: const AllNotesPage(),
           );
         }),
+    //====================favourite================
     GoRoute(
       path: AppRoutes.favoritePage,
       builder: (context, state) => BlocProvider(

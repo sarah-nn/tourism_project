@@ -4,6 +4,7 @@ import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.da
 import 'package:tourism_project/business_logic/hotel/searchHotel_cubit.dart';
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/search_hotel_model.dart';
 
 class HotelDynamicTrip extends StatefulWidget {
@@ -140,7 +141,9 @@ class _HotelDynamicTripState extends State<HotelDynamicTrip> {
                     width: double.maxFinite,
                     alignment: Alignment.centerLeft,
                     decoration: BoxDecoration(
-                        color: AppColor.thirdColor.withOpacity(0.3),
+                        color: light
+                            ? AppColor.thirdColor.withOpacity(0.3)
+                            : AppColor.thirdColorDark,
                         border: Border.all(color: AppColor.thirdColor),
                         borderRadius:
                             const BorderRadius.all(Radius.circular(10))),
@@ -148,9 +151,11 @@ class _HotelDynamicTripState extends State<HotelDynamicTrip> {
                       padding: const EdgeInsets.only(left: 17),
                       child: Text(
                         selectedName,
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontFamily: "normal",
-                            color: Color.fromARGB(255, 146, 146, 146),
+                            color: light
+                                ? Color.fromARGB(255, 146, 146, 146)
+                                : Colors.white70,
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
                       ),
@@ -167,8 +172,9 @@ class _HotelDynamicTripState extends State<HotelDynamicTrip> {
                     0: FractionColumnWidth(0.8),
                     1: FractionColumnWidth(0.3)
                   },
-                  border:
-                      TableBorder.all(color: AppColor.primaryColor, width: 1.5),
+                  border: TableBorder.all(
+                      color: light ? AppColor.primaryColor : Colors.white60,
+                      width: 1.5),
                   children: [
                     customHeaders(['Capacity', 'Num']),
                     customTableRow(

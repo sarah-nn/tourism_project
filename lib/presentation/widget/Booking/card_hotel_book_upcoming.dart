@@ -11,8 +11,8 @@ import 'package:tourism_project/presentation/widget/Booking/text_name.dart';
 
 class CardHotelBook extends StatefulWidget {
   const CardHotelBook(
-      {required this.onDelete, required this.detailsBookHotelModel, super.key});
-  final DetailsBookHotelModel detailsBookHotelModel;
+      {required this.onDelete, required this.futureTripsHotel, super.key});
+  final FutureTripsHotel futureTripsHotel;
   final VoidCallback onDelete;
 
   @override
@@ -30,6 +30,7 @@ class _CardHotelBookState extends State<CardHotelBook> {
   int addRoomC2 = 0;
   int addRoomC4 = 0;
   int addRoomC6 = 0;
+  int addRoomC1 = 0;
   String? endDate;
   String? startDate;
   String? nameBooking;
@@ -50,9 +51,9 @@ class _CardHotelBookState extends State<CardHotelBook> {
   @override
   void initState() {
     super.initState();
-    endDate = widget.detailsBookHotelModel.endDate;
-    nameBooking = widget.detailsBookHotelModel.tripName;
-    startDate = widget.detailsBookHotelModel.startDate;
+    endDate = widget.futureTripsHotel.endDate;
+    nameBooking = widget.futureTripsHotel.tripName;
+    startDate = widget.futureTripsHotel.startDate;
     myBloc = BlocProvider.of<ShowDetailsBookHotelCubit>(context);
   }
 
@@ -128,12 +129,12 @@ class _CardHotelBookState extends State<CardHotelBook> {
 
                     TextInfoBook(
                         baseText: 'start date',
-                        secoundText: widget.detailsBookHotelModel.startDate),
+                        secoundText: widget.futureTripsHotel.startDate),
                     const SizedBox(height: 10),
 
                     TextInfoBook(
                         baseText: 'end date',
-                        secoundText: widget.detailsBookHotelModel.endDate),
+                        secoundText: widget.futureTripsHotel.endDate),
                     !isExpanded
                         ? const SizedBox(height: 20)
                         : const SizedBox(height: 10),
@@ -142,7 +143,7 @@ class _CardHotelBookState extends State<CardHotelBook> {
                             onTap: () {
                               toggleExpande();
                               myBloc.getAllShowDetailsBookHotel(
-                                  widget.detailsBookHotelModel.id.toString());
+                                  widget.futureTripsHotel.id.toString());
                             },
                             child: Text(
                               'view more details...',
@@ -268,7 +269,7 @@ class _CardHotelBookState extends State<CardHotelBook> {
                           onTap: () {
                             date1 = DateTime.now();
                             date2 = DateTime.parse(
-                                widget.detailsBookHotelModel.startDate);
+                                widget.futureTripsHotel.startDate);
                             if (date2.isBefore(date1) ||
                                 date2.isAtSameMomentAs(date1)) {
                               enableEdit = true;
@@ -298,6 +299,8 @@ class _CardHotelBookState extends State<CardHotelBook> {
                                                 onPressed: () {
                                                   Navigator.of(context).pop();
                                                   isEditingName = false;
+                                                  addRoomC1 = 0;
+
                                                   addRoomC2 = 0;
                                                   addRoomC4 = 0;
                                                   addRoomC6 = 0;
@@ -306,22 +309,21 @@ class _CardHotelBookState extends State<CardHotelBook> {
                                             TextButton(
                                                 onPressed: () {
                                                   myBloc.editBookHotel(
-                                                      widget
-                                                          .detailsBookHotelModel
-                                                          .id
+                                                      widget.futureTripsHotel.id
                                                           .toString(),
                                                       nameBooking!,
                                                       endDate!,
+                                                      addRoomC1.toString(),
                                                       addRoomC2.toString(),
                                                       addRoomC4.toString(),
                                                       addRoomC6.toString());
 
                                                   successEdit
                                                       ? setState(() {
-                                                          widget
-                                                              .detailsBookHotelModel
-                                                              .endDate = endDate!;
-                                                          widget.detailsBookHotelModel
+                                                          widget.futureTripsHotel
+                                                                  .endDate =
+                                                              endDate!;
+                                                          widget.futureTripsHotel
                                                                   .tripName =
                                                               nameBooking!;
                                                         })
@@ -329,6 +331,8 @@ class _CardHotelBookState extends State<CardHotelBook> {
                                                   //  }
 
                                                   isEditingName = false;
+                                                  addRoomC1 = 0;
+
                                                   addRoomC2 = 0;
                                                   addRoomC4 = 0;
                                                   addRoomC6 = 0;
@@ -360,7 +364,7 @@ class _CardHotelBookState extends State<CardHotelBook> {
                                               (BuildContext context,
                                                   StateSetter setState) {
                                             _controllerNameBook.text = widget
-                                                .detailsBookHotelModel.tripName;
+                                                .futureTripsHotel.tripName;
                                             return SingleChildScrollView(
                                               child: Column(
                                                   crossAxisAlignment:
@@ -527,6 +531,64 @@ class _CardHotelBookState extends State<CardHotelBook> {
                                                     ),
                                                     Column(
                                                       children: [
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
+                                                          children: [
+                                                            const Text(
+                                                              'Room Capaity_1 : ',
+                                                              style: TextStyle(
+                                                                  fontSize: 15),
+                                                            ),
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .end,
+                                                              children: [
+                                                                IconButton(
+                                                                  onPressed:
+                                                                      addRoomC1 !=
+                                                                              0
+                                                                          ? () {
+                                                                              setState(() {
+                                                                                addRoomC1--;
+                                                                              });
+                                                                            }
+                                                                          : null,
+                                                                  icon: Icon(
+                                                                    Iconsax
+                                                                        .minus,
+                                                                    color: addRoomC1 !=
+                                                                            0
+                                                                        ? AppColor
+                                                                            .IconAdd
+                                                                        : AppColor
+                                                                            .IconMinus,
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(
+                                                                    width: 5),
+                                                                Text(
+                                                                    '$addRoomC1'),
+                                                                IconButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    setState(
+                                                                        () {
+                                                                      addRoomC1++;
+                                                                    });
+                                                                  },
+                                                                  icon: Icon(
+                                                                    Iconsax.add,
+                                                                    color: AppColor
+                                                                        .IconAdd,
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            )
+                                                          ],
+                                                        ),
                                                         Row(
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
@@ -754,7 +816,7 @@ class _CardHotelBookState extends State<CardHotelBook> {
                           onTap: () {
                             date1 = DateTime.now();
                             date2 = DateTime.parse(
-                                widget.detailsBookHotelModel.startDate);
+                                widget.futureTripsHotel.startDate);
                             difference = date2.difference(date1).inHours;
                             // print(difference * 1000 * 3600 * 24);
                             if (difference >= 0 && difference <= 48) {
@@ -774,9 +836,8 @@ class _CardHotelBookState extends State<CardHotelBook> {
                                 ? showAlertDialog(context,
                                     'sorry you cant cancel book because the trip is started ')
                                 : showAlertDialogQuestion(context, () {
-                                    myBloc.deleteHotel(widget
-                                        .detailsBookHotelModel.id
-                                        .toString());
+                                    myBloc.deleteHotel(
+                                        widget.futureTripsHotel.id.toString());
                                     Navigator.pop(context);
                                   }, () {
                                     Navigator.pop(context);
@@ -802,7 +863,7 @@ class _CardHotelBookState extends State<CardHotelBook> {
           ),
         ),
         TextNameBook(
-          name: widget.detailsBookHotelModel.tripName,
+          name: widget.futureTripsHotel.tripName,
         )
       ]);
     });
@@ -833,8 +894,8 @@ class _CardHotelBookState extends State<CardHotelBook> {
     );
 
     final DateTime? picker = await showDatePicker(
-      initialDate: DateTime.parse(widget.detailsBookHotelModel.endDate),
-      firstDate: DateTime.parse(widget.detailsBookHotelModel.endDate),
+      initialDate: DateTime.parse(widget.futureTripsHotel.endDate),
+      firstDate: DateTime.parse(widget.futureTripsHotel.endDate),
       lastDate: DateTime(2024, 12, 31),
       context: context,
       initialDatePickerMode: DatePickerMode.day,

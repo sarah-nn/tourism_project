@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
+import 'package:tourism_project/core/utils/global.dart';
 
 class FilterChipWidget extends StatefulWidget {
   final String categoryName;
@@ -34,8 +35,10 @@ class _FilterChipWidgetState extends State<FilterChipWidget> {
                 width: 1.2, color: AppColor.primaryColor.withOpacity(0.8))),
         label: Text(
           widget.categoryName,
-          style: MyTextStyle.headers
-              .copyWith(fontWeight: FontWeight.bold, fontSize: 18),
+          style: MyTextStyle.headers.copyWith(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              color: light ? Colors.black : Colors.white70),
         ),
         selected: widget.selectedCategory == widget.categoryName,
         onSelected: (isSelected) {

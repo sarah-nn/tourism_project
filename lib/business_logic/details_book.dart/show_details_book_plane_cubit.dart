@@ -13,6 +13,7 @@ class ShowDetailsBookPlaneCubit extends Cubit<ShowDetailsBookPlaneState> {
   var data1 = [];
   ShowDetailsBookPlaneModel? showDetailsBookPlaneModel;
   ShowDetailsBookPlaneModel? editshowDetailsBookPlane;
+  String tripNameVal = '';
 
   dynamic message;
 
@@ -61,23 +62,22 @@ class ShowDetailsBookPlaneCubit extends Cubit<ShowDetailsBookPlaneState> {
 
   Future<ShowDetailsBookPlaneModel?> editBookPlane({
     required String id,
-    required String nameTrip,
+    // required String nameTrip,
     required String numberOfPeople,
   }) async {
     var uri = Uri.parse(EndPoint.editBookPlane + id);
     var header = {'Authorization': 'Bearer $myToken'};
     var response = await http.post(uri, headers: header, body: {
-      'trip_name': nameTrip,
+      'trip_name': tripNameVal,
       'number_of_people': numberOfPeople,
     });
     try {
       // emit(ShowDetailsBookHotelLoading());
       if (response.statusCode == 200) {
-        print('=============${response.body}');
+        print(response.body);
+        var data = json.decode(response.body)[0]['data'];
+        editshowDetailsBookPlane = ShowDetailsBookPlaneModel.fromJson(data);
 
-        var data2 = json.decode(response.body)['data'];
-        editshowDetailsBookPlane = ShowDetailsBookPlaneModel.fromJson(data2);
-        print('=============${response.body}');
         emit(EditBookPlaneSuccess(editshowDetailsBookPlane!));
       } else {
         print('=============${response.body}');

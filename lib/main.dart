@@ -2,9 +2,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tourism_project/business_logic/theme/app_theme_cubit.dart';
+import 'package:tourism_project/business_logic/theme/app_theme_state.dart';
 import 'package:tourism_project/business_logic/user/user_cubit.dart';
 import 'package:tourism_project/core/database/cach_helper.dart';
 import 'package:tourism_project/core/fcm_services.dart';
+import 'package:tourism_project/core/utils/global.dart';
+import 'package:tourism_project/data/models/themestate.dart';
 import 'package:tourism_project/routers.dart';
 
 Future<void> _firebaseMessaging(RemoteMessage message) async {
@@ -14,6 +18,8 @@ Future<void> _firebaseMessaging(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CacheHelper().init();
+  CacheHelper().saveData(key: 'light', value: light);
+
   await Firebase.initializeApp(
       options: const FirebaseOptions(
     apiKey: "AIzaSyDLp52E7-yzXST6OHAYT5dWF1Gjfl2ZP1M",
@@ -53,9 +59,27 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      routerConfig: router,
+    return BlocProvider(
+      create: (context) => AppThemeCubit()..changeTheme(ThemeState.Initial),
+      child: BlocBuilder<AppThemeCubit, AppThemeState>(
+        builder: (BuildContext context, AppThemeState state) {
+          if (state is AppDarkTheme) {
+            light = false;
+            return MaterialApp.router(
+              theme: ThemeData.dark(),
+              debugShowCheckedModeBanner: false,
+              routerConfig: router,
+            );
+          } else {
+            light = true;
+            return MaterialApp.router(
+              theme: ThemeData.light(),
+              debugShowCheckedModeBanner: false,
+              routerConfig: router,
+            );
+          }
+        },
+      ),
     );
   }
 }

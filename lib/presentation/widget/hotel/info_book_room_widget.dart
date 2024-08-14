@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/presentation/widget/hotel/add_minus_widget.dart';
 
 // ignore: must_be_immutable
@@ -34,8 +35,12 @@ class WidgetInfoBookRoom extends StatelessWidget {
         child: Container(
           height: 150,
           decoration: BoxDecoration(
-            border: Border.all(width: 0.8, color: AppColor.primaryColor),
-            color: AppColor.secondColor.withAlpha(150),
+            border: Border.all(
+                width: 0.8,
+                color: light ? AppColor.primaryColor : Colors.white54),
+            color: light
+                ? AppColor.secondColor.withAlpha(150)
+                : Color.fromARGB(255, 87, 86, 86),
             borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(55),
                 bottomRight: Radius.circular(55),
@@ -59,14 +64,18 @@ class WidgetInfoBookRoom extends StatelessWidget {
                       ),
                       Text(
                         '$num',
-                        style: const TextStyle(
-                            fontSize: 16,
-                            backgroundColor:
-                                Color.fromARGB(255, 200, 226, 247)),
+                        style: light
+                            ? TextStyle(
+                                fontSize: 16,
+                                backgroundColor:
+                                    Color.fromARGB(255, 200, 226, 247))
+                            : TextStyle(fontSize: 16, color: Colors.white70),
                       ),
-                      const Text(
+                      Text(
                         ' persons',
-                        style: TextStyle(fontSize: 16, color: Colors.black87),
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: light ? Colors.black87 : Colors.white70),
                       ),
                     ],
                   ),
@@ -80,13 +89,20 @@ class WidgetInfoBookRoom extends StatelessWidget {
                             fontFamily: 'Poppins'),
                       ),
                       Text("$price\$",
-                          style: const TextStyle(
-                              backgroundColor:
-                                  Color.fromARGB(255, 238, 215, 214),
-                              fontSize: 16)),
-                      const Text(
+                          style: TextStyle(
+                              backgroundColor: light
+                                  ? Color.fromARGB(255, 238, 215, 214)
+                                  : null,
+                              fontSize: 16,
+                              color: light
+                                  ? null
+                                  : const Color.fromARGB(255, 235, 135, 128))),
+                      Text(
                         ' per day ',
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: light ? null : Colors.white70,
+                        ),
                       )
                     ],
                   ),

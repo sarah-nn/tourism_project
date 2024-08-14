@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
+import 'package:tourism_project/core/utils/global.dart';
 
 // ignore: must_be_immutable
 class LocationAndCategory extends StatelessWidget {
@@ -27,7 +28,9 @@ class LocationAndCategory extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: Text(
                 "per person",
-                style: TextStyle(fontSize: 17, color: Colors.black54),
+                style: TextStyle(
+                    fontSize: 17,
+                    color: light ? Colors.black54 : Colors.white54),
               ),
             ),
           )
@@ -75,7 +78,8 @@ Widget locationRow(String location) {
           ),
           Text(
             location,
-            style: TextStyle(fontSize: 17, color: Colors.black54),
+            style: TextStyle(
+                fontSize: 17, color: light ? Colors.black54 : Colors.white54),
           ),
         ],
       ));

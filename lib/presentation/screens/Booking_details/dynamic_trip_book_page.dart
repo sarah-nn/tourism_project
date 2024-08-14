@@ -6,7 +6,6 @@ import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.da
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_images.dart';
-import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/data/models/dynamic_booklist_model.dart';
 import 'package:tourism_project/presentation/widget/animation_text/hero_text.dart';
 import 'package:tourism_project/presentation/widget/dynamic_trip/dynamic_booking_details/booking_card_widget.dart';

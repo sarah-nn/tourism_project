@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_project/business_logic/hotel/roomAndBook_cubit.dart';
 import 'package:tourism_project/business_logic/hotel/searchHotel_cubit.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/search_hotel_model.dart';
 import 'package:tourism_project/presentation/widget/hotel/search_hotel_widget.dart';
 
@@ -39,7 +40,8 @@ class _SearchHotelPageState extends State<SearchHotelPage> {
       return Scaffold(
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: AppColor.primaryColor,
+          backgroundColor:
+              light ? AppColor.primaryColor : AppColor.primaryColorDark,
           centerTitle: true,
           title: const Text(
             'Select Hotel ',
@@ -48,7 +50,8 @@ class _SearchHotelPageState extends State<SearchHotelPage> {
             ),
           ),
         ),
-        backgroundColor: AppColor.primaryColor,
+        backgroundColor:
+            light ? AppColor.primaryColor : AppColor.primaryColorDark,
         body: Column(
           children: [
             Expanded(
@@ -59,8 +62,8 @@ class _SearchHotelPageState extends State<SearchHotelPage> {
               flex: 10,
               child: Container(
                 clipBehavior: Clip.antiAlias,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
+                decoration: BoxDecoration(
+                  color: light ? Colors.white : AppColor.thirdColorDark,
                   borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(45),
                     topLeft: Radius.circular(45),

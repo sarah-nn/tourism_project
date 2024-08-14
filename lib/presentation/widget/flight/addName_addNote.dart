@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
+import 'package:tourism_project/core/utils/global.dart';
 
 // ignore: must_be_immutable
 class AddNameAndNote extends StatefulWidget {
@@ -47,13 +48,13 @@ class _AddNameAndNoteState extends State<AddNameAndNote> {
           children: [
             Icon(
               Icons.add,
-              color: AppColor.primaryColor,
+              color: light ? AppColor.primaryColor : Colors.white,
             ),
-            const Text(
+            Text(
               ' add name booking',
               style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.black45,
+                  color: light ? Colors.black45 : Colors.white70,
                   fontFamily: 'normal',
                   fontSize: 18),
             )
@@ -91,13 +92,13 @@ class _AddNameAndNoteState extends State<AddNameAndNote> {
           children: [
             Icon(
               Icons.add,
-              color: AppColor.primaryColor,
+              color: light ? AppColor.primaryColor : Colors.white,
             ),
-            const Text(
+            Text(
               ' add note booking',
               style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.black45,
+                  color: light ? Colors.black45 : Colors.white70,
                   fontFamily: 'normal',
                   fontSize: 18),
             )

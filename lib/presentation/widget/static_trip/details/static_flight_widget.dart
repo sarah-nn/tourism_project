@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/static_trip_details_model.dart';
 
 class StaticFlightWidget extends StatelessWidget {
@@ -14,7 +15,9 @@ class StaticFlightWidget extends StatelessWidget {
       child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           decoration: BoxDecoration(
-            color: AppColor.staticTripContainer,
+            color: light
+                ? AppColor.staticTripContainer
+                : AppColor.secoundColorDark,
             // color: const Color.fromRGBO(232, 243, 255, 1),
             border: Border(
               left: BorderSide(
@@ -30,11 +33,14 @@ class StaticFlightWidget extends StatelessWidget {
                     "Flight Booking Included ",
                     style: MyTextStyle.poppins.copyWith(
                         fontSize: 19,
-                        color: const Color.fromARGB(255, 26, 73, 112)),
+                        color: light
+                            ? const Color.fromARGB(255, 26, 73, 112)
+                            : Colors.white),
                   ),
-                  const Icon(
+                  Icon(
                     Icons.check,
-                    color: Color.fromARGB(255, 26, 73, 112),
+                    color:
+                        light ? Color.fromARGB(255, 26, 73, 112) : Colors.white,
                   )
                 ],
               ),
@@ -66,8 +72,11 @@ class StaticFlightWidget extends StatelessWidget {
               Text(
                 goingPlane,
                 //  "Going Plane :${myTripModel!.goingTrip!.goingPlane!.name!}",
-                style: const TextStyle(
-                    fontSize: 16, color: Color.fromARGB(255, 26, 73, 112)),
+                style: TextStyle(
+                    fontSize: 16,
+                    color: light
+                        ? Color.fromARGB(255, 26, 73, 112)
+                        : Colors.white70),
               ),
             ],
           ),

@@ -5,6 +5,7 @@ import 'package:tourism_project/core/utils/app_images.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
+import 'package:tourism_project/core/utils/global.dart';
 
 class StartingDaynamicPage extends StatelessWidget {
   const StartingDaynamicPage({super.key});
@@ -15,7 +16,8 @@ class StartingDaynamicPage extends StatelessWidget {
       appBar: AppBar(
           toolbarHeight: 50,
           automaticallyImplyLeading: false,
-          backgroundColor: AppColor.primaryColor,
+          backgroundColor:
+              light ? AppColor.primaryColor : AppColor.thirdColorDark,
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(18),
@@ -61,7 +63,7 @@ class StartingDaynamicPage extends StatelessWidget {
                     fontSize: 23,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 0.3,
-                    color: Colors.black54),
+                    color: light ? Colors.black54 : Colors.white54),
               ),
             ),
             SizedBox(height: 100),

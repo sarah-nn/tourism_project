@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
-import 'package:tourism_project/core/utils/app_images.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
 import 'package:tourism_project/core/utils/end_point.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/place_desc_model.dart';
 
 class ImageViewPage extends StatelessWidget {
@@ -14,7 +14,8 @@ class ImageViewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColor.primaryColor,
+        backgroundColor:
+            light ? AppColor.primaryColor : AppColor.primaryColorDark,
         title: Text(
           "Place Images",
           style: MyTextStyle.headers.copyWith(
@@ -35,7 +36,8 @@ class ImageViewPage extends StatelessWidget {
                   style: MyTextStyle.normal.copyWith(
                       fontSize: 25,
                       fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.underline),
+                      decoration: TextDecoration.underline,
+                      color: light ? Colors.black : Colors.white60),
                 ),
               ),
               const SizedBox(height: 20),

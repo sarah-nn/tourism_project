@@ -25,7 +25,9 @@ class CardCategouries extends StatelessWidget {
           },
           child: Container(
             decoration: BoxDecoration(
-                color: AppColor.secondColor.withOpacity(0.9),
+                color: light
+                    ? AppColor.secondColor.withOpacity(0.9)
+                    : AppColor.secoundColorDark,
                 border: Border.all(width: 2, color: AppColor.primaryColor),
                 borderRadius: BorderRadius.circular(50)),
             height: 90,
@@ -33,7 +35,7 @@ class CardCategouries extends StatelessWidget {
             child: Center(
               child: SvgPicture.asset(
                 image,
-                color: AppColor.primaryColor,
+                color: light ? AppColor.primaryColor : AppColor.iconsColorDark,
                 height: 50,
               ),
               // child: Icon(
@@ -47,7 +49,8 @@ class CardCategouries extends StatelessWidget {
         const SizedBox(height: 6),
         Text(
           "${nameCategory}",
-          style: const TextStyle(fontSize: 16, color: Colors.black),
+          style: TextStyle(
+              fontSize: 16, color: light ? Colors.black : Colors.white),
         ),
       ],
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
+import 'package:tourism_project/core/utils/global.dart';
 
 class OneLineContainer extends StatelessWidget {
   final String title;
@@ -14,7 +15,8 @@ class OneLineContainer extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           //   color: Color.fromRGBO(232, 243, 255, 1),
-          color: AppColor.staticTripContainer,
+          color:
+              light ? AppColor.staticTripContainer : AppColor.secoundColorDark,
           // color: Color.fromARGB(255, 235, 235, 235),
           border: Border(
             left: BorderSide(width: 5, color: Color.fromARGB(255, 26, 73, 112)),
@@ -25,10 +27,11 @@ class OneLineContainer extends StatelessWidget {
           children: [
             Text(
               "$title : ",
-              style: const TextStyle(
+              style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 19,
-                  color: Color.fromARGB(255, 26, 73, 112)),
+                  color:
+                      light ? Color.fromARGB(255, 26, 73, 112) : Colors.white),
             ),
             Text(
               content,

@@ -5,6 +5,7 @@ import 'package:tourism_project/business_logic/static_trip/static_trip_cubit.dar
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/all_static_trip_model.dart';
 import 'package:tourism_project/presentation/widget/static_trip/custom_search_widget.dart';
 import 'package:tourism_project/presentation/widget/static_trip/trip_item_widget.dart';
@@ -60,7 +61,9 @@ class _SearchStaticTripPageState extends State<SearchStaticTripPage> {
                             left: 16, right: 12, bottom: 20),
                         height: 160,
                         decoration: BoxDecoration(
-                            color: AppColor.primaryColor,
+                            color: light
+                                ? AppColor.primaryColor
+                                : AppColor.thirdColorDark,
                             borderRadius: const BorderRadius.only(
                                 bottomLeft: Radius.circular(25),
                                 bottomRight: Radius.circular(25))),
@@ -172,27 +175,40 @@ class _SearchStaticTripPageState extends State<SearchStaticTripPage> {
                         padding: EdgeInsets.only(left: 36),
                         height: 60,
                         decoration: BoxDecoration(
-                            color: AppColor.secondColor,
+                            color: light
+                                ? AppColor.secondColor
+                                : AppColor.secoundColorDark,
                             borderRadius: BorderRadius.circular(30),
-                            border: Border.all()),
+                            border: Border.all(
+                                color: light ? Colors.black : Colors.white60)),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               type[index],
                               style: MyTextStyle.poppins.copyWith(
-                                  fontSize: 21, color: AppColor.primaryColor),
+                                  fontSize: 21,
+                                  color: light
+                                      ? AppColor.primaryColor
+                                      : Colors.white70),
                             ),
                             Container(
                                 width: 60,
                                 height: double.maxFinite,
                                 decoration: BoxDecoration(
+                                    color:
+                                        light ? null : AppColor.thirdColorDark,
                                     borderRadius: BorderRadius.circular(30),
-                                    border: Border.all(color: Colors.black54)),
+                                    border: Border.all(
+                                        color: light
+                                            ? Colors.black54
+                                            : Colors.white60)),
                                 child: Icon(
                                   icons[index],
                                   size: 33,
-                                  color: AppColor.primaryColor,
+                                  color: light
+                                      ? AppColor.primaryColor
+                                      : Colors.white,
                                 ))
                           ],
                         )),
@@ -252,8 +268,10 @@ class _SearchStaticTripPageState extends State<SearchStaticTripPage> {
             child: Container(
               alignment: Alignment.center,
               height: 53,
-              decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 230, 230, 230),
+              decoration: BoxDecoration(
+                  color: light
+                      ? Color.fromARGB(255, 230, 230, 230)
+                      : AppColor.secoundColorDark,
                   borderRadius: BorderRadius.all(Radius.circular(12))),
               child: isEnterDate
                   ? Padding(
@@ -262,8 +280,10 @@ class _SearchStaticTripPageState extends State<SearchStaticTripPage> {
                     )
                   : Text(
                       isDate ? "Tap to Choose Date Range" : "Select To Search",
-                      style:
-                          TextStyle(fontSize: 18, color: AppColor.primaryColor),
+                      style: TextStyle(
+                          fontSize: 18,
+                          color:
+                              light ? AppColor.primaryColor : Colors.white70),
                     ),
             ),
           ),
@@ -273,8 +293,10 @@ class _SearchStaticTripPageState extends State<SearchStaticTripPage> {
         ),
         Container(
           height: 53,
-          decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 230, 230, 230),
+          decoration: BoxDecoration(
+              color: light
+                  ? Color.fromARGB(255, 230, 230, 230)
+                  : AppColor.secoundColorDark,
               borderRadius: BorderRadius.all(Radius.circular(12))),
           width: 62,
           padding: const EdgeInsets.symmetric(vertical: 6),
@@ -287,7 +309,9 @@ class _SearchStaticTripPageState extends State<SearchStaticTripPage> {
               print(context.read<StaticTripCubit>().secondDate);
               context.read<StaticTripCubit>().printll();
             },
-            icon: Icon(Icons.search, size: 32, color: AppColor.primaryColor),
+            icon: Icon(Icons.search,
+                size: 32,
+                color: light ? AppColor.primaryColor : Colors.white70),
           ),
         ),
       ],
@@ -299,15 +323,19 @@ class _SearchStaticTripPageState extends State<SearchStaticTripPage> {
       children: [
         Text(
           '${context.read<StaticTripCubit>().firstDate}  ',
-          style: TextStyle(fontSize: 18, color: AppColor.primaryColor),
+          style: TextStyle(
+              fontSize: 18,
+              color: light ? AppColor.primaryColor : Colors.white),
         ),
         Icon(
           Icons.forward_outlined,
-          color: AppColor.primaryColor,
+          color: light ? AppColor.primaryColor : Colors.white,
         ),
         Text(
           '  ${context.read<StaticTripCubit>().secondDate}',
-          style: TextStyle(fontSize: 18, color: AppColor.primaryColor),
+          style: TextStyle(
+              fontSize: 18,
+              color: light ? AppColor.primaryColor : Colors.white),
         )
       ],
     );

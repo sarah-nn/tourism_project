@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
+import 'package:tourism_project/core/utils/global.dart';
 
 class WriteCommentField extends StatelessWidget {
   final String placeId;
@@ -36,8 +37,10 @@ class WriteCommentField extends StatelessWidget {
                                   decoration: InputDecoration(
                                       hintText: "  Write your Comment",
                                       hintStyle: MyTextStyle.headers.copyWith(
-                                        color: AppColor.primaryColor
-                                            .withAlpha(180),
+                                        color: light
+                                            ? AppColor.primaryColor
+                                                .withAlpha(180)
+                                            : Colors.white60,
                                         fontSize: 18,
                                       ),
                                       suffixIcon: IconButton(
@@ -61,7 +64,9 @@ class WriteCommentField extends StatelessWidget {
 Widget customUseOfField() {
   return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-      color: const Color.fromARGB(255, 238, 238, 238),
+      color: light
+          ? const Color.fromARGB(255, 238, 238, 238)
+          : AppColor.secoundColorDark,
       child: Container(
         decoration: BoxDecoration(
             border: Border.all(color: AppColor.primaryColor),
@@ -74,7 +79,10 @@ Widget customUseOfField() {
               Text(
                 "  Write your Comment",
                 style: MyTextStyle.headers.copyWith(
-                    color: AppColor.primaryColor.withAlpha(180), fontSize: 18),
+                    color: light
+                        ? AppColor.primaryColor.withAlpha(180)
+                        : Colors.white60,
+                    fontSize: 18),
               ),
               Icon(
                 Icons.send,

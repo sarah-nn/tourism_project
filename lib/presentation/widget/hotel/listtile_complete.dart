@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
+import 'package:tourism_project/core/utils/global.dart';
 
 // ignore: must_be_immutable
 class WidgetListTileComplete extends StatelessWidget {
@@ -30,7 +31,7 @@ class WidgetListTileComplete extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(25),
         ),
-        color: AppColor.secondColor,
+        color: light ? AppColor.secondColor : AppColor.secoundColorDark,
         child: enableIcon
             ? ListTile(
                 shape: RoundedRectangleBorder(

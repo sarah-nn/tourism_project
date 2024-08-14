@@ -1,16 +1,20 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:like_button/like_button.dart';
+import 'package:tourism_project/business_logic/favorite/favorite_cubit.dart';
 import 'package:tourism_project/business_logic/places/place_desc_cubit.dart';
 import 'package:tourism_project/core/functions/functions.dart';
+import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/end_point.dart';
+import 'package:tourism_project/core/utils/global.dart';
+import 'package:tourism_project/data/models/get_favorite_model.dart';
 import 'package:tourism_project/data/models/place_desc_model.dart';
 import 'package:tourism_project/presentation/widget/place_desc/place_desc_overview.dart';
 import 'package:tourism_project/presentation/widget/place_desc/place_desc_text.dart';
 import 'package:tourism_project/presentation/widget/place_desc/place_images.dart';
 import 'package:tourism_project/presentation/widget/place_desc/place_location_cat.dart';
 import 'package:tourism_project/presentation/widget/place_desc/place_name_price.dart';
-import 'package:tourism_project/presentation/widget/static_trip/trip_item_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PlaceDescPage extends StatefulWidget {
@@ -22,6 +26,9 @@ class PlaceDescPage extends StatefulWidget {
 }
 
 class _TestPageState extends State<PlaceDescPage> {
+  FavoriteCubit? myBloc;
+  List<FavoriteModel> fav = [];
+
   Future<void> _launchMap(String lat, String lon) async {
     final String googleMapsUrl =
         'https://www.google.com/maps/search/?api=1&query=$lat,$lon';
@@ -39,6 +46,8 @@ class _TestPageState extends State<PlaceDescPage> {
   void initState() {
     super.initState();
     context.read<PlaceDescCubit>().getAllPlace(widget.placeId);
+    context.read<FavoriteCubit>().getFavorite();
+    myBloc = context.read<FavoriteCubit>();
   }
 
   @override
@@ -64,15 +73,35 @@ class _TestPageState extends State<PlaceDescPage> {
                     decoration: BoxDecoration(
                         image: DecorationImage(
                             image: NetworkImage(EndPoint.imageBaseUrl +
-                                state.placeDescModel.images![0].image!),
+                                state.placeDescModel.images![1].image!),
                             fit: BoxFit.cover)),
                   )
                 : Container(
                     width: double.maxFinite,
                     height: MediaQuery.of(context).size.height / 2.5,
-                    child: Center(child: CircularProgressIndicator()),
+                    child: const Center(child: CircularProgressIndicator()),
                   ),
-            buttonArrow(context),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                buttonArrow(context),
+                BlocConsumer<FavoriteCubit, FavoriteState>(
+                    listener: (context, state) {
+                  if (state is FavoriteSuccess) {
+                    fav = state.favoriteModel;
+                  }
+                  if (state is FavoriteSuccess) {
+                  } else if (state is FavoriteFailure) {
+                    showAlertDialog(context, state.errMessage);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(state.errMessage)));
+                  }
+                }, builder: (context, state) {
+                  return buttonFavourite(context);
+                })
+              ],
+            ),
             DraggableScrollableSheet(
                 initialChildSize: 0.62,
                 maxChildSize: 1.0,
@@ -81,9 +110,9 @@ class _TestPageState extends State<PlaceDescPage> {
                   return Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       clipBehavior: Clip.hardEdge,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
+                      decoration: BoxDecoration(
+                        color: light ? Colors.white : AppColor.secoundColorDark,
+                        borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(25),
                             topRight: Radius.circular(25)),
                       ),
@@ -95,7 +124,7 @@ class _TestPageState extends State<PlaceDescPage> {
                                   padding: EdgeInsets.only(
                                       top: MediaQuery.of(context).size.height /
                                           3),
-                                  child: Center(
+                                  child: const Center(
                                     child: CircularProgressIndicator(),
                                   ),
                                 )));
@@ -132,6 +161,78 @@ class _TestPageState extends State<PlaceDescPage> {
                 Icons.arrow_back_ios,
                 size: 20,
                 color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  buttonFavourite(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: InkWell(
+        onTap: () {
+          Navigator.pop(context);
+        },
+        child: Container(
+          clipBehavior: Clip.hardEdge,
+          height: 55,
+          width: 55,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+          ),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+            child: Container(
+              height: 55,
+              width: 55,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: LikeButton(
+                size: 28,
+                bubblesSize: 100,
+                circleSize: 20,
+                circleColor: const CircleColor(
+                    start: Color.fromARGB(255, 152, 202, 243),
+                    end: Color.fromARGB(255, 229, 135, 166)),
+                bubblesColor: const BubblesColor(
+                    dotPrimaryColor: Color.fromARGB(255, 156, 204, 244),
+                    dotSecondaryColor: Color.fromARGB(255, 234, 165, 240),
+                    dotThirdColor: Color.fromARGB(255, 248, 159, 189),
+                    dotLastColor: Color.fromARGB(255, 127, 208, 245)),
+                animationDuration: Duration(milliseconds: 1500),
+                isLiked: myBloc!.favoriteId.contains(widget.placeId.toString())
+                    // myBloc!.favoriteId
+                    //     .contains(widget.placeCat?.id.toString())
+                    ? true
+                    : false,
+                onTap: (isLiked) async {
+                  if (!(myBloc!.favoriteId
+                      .contains(widget.placeId.toString()))) {
+                    myBloc!.addFavorite(widget.placeId.toString());
+
+                    myBloc!.favoriteId.add(widget.placeId.toString());
+
+                    return true;
+                  } else {
+                    myBloc!.removeFavorite(widget.placeId.toString());
+
+                    myBloc!.favoriteId.remove(widget.placeId.toString());
+
+                    return false;
+                  }
+                },
+                likeBuilder: (isLiked) {
+                  return Icon(
+                    isLiked ? Icons.favorite : Icons.favorite_border,
+                    color: isLiked
+                        ? Color.fromARGB(255, 226, 80, 129)
+                        : Colors.white,
+                  );
+                },
               ),
             ),
           ),
@@ -181,20 +282,26 @@ class _TestPageState extends State<PlaceDescPage> {
           child: Container(
             height: 37,
             alignment: Alignment.center,
-            decoration:
-                BoxDecoration(border: Border.all(color: Colors.black54)),
+            decoration: BoxDecoration(
+                border:
+                    Border.all(color: light ? Colors.black54 : Colors.white54)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   "View On Map",
-                  style: TextStyle(color: Theme.of(context).primaryColor),
+                  style: TextStyle(
+                      color: light
+                          ? Theme.of(context).primaryColor
+                          : Colors.white),
                 ),
                 SizedBox(width: 12),
                 Icon(
                   Icons.map_outlined,
-                  color: Theme.of(context).primaryColor,
+                  color: light
+                      ? Theme.of(context).primaryColor
+                      : AppColor.iconsColorDark,
                 )
               ],
             ),

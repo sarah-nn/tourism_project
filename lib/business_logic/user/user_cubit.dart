@@ -54,7 +54,7 @@ class UserCubit extends Cubit<UserState> {
 
   register() async {
     if (formKeyReg.currentState!.validate()) {
-      emit(UserLoading());
+      emit(UserLoading());   
       http.Response response =
           await http.post(Uri.parse(EndPoint.register), body: {
         'name': name.text,

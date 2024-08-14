@@ -7,6 +7,7 @@ import 'package:tourism_project/core/utils/app_images.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
 import 'package:tourism_project/core/functions/functions.dart';
+import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/all_static_trip_model.dart';
 import 'package:tourism_project/presentation/widget/static_trip/time_to_travel_type_widget.dart';
 import 'package:tourism_project/presentation/widget/static_trip/trip_item_widget.dart';
@@ -44,7 +45,9 @@ class _StaticTripPageState extends State<StaticTripPage> {
               },
               child: Icon(Icons.add),
             ),
-            backgroundColor: Color.fromARGB(255, 230, 230, 230),
+            backgroundColor: light
+                ? Color.fromARGB(255, 230, 230, 230)
+                : AppColor.primaryColorDark,
             appBar: myAppBar(context),
             body: Container(
               padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -122,7 +125,7 @@ class _StaticTripPageState extends State<StaticTripPage> {
 
 PreferredSizeWidget myAppBar(BuildContext context) {
   return AppBar(
-    backgroundColor: AppColor.primaryColor,
+    backgroundColor: light ? AppColor.primaryColor : AppColor.primaryColorDark,
     actions: [
       IconButton(
           onPressed: () {

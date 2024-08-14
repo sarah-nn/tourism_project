@@ -1,5 +1,4 @@
 import 'package:tourism_project/core/database/cach_helper.dart';
-import 'package:tourism_project/data/models/dynamic_booking_details_model.dart';
 
 String myToken = CacheHelper().getData(key: 'token');
 List<int> placeIds = [];
@@ -9,8 +8,8 @@ String tripDestination = '';
 String goingPlaneId = '';
 String returnPlaneId = '';
 String onePlaneId = '';
-int numperson = 0;
-bool editStatic = false;
+bool light = true;
+
 //bool isselectePlace = true;
 // String? gstartDate;
 // String? gendDate;

@@ -67,6 +67,7 @@ class ShowDetailsBookHotelCubit extends Cubit<ShowDetailsBookHotelState> {
       String id,
       String nameTrip,
       String endDate,
+      String capacity_1,
       String capacity_2,
       String capacity_4,
       String capacity_6) async {
@@ -75,6 +76,7 @@ class ShowDetailsBookHotelCubit extends Cubit<ShowDetailsBookHotelState> {
     var response = await http.post(uri, headers: header, body: {
       'trip_name': nameTrip,
       'end_date': endDate,
+      'count_room_C1': capacity_1,
       'count_room_C2': capacity_2,
       'count_room_C4': capacity_4,
       'count_room_C6': capacity_6

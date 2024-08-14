@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_images.dart';
+import 'package:tourism_project/core/utils/global.dart';
 
 // ignore: must_be_immutable
 class CardTopVisit extends StatelessWidget {
@@ -13,7 +14,9 @@ class CardTopVisit extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             border: Border.all(width: 0.5, color: AppColor.primaryColor),
-            color: AppColor.secondColor,
+            color: light
+                ? AppColor.primaryColor.withOpacity(0.3)
+                : AppColor.secoundColorDark,
             borderRadius: BorderRadius.circular(10)),
         width: 170,
         child: Padding(

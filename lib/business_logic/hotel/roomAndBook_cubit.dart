@@ -59,7 +59,8 @@ class RoomCubit extends Cubit<RoomState> {
       required String endDate,
       required String countRoomC2,
       required String countRoomC4,
-      required String countRoomC6}) async {
+      required String countRoomC6,
+      required String countRoomC1}) async {
     var uri = Uri.parse(EndPoint.bookHotel);
     var header = {
       'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
@@ -71,6 +72,7 @@ class RoomCubit extends Cubit<RoomState> {
       'hotel_id': hotelId,
       'start_date': startDate,
       'end_date': endDate,
+      'count_room_C1': countRoomC1,
       'count_room_C2': countRoomC2,
       'count_room_C4': countRoomC4,
       'count_room_C6': countRoomC6,
