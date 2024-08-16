@@ -40,4 +40,6 @@ abstract class AppIcon {
   static const single = 'assets/icons/single_person.png';
   static const climping = 'assets/icons/climbing.png';
   static const telegramIcon = 'assets/icons/telegram_icon.png';
+  static const inspireIcon = 'assets/icons/inspire.svg';
+  static const inspire2 = 'assets/icons/inspire2.svg';
 }

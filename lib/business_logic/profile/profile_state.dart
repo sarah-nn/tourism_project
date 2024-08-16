@@ -17,3 +17,7 @@ final class ProfileChangeFaliure extends ProfileState {
 
   ProfileChangeFaliure({required this.errMessage});
 }
+
+final class DeleteAccountDone extends ProfileState {
+  DeleteAccountDone();
+}

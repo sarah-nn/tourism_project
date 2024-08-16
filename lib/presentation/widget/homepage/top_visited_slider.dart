@@ -30,7 +30,7 @@ class _TopVisitedSliderState extends State<TopVisitedSlider> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: NetworkImage(EndPoint.imageBaseUrl +
-                    widget.topVisitedModel!.images![1].image!),
+                    widget.topVisitedModel!.images![0].image!),
                 fit: BoxFit.fill,
               ),
               color: AppColor.thirdColor,
@@ -46,7 +46,7 @@ class _TopVisitedSliderState extends State<TopVisitedSlider> {
             // ),
           ),
           Positioned(
-              top: 140,
+              top: 130,
               left: 20,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +57,7 @@ class _TopVisitedSliderState extends State<TopVisitedSlider> {
                         color: Colors.white,
                         fontSize: 27,
                         fontWeight: FontWeight.bold,
-                        fontFamily: 'Philosopher'),
+                        fontFamily: 'Poppins'),
                   ),
                   Row(
                     children: [

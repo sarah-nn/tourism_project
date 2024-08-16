@@ -1,6 +1,7 @@
 import 'package:tourism_project/core/database/cach_helper.dart';
 
 String myToken = CacheHelper().getData(key: 'token');
+String globalFcm = '';
 List<int> placeIds = [];
 List<String> placeNames = [];
 List<int> activities = [];

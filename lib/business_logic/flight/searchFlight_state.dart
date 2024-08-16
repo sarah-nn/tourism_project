@@ -17,3 +17,14 @@ final class SearchFlightFailure extends SearchFlightState {
   final String errMessage;
   SearchFlightFailure({required this.errMessage});
 }
+
+final class SearchFlightDyanmicSuccessGo extends SearchFlightState {
+  List<GoingTripDynamic>? goingTrip;
+  SearchFlightDyanmicSuccessGo({@required this.goingTrip});
+}
+
+final class SearchFlightDyanmicSuccessRound extends SearchFlightState {
+  final Dynamicflight fligh;
+
+  SearchFlightDyanmicSuccessRound({required this.fligh});
+}

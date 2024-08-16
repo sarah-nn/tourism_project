@@ -4,15 +4,15 @@ class PaymentModel {
   PaymentModel({this.data});
 
   PaymentModel.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json["data"] == null ? null : Data.fromJson(json["data"]);
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.data != null) {
-      data['data'] = this.data!.toJson();
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    if (data != null) {
+      _data["data"] = data?.toJson();
     }
-    return data;
+    return _data;
   }
 }
 
@@ -21,6 +21,7 @@ class Data {
   String? email;
   String? money;
   String? payments;
+  int? point;
   String? createdAt;
   String? updatedAt;
 
@@ -29,26 +30,29 @@ class Data {
       this.email,
       this.money,
       this.payments,
+      this.point,
       this.createdAt,
       this.updatedAt});
 
   Data.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    email = json['email'];
-    money = json['money'];
-    payments = json['payments'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    id = json["id"];
+    email = json["email"];
+    money = json["money"];
+    payments = json["payments"];
+    point = json["point"];
+    createdAt = json["created_at"];
+    updatedAt = json["updated_at"];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['email'] = this.email;
-    data['money'] = this.money;
-    data['payments'] = this.payments;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    return data;
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["id"] = id;
+    _data["email"] = email;
+    _data["money"] = money;
+    _data["payments"] = payments;
+    _data["point"] = point;
+    _data["created_at"] = createdAt;
+    _data["updated_at"] = updatedAt;
+    return _data;
   }
 }

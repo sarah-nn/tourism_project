@@ -3,10 +3,11 @@ import 'package:go_router/go_router.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
 import 'package:tourism_project/core/utils/global.dart';
+import 'package:tourism_project/data/models/dynamic_flight_model.dart';
 import 'package:tourism_project/data/models/going_and_return_plane_trip.dart';
 
 class RoundPlaneList extends StatefulWidget {
-  final GoingAndReturnPlaneTrip roundList;
+  final Dynamicflight roundList;
   const RoundPlaneList({
     super.key,
     required this.roundList,
@@ -119,16 +120,16 @@ class _RoundPlaneListState extends State<RoundPlaneList> {
             height: double.maxFinite,
             child: ListView.builder(
               itemCount: goOrReturn
-                  ? widget.roundList.data.returnTrip.length
-                  : widget.roundList.data.goingTrip.length,
+                  ? widget.roundList.data?.returnTrip?.length
+                  : widget.roundList.data?.goingTrip?.length,
               itemBuilder: (context, index) {
                 //  var goingTrip =widget.roundList.data.goingTrip[index];
                 //  var returnTrip =widget.roundList.data.returnTrip[index] ?? [];
                 return goOrReturn
                     ? returnRoundCard(
-                        widget.roundList.data.returnTrip[index], index)
+                        widget.roundList.data!.returnTrip![index], index)
                     : goingRoundCard(
-                        widget.roundList.data.goingTrip[index], index);
+                        widget.roundList.data!.goingTrip![index], index);
                 // return WidgetSearchFlight(
                 //   goingId: goOrReturn
                 //       ? null
@@ -157,7 +158,7 @@ class _RoundPlaneListState extends State<RoundPlaneList> {
     );
   }
 
-  Widget goingRoundCard(GoingTrip goingList, int index) {
+  Widget goingRoundCard(GoingTripDynamic goingList, int index) {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
       child: Card(
@@ -182,13 +183,13 @@ class _RoundPlaneListState extends State<RoundPlaneList> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        " ${goingList.plane.name}",
+                        " ${goingList.plane!.name!}",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
                             color: AppColor.primaryColor),
                       ),
-                      Text(goingList.flightDate)
+                      Text(goingList.flightDate!)
                     ],
                   ),
                 ),
@@ -200,21 +201,21 @@ class _RoundPlaneListState extends State<RoundPlaneList> {
                     Column(
                       children: [
                         Text(
-                          goingList.airportSource.name,
+                          goingList.airportSource!.name!,
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20),
                         ),
-                        Text(goingList.countrySource.name),
+                        Text(goingList.countrySource!.name!),
                       ],
                     ),
                     Column(
                       children: [
                         Text(
-                          goingList.airportDestination.name,
+                          goingList.airportDestination!.name!,
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20),
                         ),
-                        Text(goingList.airportDestination.name),
+                        Text(goingList.airportDestination!.name!),
                       ],
                     )
                   ],
@@ -236,7 +237,7 @@ class _RoundPlaneListState extends State<RoundPlaneList> {
                           'Duration',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        Text(goingList.flight_duration),
+                        Text(goingList.flightDuration!),
                       ],
                     ),
                     Column(
@@ -246,7 +247,7 @@ class _RoundPlaneListState extends State<RoundPlaneList> {
                           'Ticket price',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        Text(goingList.currentPrice)
+                        Text(goingList.currentPrice!)
                       ],
                     ),
                   ],
@@ -306,7 +307,7 @@ class _RoundPlaneListState extends State<RoundPlaneList> {
     );
   }
 
-  Widget returnRoundCard(ReturnTrip returnList, int index) {
+  Widget returnRoundCard(ReturnTripDynamic returnList, int index) {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
       child: Card(
@@ -331,13 +332,13 @@ class _RoundPlaneListState extends State<RoundPlaneList> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        returnList.plane.name,
+                        returnList.plane!.name!,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
                             color: AppColor.primaryColor),
                       ),
-                      Text(returnList.flightDate)
+                      Text(returnList.flightDate!)
                     ],
                   ),
                 ),
@@ -349,21 +350,21 @@ class _RoundPlaneListState extends State<RoundPlaneList> {
                     Column(
                       children: [
                         Text(
-                          returnList.airportSource.name,
+                          returnList.airportSource!.name!,
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20),
                         ),
-                        Text(returnList.countrySource.name),
+                        Text(returnList.countrySource!.name!),
                       ],
                     ),
                     Column(
                       children: [
                         Text(
-                          returnList.airportDestination.name,
+                          returnList.airportDestination!.name!,
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20),
                         ),
-                        Text(returnList.countryDestination.name),
+                        Text(returnList.countryDestination!.name!),
                       ],
                     )
                   ],
@@ -385,7 +386,7 @@ class _RoundPlaneListState extends State<RoundPlaneList> {
                           'Duration',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        Text(returnList.flight_duration),
+                        Text(returnList.landingDate!),
                       ],
                     ),
                     Column(

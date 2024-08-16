@@ -68,7 +68,7 @@ class _PlaceFavoriteState extends State<PlaceFavorite> {
                         child: Image(
                           image: NetworkImage(
                             EndPoint.imageBaseUrl +
-                                widget.favoriteModel!.place.images[1].image,
+                                widget.favoriteModel!.place.images[0].image,
                           ),
                           height: 95,
                           width: 95,

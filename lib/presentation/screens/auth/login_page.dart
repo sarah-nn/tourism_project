@@ -22,6 +22,7 @@ class LoginPage extends StatelessWidget {
       listener: (context, state) {
         bool isFirstTime = CacheHelper().getData(key: "isFirstTime") ?? false;
         if (state is UserSuccess) {
+          CacheHelper().saveData(key: "userPosition", value: true);
           CacheHelper().saveData(key: "isUserLoggedIn?", value: true);
           myToken = CacheHelper().getData(key: 'token');
           isFirstTime

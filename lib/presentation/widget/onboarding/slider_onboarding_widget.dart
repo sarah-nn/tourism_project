@@ -80,6 +80,7 @@ class CustomSliderOnBoarding extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
+              const SizedBox(height: 25),
               Container(
                   width: double.infinity,
                   alignment: Alignment.center,

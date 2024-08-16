@@ -17,6 +17,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   TextEditingController phoneNumber = TextEditingController();
   String userPosition = '';
   String errMessage = '';
+  String image = '';
 
   Map<String, String> buildRequestBody() {
     Map<String, String> body = {};
@@ -74,6 +75,27 @@ class ProfileCubit extends Cubit<ProfileState> {
         print(
             "Profile api error with ${response.statusCode}and ${message['message']}");
         errMessage = message['message'];
+      }
+    } catch (e) {
+      print(e.toString());
+      emit(ProfileChangeFaliure(errMessage: e.toString()));
+    }
+  }
+
+  deleteAccount() async {
+    Map<String, String> requestBody = buildRequestBody();
+    var uri = Uri.parse(EndPoint.deleteAccount);
+    var header = {'Authorization': 'Bearer $myToken'};
+    try {
+      var response = await http.post(uri, headers: header, body: requestBody);
+      if (response.statusCode == 200) {
+        emit(DeleteAccountDone());
+      } else {
+        var message = jsonDecode(response.body);
+        print(
+            "Profile api error with ${response.statusCode}and ${message['message']}");
+        errMessage = message['message'];
+        emit(ProfileChangeFaliure(errMessage: errMessage));
       }
     } catch (e) {
       print(e.toString());

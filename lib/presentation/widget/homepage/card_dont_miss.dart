@@ -83,7 +83,7 @@ class _CardDonntMissState extends State<CardDonntMiss> {
                             decoration: BoxDecoration(
                                 image: DecorationImage(
                                     image: NetworkImage(EndPoint.imageBaseUrl +
-                                        images[1]['image']),
+                                        images[0]['image']),
                                     fit: BoxFit.cover),
                                 borderRadius: BorderRadius.circular(20)),
                           );

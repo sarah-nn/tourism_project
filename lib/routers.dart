@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tourism_project/business_logic/activity/activity_cubit.dart';
+import 'package:tourism_project/business_logic/change_wallet/change_wallet_cubit.dart';
 import 'package:tourism_project/business_logic/country/country_cubit.dart';
 import 'package:tourism_project/business_logic/dont_miss/dont_miss_cubit.dart';
 import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
@@ -97,7 +98,8 @@ final GoRouter router = GoRouter(
         path: AppRoutes.homePage,
         builder: (context, state) => MultiBlocProvider(providers: [
               BlocProvider(create: (context) => DontMissCubit()),
-              BlocProvider(create: (context) => StaticTripCubit())
+              BlocProvider(create: (context) => StaticTripCubit()),
+              BlocProvider(create: (context) => ProfileCubit())
             ], child: HomePage())),
 //======================== Auth ===============================
     GoRoute(
@@ -414,8 +416,17 @@ final GoRouter router = GoRouter(
 
     GoRoute(
         path: AppRoutes.payment,
-        builder: (context, state) => BlocProvider(
-            create: (context) => PaymentCubit(), child: PaymentPage())),
+        builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => ChangeWalletCubit(),
+                ),
+                BlocProvider(
+                  create: (context) => PaymentCubit(),
+                ),
+              ],
+              child: PaymentPage(),
+            )),
 
 //================note===================
     GoRoute(

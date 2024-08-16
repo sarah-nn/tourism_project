@@ -212,48 +212,50 @@ class _WidgetSearchHotelState extends State<WidgetSearchHotel> {
                   const SizedBox(
                     width: 30,
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.hotel.name,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        children: [
-                          Icon(
-                            Iconsax.location,
-                            color: AppColor.primaryColor,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            '${User.countryShow} , ${widget.hotel.area.name}',
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 144, 142, 142)),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        children: [
-                          ...List.generate(
-                              widget.hotel.stars.length,
-                              (index) => const Icon(
-                                    Icons.star,
-                                    color: Color.fromARGB(255, 235, 177, 3),
-                                    size: 19,
-                                  )),
-                        ],
-                      ),
-                    ],
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.hotel.name,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Row(
+                          children: [
+                            Icon(
+                              Iconsax.location,
+                              color: AppColor.primaryColor,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              '${User.countryShow} , ${widget.hotel.area.name}',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Color.fromARGB(255, 144, 142, 142)),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Row(
+                          children: [
+                            ...List.generate(
+                                widget.hotel.stars.length,
+                                (index) => const Icon(
+                                      Icons.star,
+                                      color: Color.fromARGB(255, 235, 177, 3),
+                                      size: 19,
+                                    )),
+                          ],
+                        ),
+                      ],
+                    ),
                   )
                 ],
               ),

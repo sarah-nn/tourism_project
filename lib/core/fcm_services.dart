@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:tourism_project/core/utils/global.dart';
 
 class FCMServices {
   static final _firebaseMessege = FirebaseMessaging.instance;
@@ -7,6 +8,7 @@ class FCMServices {
   static Future<void> getFcmToken() async {
     await _firebaseMessege.requestPermission();
     final fcmToken = await _firebaseMessege.getToken();
+    globalFcm = fcmToken ?? '';
     print("Token f: $fcmToken");
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tourism_project/business_logic/places/place_desc_cubit.dart';
+import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
 import 'package:tourism_project/core/utils/global.dart';
@@ -70,7 +71,8 @@ class _CommentPageState extends State<CommentPage> {
                                   itemCount: myCommentsList.length,
                                   itemBuilder: (context, index) {
                                     return CommentCaredWidget(
-                                        comment: myCommentsList[index]);
+                                      comment: myCommentsList[index],
+                                    );
                                   },
                                 )
                               : const Text(

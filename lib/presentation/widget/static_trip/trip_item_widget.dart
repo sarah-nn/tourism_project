@@ -110,18 +110,18 @@ class _StaticTripItemState extends State<StaticTripItem> {
                                   light ? AppColor.primaryColor : Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 21)),
-                      Container(
-                        padding: const EdgeInsets.only(right: 25),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.star,
-                              color: Colors.amber,
-                            ),
-                            Text("(${widget.tripmodel.stars})")
-                          ],
-                        ),
-                      )
+                      // Container(
+                      //   padding: const EdgeInsets.only(right: 25),
+                      //   child: Row(
+                      //     children: [
+                      //       const Icon(
+                      //         Icons.star,
+                      //         color: Colors.amber,
+                      //       ),
+                      //       Text("(${widget.tripmodel.stars})")
+                      //     ],
+                      //   ),
+                      // )
                     ],
                   ),
                   const SizedBox(height: 6),

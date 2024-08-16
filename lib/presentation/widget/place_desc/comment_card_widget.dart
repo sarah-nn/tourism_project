@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
+import 'package:tourism_project/core/utils/app_images.dart';
 import 'package:tourism_project/core/utils/end_point.dart';
 import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/comment_model.dart';
@@ -21,9 +22,9 @@ class CommentCaredWidget extends StatelessWidget {
             child: Align(
               alignment: Alignment.topCenter,
               child: comment.user.image != null
-                  ? CircleAvatar(
-                      backgroundImage: NetworkImage(EndPoint.imageBaseUrl +
-                          comment.user.image!) //AssetImage(AppImage.person),
+                  ? CircleAvatar(backgroundImage: AssetImage(AppImage.flight)
+                      // NetworkImage(EndPoint.imageBaseUrl +
+                      //     comment.user.image!) //AssetImage(AppImage.person),
                       )
                   : CircleAvatar(
                       backgroundColor: light

@@ -31,7 +31,8 @@ class UserCubit extends Cubit<UserState> {
       http.Response response =
           await http.post(Uri.parse(EndPoint.login), body: {
         'email': loginEmail.text,
-        'password': loginPassword.text
+        'password': loginPassword.text,
+        'fcm_token': globalFcm
       }, headers: {
         'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
         'Accept': 'application/json'
@@ -54,13 +55,13 @@ class UserCubit extends Cubit<UserState> {
 
   register() async {
     if (formKeyReg.currentState!.validate()) {
-      emit(UserLoading());   
+      emit(UserLoading());
       http.Response response =
           await http.post(Uri.parse(EndPoint.register), body: {
         'name': name.text,
         'email': email.text,
         'password': password.text,
-        'password_confirmation': rePassword.text
+        'password_confirmation': rePassword.text,
       }, headers: {
         'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
         'Accept': 'application/json'
@@ -86,7 +87,8 @@ class UserCubit extends Cubit<UserState> {
     http.Response response =
         await http.post(Uri.parse(EndPoint.verifyCodeSignup), body: {
       'email': myEmail,
-      'code': code
+      'code': code,
+      'fcm_token': globalFcm
     }, headers: {
       'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
       'Accept': 'application/json'
@@ -107,7 +109,7 @@ class UserCubit extends Cubit<UserState> {
   }
 
   logOut() async {
-    var uri = Uri.parse("http://192.168.43.119:8000/api/logout");
+    var uri = Uri.parse(EndPoint.logOut);
     var header = {'Authorization': 'Bearer $myToken'};
     var response = await http.get(uri, headers: header);
     try {

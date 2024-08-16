@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:tourism_project/business_logic/activity/activity_cubit.dart';
 import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.dart';
@@ -19,7 +18,6 @@ import 'package:tourism_project/presentation/widget/dynamic_trip/dynamic_booking
 import 'package:tourism_project/presentation/widget/dynamic_trip/dynamic_booking_details/dynamic_note_details.dart';
 import 'package:tourism_project/presentation/widget/dynamic_trip/dynamic_booking_details/hotel_details.dart';
 import 'package:tourism_project/presentation/widget/dynamic_trip/dynamic_booking_details/top_detalsi_card.dart';
-import 'package:tourism_project/presentation/widget/hotel/search_hotel_widget.dart';
 
 class DynamicTripBookingEditPage extends StatefulWidget {
   const DynamicTripBookingEditPage({super.key, required this.tripId});

@@ -16,7 +16,7 @@ class PaymentCubit extends Cubit<PaymentState> {
     try {
       emit(PaymentLoading());
       if (response.statusCode == 200) {
-        var data = json.decode(response.body)['data'];
+        var data = json.decode(response.body);
         paymentModel = PaymentModel.fromJson(data);
         print(response.body);
         emit(PaymentSuccess(paymentModel!));

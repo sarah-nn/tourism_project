@@ -73,7 +73,7 @@ class _TestPageState extends State<PlaceDescPage> {
                     decoration: BoxDecoration(
                         image: DecorationImage(
                             image: NetworkImage(EndPoint.imageBaseUrl +
-                                state.placeDescModel.images![1].image!),
+                                state.placeDescModel.images![0].image!),
                             fit: BoxFit.cover)),
                   )
                 : Container(
@@ -254,7 +254,7 @@ class _TestPageState extends State<PlaceDescPage> {
               //  state
               //     .placeDescModel.area.country.name,
               // area: state.placeDescModel.area.name,
-              area: model.area!.name!,
+              area: model.area!.name ?? "",
               category: model.categories!.map((e) => e.name.toString())),
         ),
         const SizedBox(height: 50),
@@ -267,7 +267,7 @@ class _TestPageState extends State<PlaceDescPage> {
         SizedBox(
           child: PlaceDescText(
             maxWords: 22,
-            text: model.text!,
+            text: model.text ?? "",
           ),
         ),
         const SizedBox(height: 23),

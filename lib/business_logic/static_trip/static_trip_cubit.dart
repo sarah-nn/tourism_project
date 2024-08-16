@@ -61,7 +61,11 @@ class StaticTripCubit extends Cubit<StaticTripState> {
         print("api error${response.statusCode} + ${response.body}");
       }
     } catch (e) {
-      emit(StaticTripFail(errMessage: e.toString()));
+      try {
+        emit(StaticTripFail(errMessage: e.toString()));
+      } on Exception catch (e) {
+        // TODO
+      }
     }
   }
 

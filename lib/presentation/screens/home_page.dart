@@ -3,15 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:tourism_project/business_logic/dont_miss/dont_miss_cubit.dart';
+import 'package:tourism_project/business_logic/profile/profile_cubit.dart';
 import 'package:tourism_project/core/database/cach_helper.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/app_images.dart';
 import 'package:tourism_project/core/utils/app_routes.dart';
 import 'package:tourism_project/core/utils/app_text_style.dart';
 import 'package:tourism_project/core/functions/functions.dart';
+import 'package:tourism_project/core/utils/end_point.dart';
 import 'package:tourism_project/core/utils/global.dart';
 import 'package:tourism_project/data/models/dont_miss_model.dart';
 import 'package:tourism_project/data/models/top_visited_model.dart';
+import 'package:tourism_project/data/models/user_model.dart';
 import 'package:tourism_project/presentation/widget/homepage/card_category_widget.dart';
 import 'package:tourism_project/presentation/widget/homepage/card_dont_miss.dart';
 import 'package:tourism_project/presentation/widget/homepage/card_top_visit_widget.dart';
@@ -29,12 +32,14 @@ class _HomePageState extends State<HomePage> {
   String saveImage = CacheHelper().getData(key: "profileImage") ?? '';
   List<DontMissModel> dontMissModel = [];
   List<TopVisitedModel> topVisitedModel = [];
+  UserInfoModel? userInfo;
 
   @override
   void initState() {
     super.initState();
     context.read<DontMissCubit>().getDontMiss();
     context.read<DontMissCubit>().getTopVisited();
+    context.read<ProfileCubit>().getUserInfo();
   }
 
   @override
@@ -60,21 +65,118 @@ class _HomePageState extends State<HomePage> {
     }, builder: (context, state) {
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: light ? Colors.white : AppColor.primaryColorDark,
-          elevation: 0,
-          iconTheme: IconThemeData(
-              color: light ? Colors.black : Colors.white, size: 30),
+          title: Column(children: [
+            Text("Discover",
+                style: MyTextStyle.bright.copyWith(
+                    //   color: light ? Colors.black : Colors.white,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 38,
+                    letterSpacing: 1)),
+            Text("The world...",
+                style: MyTextStyle.poppins.copyWith(
+                    fontWeight: FontWeight.w100,
+                    fontSize: 20,
+                    color: Colors.white)
+                //TextStyle(fontSize: 18),
+                ),
+          ]),
+
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 10),
-              child: Icon(
-                Icons.notifications_active,
-                color: light ? AppColor.primaryColor : AppColor.iconsColorDark,
-                size: 27,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.notifications_active,
+                    color: Colors.white,
+                    // color:
+                    //     light ? AppColor.primaryColor : AppColor.iconsColorDark,
+                    size: 27,
+                  ),
+                  const SizedBox(height: 20),
+                  BlocConsumer<ProfileCubit, ProfileState>(
+                    listener: (context, state) {
+                      if (state is ProfileInfo) {
+                        userInfo = (state).userInfo;
+                        print("✅✅❎❎");
+                      }
+                    },
+                    builder: (context, state) {
+                      return state is ProfileInfo
+                          ? CircleAvatar(
+                              backgroundImage: NetworkImage(EndPoint
+                                      .imageBaseUrl +
+                                  state.userInfo
+                                      .image!) //AssetImage(AppImage.person),
+                              )
+                          // CircleAvatar(
+                          //     radius: 22,
+                          //     backgroundColor: Colors.grey[200],
+                          //     child: Image(
+                          //       image: NetworkImage(EndPoint.imageBaseUrl +
+                          //           state.userInfo.image!),
+                          //       fit: BoxFit.fill,
+                          //     ))
+                          : CircleAvatar(
+                              radius: 22,
+                              backgroundColor: Colors.grey[200],
+                              child: const Center(
+                                child: Icon(
+                                  Icons.person,
+                                  size: 22,
+                                  color: Colors.grey,
+                                ),
+                              ));
+                    },
+                  )
+
+                  // Icon(
+                  //   Icons.notifications_active,
+                  //   color:
+                  //       light ? AppColor.primaryColor : AppColor.iconsColorDark,
+                  //   size: 27,
+                  // ),
+                ],
               ),
             )
           ],
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20)),
+              gradient: LinearGradient(
+                colors: [AppColor.primaryColor, AppColor.secondColor],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+          ),
+          elevation: 0,
+          toolbarHeight: 120.0, // Set your desired height
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30))),
         ),
+        // AppBar(
+        //   backgroundColor: light ? Colors.white : AppColor.primaryColorDark,
+        //   elevation: 0,
+        //   iconTheme: IconThemeData(
+        //       color: light ? Colors.black : Colors.white, size: 30),
+        //  actions: [
+        //   Padding(
+        //     padding: const EdgeInsets.only(right: 10),
+        //     child: Icon(
+        //       Icons.notifications_active,
+        //       color: light ? AppColor.primaryColor : AppColor.iconsColorDark,
+        //       size: 27,
+        //     ),
+        //   )
+        // ],
+        // ),
         drawer: const WidgetDrawer(),
         body: Padding(
           padding: const EdgeInsets.all(14),
@@ -82,69 +184,24 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Discover",
-                        style: MyTextStyle.bright.copyWith(
-                            color: light ? Colors.black : Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 38,
-                            letterSpacing: 1)
-                        //TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                        ),
-                    // IconButton(
-                    //   icon: Icon(
-                    //     Icons.notifications_active,
-                    //     color: AppColor.primaryColor,
-                    //   ),
-                    //   onPressed: () {},
-                    // )
-                    //!-----------------------------
-                    // saveImage != ''
-                    //     ? CircleAvatar(
-                    //         radius: 22,
-                    //         backgroundColor: Colors.grey[200],
-                    //         child: const Center(
-                    //           child: Icon(
-                    //             Icons.person,
-                    //             size: 22,
-                    //             color: Colors.grey,
-                    //           ),
-                    //         ))
-                    //     : CircleAvatar(
-                    //         radius: 22,
-                    //         backgroundColor: Colors.white,
-                    //         backgroundImage: FileImage(
-                    //           File(CacheHelper().getData(key: "profileImage")),
-                    //         )
-                    //!-------------------------------
-                    //AssetImage(context.read<UploadImageCubit>().profilePic)
-                    // NetworkImage(
-                    //     EndPoint.imageBaseUrl +
-                    //         state.userInfo.image!)
-                    // )
-                    // Container(
-                    //   padding: EdgeInsets.all(3),
-                    //   decoration: BoxDecoration(
-                    //     shape: BoxShape.circle,
-                    //     color: AppColor.secondColor,
-                    //   ),
-                    //   child: const CircleAvatar(
-                    //       radius: 22,
-                    //       backgroundImage: AssetImage(
-                    //           AppImage.person) //AssetImage(AppImage.person),
-                    //       ),
-                    // )
-                  ],
-                ),
-                Text("The world...",
-                    style: MyTextStyle.poppins.copyWith(
-                        fontWeight: FontWeight.w100,
-                        fontSize: 20,
-                        color: light ? Colors.black : Colors.white)
-                    //TextStyle(fontSize: 18),
-                    ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     Text("Discover",
+                //         style: MyTextStyle.bright.copyWith(
+                //             color: light ? Colors.black : Colors.white,
+                //             fontWeight: FontWeight.bold,
+                //             fontSize: 38,
+                //             letterSpacing: 1)),
+                //   ],
+                // ),
+                // Text("The world...",
+                //     style: MyTextStyle.poppins.copyWith(
+                //         fontWeight: FontWeight.w100,
+                //         fontSize: 20,
+                //         color: light ? Colors.black : Colors.white)
+                //     //TextStyle(fontSize: 18),
+                //     ),
                 const SizedBox(height: 10),
 
                 /******** SEARCH ********/
@@ -154,6 +211,7 @@ class _HomePageState extends State<HomePage> {
                   },
                   child: Card(
                     elevation: 5,
+                    color: Color.fromARGB(255, 228, 228, 228),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -165,7 +223,8 @@ class _HomePageState extends State<HomePage> {
                       title: Text(
                         'Find Country or Area',
                         style: TextStyle(
-                            color: light ? Colors.black26 : Colors.white38),
+                            color:
+                                light ? AppColor.primaryColor : Colors.white38),
                       ),
                     ),
                   ),
@@ -234,7 +293,7 @@ class _HomePageState extends State<HomePage> {
                       CardCategouries(
                           // path: AppRoutes.places,
                           path: AppRoutes.test,
-                          image: AppIcon.plan,
+                          image: AppIcon.inspire2,
                           nameCategory: "Inspire"),
                     ],
                   ),

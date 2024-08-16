@@ -4,7 +4,7 @@ import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.da
 import 'package:tourism_project/business_logic/flight/searchFlight_cubit.dart';
 import 'package:tourism_project/core/functions/functions.dart';
 import 'package:tourism_project/core/utils/app_color.dart';
-import 'package:tourism_project/core/utils/global.dart';
+import 'package:tourism_project/data/models/dynamic_flight_model.dart';
 import 'package:tourism_project/data/models/going_and_return_plane_trip.dart';
 import 'package:tourism_project/data/models/going_plane_trip.dart';
 import 'package:tourism_project/presentation/widget/dynamic_trip/planesList_widget.dart';
@@ -19,8 +19,10 @@ class FlightDynamicTrip extends StatefulWidget {
 
 class _FlightDynamicTripState extends State<FlightDynamicTrip> {
   String? _selectedOption;
-  GoingAndReturnPlaneTrip? goingAndReturnPlaneTrip;
-  List<GoingPlaneTrip> planesList = [];
+  List<GoingTripDynamic> goFlight = [];
+  Dynamicflight? fligh;
+  // GoingAndReturnPlaneTrip? goingAndReturnPlaneTrip;
+  // List<GoingPlaneTrip> planesList = [];
   String planeType = '';
   String errMessage = '';
   bool isChoose = false;
@@ -29,7 +31,7 @@ class _FlightDynamicTripState extends State<FlightDynamicTrip> {
 
   void singlePlaneList(
     BuildContext context,
-    List<GoingPlaneTrip> singlTrip,
+    List<GoingTripDynamic> singlTrip,
   ) {
     showModalBottomSheet(
       context: context,
@@ -45,8 +47,7 @@ class _FlightDynamicTripState extends State<FlightDynamicTrip> {
     );
   }
 
-  void roundPlaneList(
-      BuildContext context, GoingAndReturnPlaneTrip something2) {
+  void roundPlaneList(BuildContext context, Dynamicflight something2) {
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -97,14 +98,14 @@ class _FlightDynamicTripState extends State<FlightDynamicTrip> {
                 listener: (context, state) {
                   if (state is SearchFlightSuccess) {
                     try {
-                      print("SearchFlightSuccess");
-                      errMessage = '';
-                      _selectedOption == 'Round Trip'
-                          ? goingAndReturnPlaneTrip =
-                              (state).goingAndReturnPlaneTrip
-                          : planesList = (state).goingPlaneTrip!;
+                      // print("SearchFlightSuccess");
+                      // errMessage = '';
+                      // _selectedOption == 'Round Trip'
+                      //     ? goingAndReturnPlaneTrip =
+                      //         (state).goingAndReturnPlaneTrip
+                      //     : planesList = (state).goingPlaneTrip!;
 
-                      print(planesList);
+                      // print(planesList);
                     } catch (e) {
                       print(e);
                     }
@@ -135,18 +136,18 @@ class _FlightDynamicTripState extends State<FlightDynamicTrip> {
                         _selectedOption == 'Round Trip'
                             ? context
                                 .read<SearchFlightCubit>()
-                                .getallPlaneTripGoingAndReturn(
+                                .dynamicPlaneRetuenAndGo(
                                     country_source_id: params.sourceTripId,
                                     country_destination_id:
                                         params.destinationTripId,
-                                    flight_date: params.startDate)
-                            : context
-                                .read<SearchFlightCubit>()
-                                .getallPlaneTripGoing(
-                                    country_source_id: params.sourceTripId,
-                                    country_destination_id:
-                                        params.destinationTripId,
-                                    flight_date: params.startDate);
+                                    start_date: params.startDate,
+                                    end_date: params.endDate)
+                            : context.read<SearchFlightCubit>().dynamicPlaneGo(
+                                country_source_id: params.sourceTripId,
+                                country_destination_id:
+                                    params.destinationTripId,
+                                start_date: params.startDate,
+                                end_date: params.endDate);
                       });
                     },
                   );
@@ -155,39 +156,55 @@ class _FlightDynamicTripState extends State<FlightDynamicTrip> {
             }).toList(),
           ),
         ),
-        Container(
-          width: double.maxFinite,
-          decoration: BoxDecoration(
-              color: Colors.amber,
-              //    color: light ? AppColor.secondColor : AppColor.thirdColorDark,
-              border: Border.all(color: AppColor.primaryColor.withOpacity(0.3)),
-              borderRadius: BorderRadius.circular(15)),
-          child: MaterialButton(
-            elevation: 10,
-            onPressed: () {
-              // errMessage == '' ? null : showAlertDialog(context, errMessage);
-              //! it sometimes make null exception
-              //! it is because of not choose time
-              //! buttom sheet have new tree widget
-              if (_selectedOption != null) {
-                _selectedOption == 'Round Trip'
-                    ? errMessage == ''
-                        ? roundPlaneList(context, goingAndReturnPlaneTrip!)
-                        : showAlertDialog(context, errMessage)
-                    : errMessage == ''
-                        ? singlePlaneList(context, planesList)
-                        : showAlertDialog(context, errMessage);
-              } else {
-                setState(() {
-                  isChoose = true;
-                });
-              }
-            },
-            child: const Text(
-              "-- Show Avaliable Planes --",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
+        BlocConsumer<SearchFlightCubit, SearchFlightState>(
+          listener: (context, state) {
+            if (state is SearchFlightDyanmicSuccessGo) {
+              goFlight = (state).goingTrip!;
+              print("-----------------$goFlight");
+            } else if (state is SearchFlightDyanmicSuccessRound) {
+              fligh = (state).fligh;
+              print("-----------------$fligh");
+            } else if (state is SearchFlightFailure) {
+              showAlertDialog(context, state.errMessage);
+            }
+          },
+          builder: (context, state) {
+            return Container(
+              width: double.maxFinite,
+              decoration: BoxDecoration(
+                  color: Colors.amber,
+                  //    color: light ? AppColor.secondColor : AppColor.thirdColorDark,
+                  border:
+                      Border.all(color: AppColor.primaryColor.withOpacity(0.3)),
+                  borderRadius: BorderRadius.circular(15)),
+              child: MaterialButton(
+                elevation: 10,
+                onPressed: () {
+                  // errMessage == '' ? null : showAlertDialog(context, errMessage);
+                  //! it sometimes make null exception
+                  //! it is because of not choose time
+                  //! buttom sheet have new tree widget
+                  if (_selectedOption != null) {
+                    _selectedOption == 'Round Trip'
+                        ? errMessage == ''
+                            ? roundPlaneList(context, fligh!)
+                            : showAlertDialog(context, errMessage)
+                        : errMessage == ''
+                            ? singlePlaneList(context, goFlight)
+                            : showAlertDialog(context, errMessage);
+                  } else {
+                    setState(() {
+                      isChoose = true;
+                    });
+                  }
+                },
+                child: const Text(
+                  "-- Show Avaliable Planes --",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            );
+          },
         ),
         const SizedBox(height: 20),
       ],

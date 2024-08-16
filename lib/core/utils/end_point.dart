@@ -1,7 +1,7 @@
 class EndPoint {
-  static const String baseUrl = 'http://192.168.137.60:8000/api'; //for me
+  static const String baseUrl = 'http://192.168.137.172:8000/api'; //for me
   //static const String baseUrl = 'http://192.168.43.76:8000/api'; //for Oula
-  static const String imageBaseUrl = 'http://192.168.137.60:8000/';
+  static const String imageBaseUrl = 'http://192.168.137.172:8000/';
   //static const String imageBaseUrl = 'http://192.168.43.76:8000/';
 
 //======================== Auth ========================
@@ -19,6 +19,8 @@ class EndPoint {
   static const String changeProfilePhoto = '$baseUrl/user/change-profile-photo';
   static const String updateProfile = '$baseUrl/user/update-profile';
   static const String deleteImage = '$baseUrl/user/delete-profile-photo';
+  static const String deleteAccount = '$baseUrl/user/delete-account';
+  static const String logout = '$baseUrl/logout';
 
 //======================== Places ====================
   static const String places = '$baseUrl/user/places';
@@ -56,6 +58,8 @@ class EndPoint {
   static const String searchFlight = '$baseUrl/user/search-for-plane-trip';
   static const String flightDetails = '$baseUrl/user/show-plane-trip-details/';
   static const String bookPlane = '$baseUrl/user/plane_book';
+  static const String searchFlightdynamic =
+      '$baseUrl/user/search-for-plane-trip-second';
 
 //======================== Hotel=====================
   static const String searchHotel = '$baseUrl/user/get_Hotel_By_Country/';
@@ -92,4 +96,5 @@ class EndPoint {
   static const String topVisited = '$baseUrl/user/get-top-places';
   //==================payment=================================
   static const String paymentInfo = '$baseUrl/user/payment-inofo';
+  static const String changeMony = '$baseUrl/user/charge-account';
 }

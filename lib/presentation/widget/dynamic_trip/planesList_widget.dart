@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tourism_project/data/models/dynamic_booking_details_model.dart';
+import 'package:tourism_project/data/models/dynamic_flight_model.dart';
 import 'package:tourism_project/data/models/going_plane_trip.dart';
 import 'package:tourism_project/presentation/widget/flight/card_searach_flight_widget.dart';
 
 class PlaneListWidget extends StatelessWidget {
-  final List<GoingPlaneTrip>? singlTrip;
+  final List<GoingTripDynamic>? singlTrip;
 
   const PlaneListWidget({super.key, @required this.singlTrip});
 
@@ -42,7 +43,7 @@ class PlaneListWidget extends StatelessWidget {
                         return WidgetSearchFlight(
                             onePlane: planeList.id.toString(),
                             isTrip: true,
-                            goingPlaneTrip: planeList,
+                            goFlight: planeList,
                             departflight: true,
                             round: false);
                       }),

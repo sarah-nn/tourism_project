@@ -5,6 +5,7 @@ import 'package:tourism_project/business_logic/dynamicTrip/dynamic_trip_cubit.da
 
 import 'package:tourism_project/core/utils/app_color.dart';
 import 'package:tourism_project/core/utils/global.dart';
+import 'package:tourism_project/data/models/dynamic_flight_model.dart';
 import 'package:tourism_project/data/models/going_and_return_plane_trip.dart';
 import 'package:tourism_project/data/models/going_plane_trip.dart';
 
@@ -17,6 +18,7 @@ class WidgetSearchFlight extends StatefulWidget {
       @required this.goingId,
       @required this.returnId,
       @required this.onePlane,
+      @required this.goFlight,
       required this.isTrip,
       required this.departflight,
       required this.round,
@@ -24,6 +26,7 @@ class WidgetSearchFlight extends StatefulWidget {
   GoingTrip? goingTrip;
   ReturnTrip? returnTrip;
   GoingPlaneTrip? goingPlaneTrip;
+  GoingTripDynamic? goFlight;
   String? goingId;
   String? returnId;
   String? onePlane;
@@ -63,17 +66,17 @@ class _WidgetSearchFlightState extends State<WidgetSearchFlight> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                             Text(
-                              " ${widget.round ? widget.departflight ? widget.goingTrip?.plane.name : widget.returnTrip?.plane.name : widget.goingPlaneTrip?.plane.name}",
+                              " ${widget.round ? widget.departflight ? widget.goingTrip?.plane.name : widget.returnTrip?.plane.name : widget.goFlight?.plane?.name}",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
                                   color: AppColor.primaryColor),
                             ),
-                            Text(widget.goingPlaneTrip!.flightDate)
+                            Text("${widget.goFlight?.flightDate}")
                           ])
                     : Center(
                         child: Text(
-                          " ${widget.round ? widget.departflight ? widget.goingTrip?.plane.name : widget.returnTrip?.plane.name : widget.goingPlaneTrip?.plane.name}",
+                          " ${widget.round ? widget.departflight ? widget.goingTrip?.plane.name : widget.returnTrip?.plane.name : widget.goFlight?.plane?.name}",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 15,
@@ -88,23 +91,23 @@ class _WidgetSearchFlightState extends State<WidgetSearchFlight> {
                     Column(
                       children: [
                         Text(
-                          '${widget.round ? widget.departflight ? widget.goingTrip?.airportSource.name : widget.returnTrip?.airportSource.name : widget.goingPlaneTrip?.airportSource.name}',
+                          '${widget.round ? widget.departflight ? widget.goingTrip?.airportSource.name : widget.returnTrip?.airportSource.name : widget.goFlight?.airportSource?.name}',
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20),
                         ),
                         Text(
-                            '${widget.round ? widget.departflight ? widget.goingTrip?.countrySource.name : widget.returnTrip?.countrySource.name : widget.goingPlaneTrip?.countrySource.name}'),
+                            '${widget.round ? widget.departflight ? widget.goingTrip?.countrySource.name : widget.returnTrip?.countrySource.name : widget.goFlight?.countrySource?.name}'),
                       ],
                     ),
                     Column(
                       children: [
                         Text(
-                          '${widget.round ? widget.departflight ? widget.goingTrip?.airportDestination.name : widget.returnTrip?.airportDestination.name : widget.goingPlaneTrip?.airportDestination.name}',
+                          '${widget.round ? widget.departflight ? widget.goingTrip?.airportDestination.name : widget.returnTrip?.airportDestination.name : widget.goFlight?.airportDestination?.name}',
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 20),
                         ),
                         Text(
-                            "${widget.round ? widget.departflight ? widget.goingTrip?.countryDestination.name : widget.returnTrip?.countryDestination.name : widget.goingPlaneTrip?.countryDestination.name}"),
+                            "${widget.round ? widget.departflight ? widget.goingTrip?.countryDestination.name : widget.returnTrip?.countryDestination.name : widget.goFlight?.countryDestination?.name}"),
                       ],
                     )
                   ],
@@ -122,23 +125,37 @@ class _WidgetSearchFlightState extends State<WidgetSearchFlight> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Depart',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                            '${widget.round ? widget.departflight ? widget.goingTrip?.flightDate : widget.returnTrip?.flightDate : widget.goingPlaneTrip?.flightDate}'),
+                        widget.isTrip
+                            ? const Text(
+                                'Ticket Price',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              )
+                            : const Text(
+                                'Depart',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                        widget.isTrip
+                            ? Text("\$ ${widget.goFlight?.currentPrice}")
+                            : Text(
+                                '${widget.round ? widget.departflight ? widget.goingTrip?.flightDate : widget.returnTrip?.flightDate : widget.goFlight?.flightDate}'),
                       ],
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        const Text(
-                          'Arrive',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                            '${widget.round ? widget.departflight ? widget.goingTrip?.landingDate : widget.returnTrip?.landingDate : widget.goingPlaneTrip?.landingDate}'),
+                        widget.isTrip
+                            ? const Text(
+                                'Available Seats',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              )
+                            : const Text(
+                                'Arrive',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                        widget.isTrip
+                            ? Text("${widget.goFlight?.availableSeats}")
+                            : Text(
+                                '${widget.round ? widget.departflight ? widget.goingTrip?.landingDate : widget.returnTrip?.landingDate : widget.goingPlaneTrip?.landingDate}'),
                       ],
                     ),
                   ],
